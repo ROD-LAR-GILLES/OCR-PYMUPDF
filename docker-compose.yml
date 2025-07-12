@@ -1,0 +1,9 @@
+services:
+  ocr-pymupdf:
+    build: .
+    container_name: ocr-pymupdf
+    volumes:
+      - ./pdfs:/app/pdfs
+      - ./resultado:/app/resultado
+    stdin_open: true
+    tty: true

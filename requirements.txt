@@ -1,0 +1,6 @@
+loguru==0.7.3
+opencv-python-headless==4.12.0.88
+pillow==11.3.0
+pymupdf4llm==0.0.26
+pytesseract==0.3.13
+questionary==2.1.0
