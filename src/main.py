@@ -15,4 +15,7 @@ def main() -> None:
     except Exception as exc:
         logger.exception(exc)
         print("[ERROR] Ocurrió un problema. Revisa ocr-pymupdf.log")
-    
+
+
+if __name__ == "__main__":
+    main()  

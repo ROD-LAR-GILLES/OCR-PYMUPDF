@@ -7,3 +7,5 @@ services:
       - ./resultado:/app/resultado
     stdin_open: true
     tty: true
+    environment:
+      - PYTHONPATH=/app/src

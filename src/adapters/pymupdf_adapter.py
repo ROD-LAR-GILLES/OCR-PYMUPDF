@@ -32,4 +32,4 @@ def extract_markdown(pdf_path: Path) -> str:
         # Aquí generamos un Markdown mínimo
         return f"# {pdf_path.stem}\n\n{text}"
     logger.info("PDF digital detectado, usando PyMuPDF4LLM.")
-    return to_markdown(path=str(pdf_path))
+    return to_markdown(str(pdf_path))

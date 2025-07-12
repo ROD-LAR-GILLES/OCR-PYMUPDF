@@ -13,6 +13,7 @@
 - Tipos válidos: feat, fix, docs, style, refactor, test, chore
 - Ejemplo: `feat: add PDF chunking functionality`
 - Incluir cuerpo descriptivo cuando sea necesario
+- git commit -m $'<tipo>(<scope>): <resumen>\n\n* <detalle 1>\n* <detalle 2>\n* ...'
 
 ### REGLA #3: ESTILO PROFESIONAL
 - Código limpio y legible
