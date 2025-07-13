@@ -1,14 +1,21 @@
 """
-Módulo principal del proyecto OCR-PYMUPDF.
+Módulo principal del sistema OCR-PYMUPDF.
 
-Este archivo inicia la interfaz de línea de comandos para seleccionar y procesar archivos PDF.
+Este archivo actúa como punto de entrada de la aplicación. Inicializa el sistema de logging y lanza la interfaz de
+línea de comandos (CLI) para que el usuario pueda seleccionar archivos PDF, procesarlos, y generar versiones en Markdown.
+
+Forma parte de la capa de interfaz del sistema, y está diseñado para ejecutarse como script principal.
 """
 
 from loguru import logger
 from interfaces.cli_menu import mostrar_menu
 
 def main() -> None:
-    """Punto de entrada principal."""
+    """
+    Inicializa el registro de logs y ejecuta la interfaz principal de la aplicación.
+
+    Si ocurre una excepción durante la ejecución, se captura y se registra en un archivo de log.
+    """
     logger.add("ocr-pymupdf.log", rotation="1 MB")
     try:
         mostrar_menu()
@@ -18,4 +25,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()  
+    main() 

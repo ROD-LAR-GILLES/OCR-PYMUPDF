@@ -1,4 +1,10 @@
-"""Menú interactivo avanzado para OCR-PYMUPDF."""
+"""
+Interfaz de línea de comandos (CLI) para el sistema OCR-PYMUPDF.
+
+Este módulo permite al usuario listar archivos PDF disponibles en un directorio,
+seleccionar uno de ellos y procesarlo para generar un archivo de salida en formato Markdown.
+Utiliza casos de uso definidos en la capa de dominio e incorpora registro de eventos mediante logging.
+"""
 
 from pathlib import Path
 from domain.use_cases import convert_pdf_to_md
@@ -8,11 +14,21 @@ import sys
 PDF_DIR = Path("pdfs")
 
 def listar_pdfs() -> list[str]:
-    """Devuelve la lista de archivos PDF en PDF_DIR."""
+    """
+    Obtiene la lista de archivos PDF presentes en el directorio de entrada.
+
+    Returns:
+        list[str]: Lista con los nombres de los archivos PDF encontrados.
+    """
     return [a.name for a in sorted(PDF_DIR.glob("*.pdf"))]
 
 def seleccionar_pdf() -> str | None:
-    """Permite al usuario seleccionar un PDF de la lista."""
+    """
+    Solicita al usuario que seleccione un archivo PDF de una lista mostrada por consola.
+
+    Returns:
+        str | None: Nombre del archivo seleccionado o None si la selección es inválida.
+    """
     archivos = listar_pdfs()
     if not archivos:
         print("[INFO] No se encontraron PDF en ./pdfs. Copia alguno y vuelve a ejecutar.")
@@ -32,7 +48,13 @@ def seleccionar_pdf() -> str | None:
     return None
 
 def procesar_pdf(pdf_name: str) -> None:
-    """Procesa el PDF seleccionado y muestra la ruta del Markdown generado."""
+    """
+    Procesa el archivo PDF especificado y muestra por consola la ruta del archivo Markdown generado,
+    o un mensaje de error si ocurre una excepción.
+
+    Args:
+        pdf_name (str): Nombre del archivo PDF a procesar.
+    """
     pdf_path = PDF_DIR / pdf_name
     logger.info(f"Procesando archivo: {pdf_path}")
     try:
@@ -44,7 +66,9 @@ def procesar_pdf(pdf_name: str) -> None:
         print("[ERROR] Hubo un problema al convertir el PDF.")
 
 def mostrar_menu() -> None:
-    """Menú principal interactivo para el usuario."""
+    """
+    Muestra el menú principal interactivo y gestiona la interacción con el usuario.
+    """
     while True:
         print("\n¿Qué deseas hacer?")
         print("1. Listar PDFs disponibles")

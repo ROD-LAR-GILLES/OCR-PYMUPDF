@@ -1,17 +1,24 @@
-"""Casos de uso para conversión de PDF a Markdown."""
+"""
+Caso de uso para convertir archivos PDF a formato Markdown utilizando PyMuPDF4LLM y OCR si es necesario.
+
+Este módulo forma parte de la capa de dominio y contiene lógica de negocio independiente de infraestructura.
+Se encarga de coordinar la extracción de contenido (a través del adaptador) y el guardado (a través de la infraestructura).
+"""
 from pathlib import Path
 from adapters.pymupdf_adapter import extract_markdown
 from infrastructure.file_storage import save_markdown
 
 
 def convert_pdf_to_md(pdf_path: Path) -> Path:
-    """Convierte un PDF a Markdown y lo guarda.
+    """
+    Convierte un archivo PDF en un archivo Markdown, utilizando extracción inteligente (digital u OCR) 
+    y guarda el resultado en el sistema de archivos.
 
     Args:
-        pdf_path: Ruta al PDF de entrada.
+        pdf_path (Path): Ruta al archivo PDF de entrada.
 
     Returns:
-        Ruta del Markdown generado.
+        Path: Ruta al archivo Markdown generado y almacenado.
     """
     markdown = extract_markdown(pdf_path)
     return save_markdown(pdf_path.stem, markdown)
