@@ -26,6 +26,32 @@ from tabulate import tabulate
 
 from adapters.ocr_adapter import has_visual_table, needs_ocr, perform_ocr_on_page
 
+# ──────────────── Layout Detection (layoutparser) ────────────────
+import layoutparser as lp
+import numpy as np
+
+def detect_layout_blocks(img: Image.Image) -> list[tuple[str, tuple[int, int, int, int]]]:
+    """
+    Detecta bloques visuales (títulos, párrafos, etc.) en una imagen usando layoutparser.
+
+    Returns:
+        Lista de tuplas (etiqueta, (x1, y1, x2, y2))
+    """
+    model = lp.Detectron2LayoutModel(
+        config_path="lp://PubLayNet/faster_rcnn_R_50_FPN_3x/config",
+        model_path=None,
+        label_map={0: "Text", 1: "Title", 2: "List", 3: "Table", 4: "Figure"},
+        extra_config=["MODEL.ROI_HEADS.SCORE_THRESH_TEST", 0.8],
+        device="cpu"  # Cambiar a "cuda" si hay GPU disponible
+    )
+
+    layout = model.detect(np.array(img))
+    blocks = []
+    for block in layout:
+        x1, y1, x2, y2 = map(int, block.coordinates)
+        blocks.append((block.type, (x1, y1, x2, y2)))
+    return blocks
+
 # DPI used when rendering pages to images
 _RENDER_DPI = 300
 
@@ -122,6 +148,8 @@ def extract_markdown(pdf_path: Path) -> str:
             else:
                 logger.debug(f"[Page {page_num}] Extracting embedded text")
                 text = page.get_text("text")
+                # Para diagnóstico: visualizamos bloques detectados (layoutparser)
+                # blocks = detect_layout_blocks(img)  # Descomentar si se quiere inspeccionar visualmente
             page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
 
     md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
