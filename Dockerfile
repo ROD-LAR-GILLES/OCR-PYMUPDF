@@ -9,6 +9,8 @@ RUN apt-get update && \
         libsm6 \
         libxext6 \
         libxrender-dev \
+        build-essential \
+        python3-dev \
         tesseract-ocr-spa \
         ghostscript \
     && apt-get clean && \
@@ -17,6 +19,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 COPY requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/ src/
