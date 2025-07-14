@@ -37,6 +37,9 @@ import numpy as np
 import pytesseract
 from PIL import Image
 
+# Agrega importación para image_to_string si no está presente
+from pytesseract import image_to_string
+
 #
 # ───────────────────────── Configuración global ─────────────────────────
 DPI              = 600
@@ -352,3 +355,34 @@ def extract_table_candidates(img_pil: Image.Image) -> list[tuple[int, int, int, 
     boxes = [box for box in boxes if box[2] > 50 and box[3] > 30]
 
     return boxes
+
+
+# Devuelve imágenes PIL recortadas
+def ocr_table_to_markdown(table_img: Image.Image) -> str:
+    """
+    Realiza OCR sobre una imagen de tabla y genera una tabla Markdown tipo pipe.
+
+    Args:
+        table_img (Image.Image): Imagen de una tabla detectada.
+
+    Returns:
+        str: Texto Markdown en formato tabla.
+    """
+    raw_text = pytesseract.image_to_string(table_img, lang='spa', config="--psm 6")
+    lines = [line.strip() for line in raw_text.splitlines() if line.strip()]
+    rows = [re.split(r'\s{2,}', line) for line in lines]
+    if not rows:
+        return ""
+
+    # Aseguramos que todas las filas tengan el mismo número de columnas
+    max_cols = max(len(row) for row in rows)
+    normalized_rows = [row + [''] * (max_cols - len(row)) for row in rows]
+
+    # Construimos la tabla Markdown
+    md_lines = []
+    md_lines.append('| ' + ' | '.join(normalized_rows[0]) + ' |')
+    md_lines.append('|' + '|'.join(['---'] * max_cols) + '|')
+    for row in normalized_rows[1:]:
+        md_lines.append('| ' + ' | '.join(row) + ' |')
+    
+    return '\n'.join(md_lines)
