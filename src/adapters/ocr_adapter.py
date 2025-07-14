@@ -74,7 +74,73 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     cleaned = _cleanup_text(raw)
     cleaned = detect_lists(cleaned)
     segmented = segment_text_blocks(cleaned)
+
+    # Intentar detectar tablas en la imagen
+    table_regions = detect_table_regions(img)
+    if table_regions:
+        logging.info(f"Se detectaron {len(table_regions)} regiones tabulares.")
+        tables_md = []
+        for region in table_regions:
+            table_img = img.crop(region)
+            table_md = ocr_table_to_markdown(table_img)
+            if table_md.strip():
+                tables_md.append(table_md)
+        if tables_md:
+            segmented += "\n\n## Tablas detectadas\n" + "\n\n".join(tables_md)
+
     return detect_structured_headings(segmented)
+
+
+# ──────────────── Detección de regiones de tabla ────────────────
+def detect_table_regions(img: Image.Image):
+    """
+    Detecta regiones candidatas a ser tablas en la imagen (PIL) y retorna una lista de cajas (left, upper, right, lower).
+    """
+    import numpy as np
+    import cv2
+    img_gray = np.array(img.convert("L"))
+    _, binary = cv2.threshold(img_gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    # Detección de líneas horizontales y verticales
+    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (40, 1))
+    vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 40))
+    horizontal_lines = cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
+    vertical_lines = cv2.morphologyEx(binary, cv2.MORPH_OPEN, vertical_kernel, iterations=1)
+    table_mask = cv2.add(horizontal_lines, vertical_lines)
+    contours, _ = cv2.findContours(table_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    boxes = [cv2.boundingRect(cnt) for cnt in contours]
+    # Opcional: filtrar por tamaño mínimo
+    boxes = [box for box in boxes if box[2] > 50 and box[3] > 30]
+    # Convertir a formato PIL: (left, upper, right, lower)
+    regions = [(x, y, x + w, y + h) for (x, y, w, h) in boxes]
+    return regions
+
+
+# ──────────────── OCR de tabla a Markdown ────────────────
+def ocr_table_to_markdown(img: Image.Image) -> str:
+    """
+    Aplica OCR sobre una imagen de tabla y la convierte a formato Markdown simple.
+    """
+    raw_text = image_to_string(img, lang="spa", config="--psm 6")
+    lines = raw_text.strip().splitlines()
+    lines = [line for line in lines if line.strip()]
+
+    if len(lines) < 2:
+        return ""
+
+    # Separar por espacios o tabulaciones para obtener celdas
+    header_cells = lines[0].split()
+    header = "| " + " | ".join(header_cells) + " |"
+    separator = "| " + " | ".join(["---"] * len(header_cells)) + " |"
+    rows = []
+    for line in lines[1:]:
+        row_cells = line.split()
+        # Si la fila tiene menos celdas que el header, rellenar
+        if len(row_cells) < len(header_cells):
+            row_cells += [""] * (len(header_cells) - len(row_cells))
+        elif len(row_cells) > len(header_cells):
+            row_cells = row_cells[:len(header_cells)]
+        rows.append("| " + " | ".join(row_cells) + " |")
+    return "\n".join([header, separator] + rows)
 
 
 # ───────────────────── Post‑OCR cleanup ──────────────────────
@@ -357,32 +423,67 @@ def extract_table_candidates(img_pil: Image.Image) -> list[tuple[int, int, int, 
     return boxes
 
 
-# Devuelve imágenes PIL recortadas
-def ocr_table_to_markdown(table_img: Image.Image) -> str:
+def ocr_table_to_markdown(img: Image.Image) -> str:
     """
-    Realiza OCR sobre una imagen de tabla y genera una tabla Markdown tipo pipe.
+    Aplica OCR sobre una imagen de tabla y la convierte a formato Markdown simple.
 
     Args:
-        table_img (Image.Image): Imagen de una tabla detectada.
+        img (PIL.Image): Imagen de tabla recortada.
 
     Returns:
-        str: Texto Markdown en formato tabla.
+        str: Tabla en formato Markdown.
     """
-    raw_text = pytesseract.image_to_string(table_img, lang='spa', config="--psm 6")
-    lines = [line.strip() for line in raw_text.splitlines() if line.strip()]
-    rows = [re.split(r'\s{2,}', line) for line in lines]
-    if not rows:
+    raw_text = image_to_string(img, lang="spa", config="--psm 6")
+    lines = raw_text.strip().splitlines()
+    lines = [line for line in lines if line.strip()]
+
+    if len(lines) < 2:
         return ""
 
-    # Aseguramos que todas las filas tengan el mismo número de columnas
-    max_cols = max(len(row) for row in rows)
-    normalized_rows = [row + [''] * (max_cols - len(row)) for row in rows]
+    header = "| " + " | ".join(lines[0].split()) + " |"
+    separator = "| " + " | ".join(["---"] * len(lines[0].split())) + " |"
+    rows = ["| " + " | ".join(line.split()) + " |" for line in lines[1:]]
 
-    # Construimos la tabla Markdown
-    md_lines = []
-    md_lines.append('| ' + ' | '.join(normalized_rows[0]) + ' |')
-    md_lines.append('|' + '|'.join(['---'] * max_cols) + '|')
-    for row in normalized_rows[1:]:
-        md_lines.append('| ' + ' | '.join(row) + ' |')
-    
-    return '\n'.join(md_lines)
+    return "\n".join([header, separator] + rows)
+
+def extract_tables_from_page(page: fitz.Page) -> list[str]:
+    """
+    Detecta visualmente tablas en una página PDF y extrae su contenido en formato Markdown.
+
+    Returns:
+        list[str]: Lista de tablas extraídas como strings Markdown.
+    """
+    pix = page.get_pixmap(dpi=DPI, alpha=False)
+    img_pil = Image.open(BytesIO(pix.tobytes("png")))
+    img_gray = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2GRAY)
+
+    # Binarización y detección de bordes
+    _, binary = cv2.threshold(img_gray, 128, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    # Detección de líneas horizontales y verticales
+    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (30, 1))
+    vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 30))
+
+    detect_horizontal = cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
+    detect_vertical = cv2.morphologyEx(binary, cv2.MORPH_OPEN, vertical_kernel, iterations=1)
+
+    table_mask = cv2.add(detect_horizontal, detect_vertical)
+
+    # Encontrar contornos (tablas candidatas)
+    contours, _ = cv2.findContours(table_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    tables_md = []
+
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+        if w < 100 or h < 50:
+            continue  # ignora cuadros pequeños
+
+        table_img = img_gray[y:y + h, x:x + w]
+        table_pil = Image.fromarray(table_img)
+        md_table = ocr_table_to_markdown(table_pil)
+
+        if md_table.strip():
+            tables_md.append(md_table.strip())
+
+    return tables_md
