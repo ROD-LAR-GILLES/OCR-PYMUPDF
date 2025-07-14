@@ -14,6 +14,7 @@ from loguru import logger
 from adapters.ocr_adapter import perform_ocr_on_page
 
 
+
 def extract_markdown(pdf_path: Path) -> str:
     """
     Extrae el contenido de un archivo PDF en formato Markdown. Usa OCR si se detecta que una página no contiene texto.

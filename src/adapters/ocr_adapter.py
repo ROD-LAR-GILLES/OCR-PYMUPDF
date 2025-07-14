@@ -26,6 +26,8 @@ Ejemplo de uso:
 
 from PIL import Image
 from io import BytesIO
+import cv2
+import numpy as np
 import logging
 import pytesseract
 import fitz
@@ -63,4 +65,30 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     """
     pix = page.get_pixmap(dpi=DPI, alpha=False)
     img = Image.open(BytesIO(pix.tobytes("png")))
+    img = preprocess_image(img)
     return pytesseract.image_to_string(img, lang=OCR_LANG, config=TESSERACT_CONFIG)
+
+def preprocess_image(img_pil: Image.Image) -> Image.Image:
+    """
+    Preprocesa la imagen para mejorar la precisión OCR.
+
+    Pasos:
+        1. Convierte a escala de grises.
+        2. Aplica CLAHE para realzar contraste.
+        3. Desenfoque Gaussiano para reducir ruido.
+        4. Binariza con umbral adaptativo inverso.
+
+    Args:
+        img_pil (Image.Image): Imagen RGB original.
+
+    Returns:
+        Image.Image: Imagen binarizada lista para OCR.
+    """
+    gray = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2GRAY)
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
+    enhanced = clahe.apply(gray)
+    blur = cv2.GaussianBlur(enhanced, (5, 5), 0)
+    thresh = cv2.adaptiveThreshold(
+        blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 15, 10
+    )
+    return Image.fromarray(thresh)
