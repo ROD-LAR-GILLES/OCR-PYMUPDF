@@ -321,3 +321,34 @@ def detect_lists(text: str) -> str:
             line = re.sub(r"^[-•–]\s*", "- ", line)
         output.append(line)
     return "\n".join(output)
+# ──────────────── Detección y extracción de tablas visuales ────────────────
+
+def extract_table_candidates(img_pil: Image.Image) -> list[tuple[int, int, int, int]]:
+    """
+    Detecta regiones candidatas a ser tablas mediante análisis de líneas horizontales y verticales.
+
+    Args:
+        img_pil (Image.Image): Imagen de la página renderizada.
+
+    Returns:
+        list[tuple[int, int, int, int]]: Lista de cajas delimitadoras (x, y, w, h) de posibles tablas.
+    """
+    img = np.array(img_pil.convert("L"))
+    _, binary = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    # Detección de líneas horizontales y verticales
+    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (40, 1))
+    vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 40))
+
+    horizontal_lines = cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
+    vertical_lines = cv2.morphologyEx(binary, cv2.MORPH_OPEN, vertical_kernel, iterations=1)
+
+    table_mask = cv2.add(horizontal_lines, vertical_lines)
+
+    contours, _ = cv2.findContours(table_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    boxes = [cv2.boundingRect(cnt) for cnt in contours]
+
+    # Opcional: filtrar por tamaño mínimo
+    boxes = [box for box in boxes if box[2] > 50 and box[3] > 30]
+
+    return boxes
