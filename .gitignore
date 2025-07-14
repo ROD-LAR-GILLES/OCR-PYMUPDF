@@ -36,4 +36,4 @@ pdfs/
 # Archivos de dependencias locales
 *.egg-info/
 dist/
-build/
+build/RULES.md
