@@ -1,4 +1,4 @@
-camelot-py[cv]==0.11.0
+camelot-py==0.11.0
 loguru==0.7.3
 opencv-python-headless==4.12.0.88
 pillow==11.3.0

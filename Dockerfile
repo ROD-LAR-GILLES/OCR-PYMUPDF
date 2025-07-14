@@ -11,7 +11,6 @@ RUN apt-get update && \
         libxrender-dev \
         build-essential \
         python3-dev \
-        tesseract-ocr-spa \
         ghostscript \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -20,7 +19,10 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Eliminar [cv] de camelot-py para evitar errores con pdftopng
+RUN sed -i 's/camelot-py\[cv\]/camelot-py/g' requirements.txt && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY src/ src/
 COPY pdfs/ pdfs/
