@@ -1,4 +1,4 @@
-# Instrucciones para Copilot - OCR-RAG
+# Instrucciones para Copilot - OCR-PUMUPDF
 
 ## REGLAS FUNDAMENTALES (CRÍTICAS)
 
