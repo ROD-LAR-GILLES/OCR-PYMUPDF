@@ -26,13 +26,17 @@ Ejemplo de uso:
 
 from PIL import Image
 from io import BytesIO
+import logging
 import pytesseract
 import fitz
 
 # ───────────────────────── Configuración global ─────────────────────────
-DPI = 300
-TESSERACT_CONFIG = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
-OCR_LANG = "spa"
+DPI                = 600
+TESSERACT_CONFIG   = f"--psm 11 --oem 1 -c user_defined_dpi={DPI}"
+MIN_W, MIN_H       = 200, 40
+OUT_DIR_NAME       = "ocr_tablas_cv"
+OCR_LANG           = "spa"
+logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
 def perform_ocr_on_page(page: fitz.Page) -> str:
     """
