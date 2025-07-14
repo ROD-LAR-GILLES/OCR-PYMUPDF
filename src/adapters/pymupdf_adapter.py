@@ -7,7 +7,6 @@ a herramientas externas y encapsulando la decisión sobre el método adecuado de
 """
 from pathlib import Path
 import fitz  # PyMuPDF
-import pytesseract
 from PIL import Image
 from io import BytesIO
 from pymupdf4llm import to_markdown
@@ -15,23 +14,9 @@ from loguru import logger
 from adapters.ocr_adapter import perform_ocr_on_page
 
 
-def _is_scanned(pdf_path: Path) -> bool:
-    """
-    Determina si un archivo PDF es escaneado, verificando si la primera página contiene texto seleccionable.
-
-    Args:
-        pdf_path (Path): Ruta al archivo PDF.
-
-    Returns:
-        bool: True si no hay texto seleccionable en la primera página, False en caso contrario.
-    """
-    with fitz.open(pdf_path) as doc:
-        page = doc[0]
-        return page.get_text("text").strip() == ""
-
 def extract_markdown(pdf_path: Path) -> str:
     """
-    Extrae el contenido de un archivo PDF en formato Markdown. Usa OCR si se detecta que el PDF es escaneado.
+    Extrae el contenido de un archivo PDF en formato Markdown. Usa OCR si se detecta que una página no contiene texto.
 
     Args:
         pdf_path (Path): Ruta al archivo PDF.
@@ -39,17 +24,22 @@ def extract_markdown(pdf_path: Path) -> str:
     Returns:
         str: Contenido en formato Markdown.
     """
-    pdf_path = Path(pdf_path)
+    from adapters.ocr_adapter import needs_ocr
+
+    logger.info("Iniciando análisis de páginas individuales para aplicar OCR selectivo si es necesario.")
+
     with fitz.open(pdf_path) as doc:
-        if _is_scanned(pdf_path):
-            logger.warning("PDF detectado como escaneado, usando OCR en todas las páginas.")
-            ocr_text = []
-            for i, page in enumerate(doc):
-                logger.info(f"Procesando OCR página {i + 1}")
+        ocr_text = []
+        for i, page in enumerate(doc):
+            if needs_ocr(page):
+                logger.info(f"[Página {i + 1}] Sin texto detectable. Aplicando OCR...")
                 text = perform_ocr_on_page(page)
-                ocr_text.append(f"## Página {i + 1}\n\n{text.strip()}")
-            full_markdown = f"# {pdf_path.stem}\n\n" + "\n\n".join(ocr_text)
-            return full_markdown
-        else:
-            logger.info("PDF digital detectado, usando PyMuPDF4LLM.")
-            return to_markdown(str(pdf_path))
+            else:
+                logger.info(f"[Página {i + 1}] Texto detectado. Extrayendo directamente...")
+                text = page.get_text("text")
+            ocr_text.append(f"## Página {i + 1}\n\n{text.strip()}")
+
+    full_markdown = f"# {pdf_path.stem}\n\n" + "\n\n".join(ocr_text)
+    return full_markdown
+
+

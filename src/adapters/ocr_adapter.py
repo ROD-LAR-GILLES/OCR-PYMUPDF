@@ -39,6 +39,18 @@ MIN_W, MIN_H       = 200, 40
 OUT_DIR_NAME       = "ocr_tablas_cv"
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
+def needs_ocr(page: fitz.Page) -> bool:
+    """
+    Determina si una página necesita OCR revisando si contiene texto seleccionable.
+
+    Args:
+        page (fitz.Page): Página a analizar.
+
+    Returns:
+        bool: True si no hay texto y se debe aplicar OCR.
+    """
+    return page.get_text("text").strip() == ""
+
 def perform_ocr_on_page(page: fitz.Page) -> str:
     """
     Realiza OCR sobre una página de PDF utilizando Tesseract vía pytesseract.
