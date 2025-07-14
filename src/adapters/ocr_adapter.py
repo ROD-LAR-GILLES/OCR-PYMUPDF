@@ -36,6 +36,7 @@ import fitz
 import numpy as np
 import pytesseract
 from PIL import Image
+from langdetect import detect, LangDetectException 
 
 # Agrega importación para image_to_string si no está presente
 from pytesseract import image_to_string
@@ -52,44 +53,74 @@ logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
 def perform_ocr_on_page(page: fitz.Page) -> str:
     """
-    Realiza OCR sobre una página de PDF utilizando Tesseract vía pytesseract.
-
-    Simplifica el preprocesamiento para mejorar estabilidad.
+    OCR de una página con:
+      • Corrección de rotación
+      • Preprocesamiento (CLAHE + binarizado adaptativo + denoise)
+      • PSM y lenguaje dinámicos
     """
+    # 1) Render
     pix = page.get_pixmap(dpi=DPI, alpha=False)
-    img = Image.open(BytesIO(pix.tobytes("png")))
+    img_pil = Image.open(BytesIO(pix.tobytes("png")))
 
-    # Preprocesamiento liviano: escala de grises
-    gray = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
-    img = Image.fromarray(gray)
+    # 2) Deskew / rotate
+    img_pil = correct_rotation(img_pil)
 
-    # Configuración fija: PSM 6 (bloques uniformes), idioma español
-    config = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
-    lang = "spa"
+    # 3) Contraste local + binarizado
+    gray = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2GRAY)
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
+    gray = clahe.apply(gray)
+    binar = cv2.adaptiveThreshold(
+        gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv2.THRESH_BINARY, 31, 15
+    )
+    # 4) Denoise ligero
+    binar = cv2.morphologyEx(
+        binar, cv2.MORPH_OPEN,
+        cv2.getStructuringElement(cv2.MORPH_RECT, (1, 1)),
+        iterations=1
+    )
+    img_pil = Image.fromarray(binar)
 
-    raw = pytesseract.image_to_string(img, lang=lang, config=config)
-    # Eliminar guiones de fin de línea que cortan palabras
+    # 5) PSM dinámico
+    psm = estimate_psm_for_page(img_pil)
+    config = (
+        f"--psm {psm} --oem 3 -c user_defined_dpi={DPI}"
+        " --user-words /usr/share/tesseract-ocr/5/tessdata/legal_words.txt"
+        " --user-patterns /usr/share/tesseract-ocr/5/tessdata/legal_patterns.txt"
+    )
+
+    # 6) Idioma dinámico
+    lang_param = "spa"
+    try:
+        sample = pytesseract.image_to_string(img_pil, lang="spa", config="--psm 7")[:200]
+        if sample:
+            lang_code = detect(sample)
+            if lang_code != "es":
+                lang_param = f"spa+{lang_code}"
+    except LangDetectException:
+        pass
+
+    # 7) OCR principal
+    raw = pytesseract.image_to_string(img_pil, lang=lang_param, config=config)
+
+    # 8) Limpieza y post-procesado existentes
     raw = re.sub(r"-\n(\w+)", r"\1", raw)
-    # Aplica _cleanup_text, luego detect_lists, luego segment_text_blocks, luego detect_structured_headings
-    cleaned = _cleanup_text(raw)
-    cleaned = detect_lists(cleaned)
+    cleaned = detect_lists(_cleanup_text(raw))
     segmented = segment_text_blocks(cleaned)
 
-    # Intentar detectar tablas en la imagen
-    table_regions = detect_table_regions(img)
+    # 9) Detección de tablas OCR (tu lógica actual)
+    table_regions = detect_table_regions(img_pil)
     if table_regions:
-        logging.info(f"Se detectaron {len(table_regions)} regiones tabulares.")
         tables_md = []
         for region in table_regions:
-            table_img = img.crop(region)
-            table_md = ocr_table_to_markdown(table_img)
-            if table_md.strip():
-                tables_md.append(table_md)
+            table_img = img_pil.crop(region)
+            md_tbl = ocr_table_to_markdown(table_img)
+            if md_tbl.strip():
+                tables_md.append(md_tbl)
         if tables_md:
             segmented += "\n\n## Tablas detectadas\n" + "\n\n".join(tables_md)
 
     return detect_structured_headings(segmented)
-
 
 # ──────────────── Detección de regiones de tabla ────────────────
 def detect_table_regions(img: Image.Image):

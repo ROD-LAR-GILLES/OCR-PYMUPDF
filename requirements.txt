@@ -1,5 +1,5 @@
-
-# ───── OCR y Preprocesamiento ─────
+# ───── OCR y Preprocesamiento
+langdetect==1.0.9
 opencv-python-headless>=4.5.0
 pillow==11.3.0
 pytesseract==0.3.13
