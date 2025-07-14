@@ -9,6 +9,8 @@ RUN apt-get update && \
         libsm6 \
         libxext6 \
         libxrender-dev \
+        tesseract-ocr-spa \
+        ghostscript \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
