@@ -67,7 +67,9 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     raw = pytesseract.image_to_string(img, lang=lang, config=config)
     # Eliminar guiones de fin de línea que cortan palabras
     raw = re.sub(r"-\n(\w+)", r"\1", raw)
+    # Aplica _cleanup_text, luego detect_lists, luego segment_text_blocks, luego detect_structured_headings
     cleaned = _cleanup_text(raw)
+    cleaned = detect_lists(cleaned)
     segmented = segment_text_blocks(cleaned)
     return detect_structured_headings(segmented)
 
@@ -294,3 +296,28 @@ def segment_text_blocks(text: str) -> str:
             out_blocks.append(stripped)
 
     return "\n\n".join(out_blocks)
+# ──────────────── Detección y formateo de listas ────────────────
+# ──────────────── Detección y formateo de listas ────────────────
+# Nueva versión detect_lists al final del archivo:
+def detect_lists(text: str) -> str:
+    """
+    Detecta listas numeradas o con viñetas y las convierte a formato Markdown.
+    - 1. Item → 1. Item
+    - • Item → - Item
+
+    Args:
+        text (str): Texto plano.
+
+    Returns:
+        str: Texto con formato de lista en Markdown.
+    """
+    lines = text.splitlines()
+    output = []
+    for line in lines:
+        line = line.strip()
+        if re.match(r"^\(?\d+[\.\)-]", line):
+            line = re.sub(r"^\(?(\d+)[\.\)-]\s*", r"\1. ", line)
+        elif re.match(r"^[-•–]", line):
+            line = re.sub(r"^[-•–]\s*", "- ", line)
+        output.append(line)
+    return "\n".join(output)

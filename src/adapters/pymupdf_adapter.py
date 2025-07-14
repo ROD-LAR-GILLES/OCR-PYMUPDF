@@ -122,8 +122,10 @@ def extract_markdown(pdf_path: Path) -> str:
                 text = perform_ocr_on_page(page)
             else:
                 logger.debug(f"[Page {page_num}] Extracting embedded text")
-                text = page.get_text("text")
+                raw = page.get_text("text")
                 # Para diagnóstico: visualizamos bloques detectados (layoutparser)
+                from adapters.ocr_adapter import detect_lists, _cleanup_text
+                text = detect_lists(_cleanup_text(raw))
             page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
 
     md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
