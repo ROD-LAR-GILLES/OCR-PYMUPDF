@@ -1,5445 +1,1014 @@
 # pdf_escan
 
-## Página 1
+## Page 1
+
+, i LONTOMMEe CON Cl cscunior cos
+r | | II ana Ed pá
+( j E II
+REPÚBLICA DE CHILE AURO VERDUGO L MUA BA ARA CEE
+MINISTERIO DE OBRAS PUBLICAS A 4 Obra Púb A
+, t Y . e LR
+H Su ogante an, a : LESS
+VO ¡E o E
+Ref:  Adjudica contrato de concesión pará la ejecución; 2 Mallo. CE
+conservación y explotación de la obra pública fiscal e, o Da 7
+MINISTERIO DE | denominada Concesión internacional Sistema A E E
+HACIENDA Oriente - Poniente, o q sl sE a
+OFICINA DE PAR uE
+ne TES SANTIAGO, 2) FEB, ¿000 ES
+RECIBIDO DE
+BUBSECRETARIA DE 00. PP. ESE
+3 7 5 OFICINA DE PARTES Ñ E
+CONTRALORIA GENERAL N* o
+TOMA DE RAZON ———— TRAMIFADO 7
+mm) NS.
+| ? Ldi, 2800 VISTOS; : FECHA ú 2 ABR 2000 E Oz
+RECEPCION o. E
+DEPART. MO - El Artículo 87 del DFL MOP N? 850, de 1997, que fija el CA
+JURIDICO O texto refundido, coordinado y sistematizado de la Ley N* : ERA
+MEN 15.840, de 1964, Orgánica del Ministerio de Obras Públicas y NE
+). 2EP- TA del DFL N* 206, de 1960, Ley de Caminos; e TE
+oerARr, | >| “ El D.S. MOP N* 900, de 3996, que fija el texto refundido, E
+CONTABIL, — coordinado y sistema 4%, del DFL MOP N* 164, de 1991, | có,
+E Ley de Concesiones de Obras Públicas; E
+C. CENTRAL e 0%
+- El DS. MOP N* 956, de 1997, Reglamento de la Ley de NE
+sun.oer [7] Concesiones de Obras Públicas; os
+a " El Oficio N* 359/350, de 01 de abril de 1997. del sr CE
+BIENES NAC. MO Ministro de Hacienda, que aprucba las Bases de : o
+DEPART. | | Precalificación del Registro Especial Internacional para el oz
+AUDITORIA MI “Primer Programa de Concesiones Urbanas”. o E
+E ma * Las Resoluciones DGOP N?* 257, de 15 de abril de 1997 y | E
+OA | 2 A N* 649, de 05 de septiembre de 1997, que aprueban las 3 UNNE
+SUB. DEP. MA Bases de Precalificación y las circulares aclaratorias N? 1, 2, o 57 ;
+MUNICIP, po 7 3, 4,5,6,7,8,9 y 10 del Registro Especial Internacional Ñ E
+A IE * para el “Primer Programa de Concesiones Urbanas”; las to E
+5 MO Resoluciones DGOP N? 180, de 05 de marzo de 1998 yN9 ? E
+408, de 27 de mayo de 1998, que aprueban las circulares o E
+: "+ REFRENDACION aclaratorias N* 11 y 12, de las Bases de Precalificación e E
+REF.POR$ mencionadas y la Resolución DGOP N? 179, de 08 de junio 2 E
+IMPUTAC: de 1999, que aprueba la circular aclaratoria N*13 de las , . 0
+ANOT.POR$ 2221212121211 Bases de Precalificación referidas, A dE
+IMPUTA pra o
+__emx* * El Oficio SEGPRES (D.EJEC) N? 441, de 09 de abril de 1997, E
+DEDUE.0O - de Su Excelencia el Presidente de la República, que aprueba la ES
+ejecución de la obra pública fiscal denominada Concesión . a E
+Internacional Sistema Oré te - Poniente, por el sistema de . E E
+concesiones; l ! E E
+_ rm. - El Oficio mA8 1/96 25 de junio de 1999, del Sr. Ministro E E
+D ¿A DE <Q] de Hacy a que apiríeba el Estudio de Factibilidad, Prospecto FEE
+Tos AY AÑ de po y ión y Pases de Licitación de la Concesión o
+OF 52 1 3 . YN > 0 " cjona 1s “ma Orjente -- Poniente; i . , 7 -
+PS y IS sj z Y RAZÓN _ / A A E
+Sm € y e 5 hy os ES 5 es E
+: " Xi. nas” t Ñ . OS A
+| Eno: ABR. 2000 mo a. RES 3
+y : .. ..o ns AS OM 12 _ , a Ñ
+%INTRALOR GENERAL IN o CESE
+Y DE LA REPÚBLICA Y. | e 2d ESE
+: . / n.: Sd
 
-a ES
+£ ; - $e 3 : A. N 1 o
 
-t.onrorme cory
+## Page 2
 
-cl
+2 7 " - nor ' Z ad
 
-SUCUNICE
+o AN A 2 E
 
-ania
+o. " oo. a a . os CS a E
+- El llamado a Licitación Pública del Proyecto de Concesión Internacional Sistema Oriente - Poniente, publicado Edel
 
-¿€
+en el Diario Oficial, de fecha 02 de julio de 1999: . 0% ES
 
-rotacelizario
+- La Resolución DGOP No 286, de 12 de agosto de 1999, que aprueba las Bases de Licitación de la obra E E
+pública fiscal denominada Concesión Intemacional Sistema Oriente - Poniente; dE:
 
-51
+- Las Resoluciones DGOP N* 358, de 27 de septiembre de 1999; N* 391, de 27 de octubre de 1999: no E
 
-ajo
++ 411, de 09 de noviembre de 1999 y N* 422, de 15 de noviembre de 1999, que aprueban las circulares MEA
+aclaratorias N* 1, 2, 3, 4,5 y 6 de las referidas Bases de Licitación; E =
+| - El Acta de Recepción de las Ofertas y Apertura de las Ofertas Técnicas de fecha 16 de noviembre de 1999; : E z
+o “o. ] a». - EN Z
 
-¡ME on
+1 * El Oficio DGOP N” 2056, de fecha 26 de noviembre de 1999, mediante el cual se solicitó a los Licitantes, las E
 
-ereeeeeenvrenes ..o.
+: aclaraciones y rectificaciones que se indicaron y la carta de respuesta del Grupo Licitante Adjudicatario de la 53:
 
-Ed
+* citación de fecha 30 de noviembre de 1999, ingresada en la Oficina de Partes de la Dirección Genera] de AE
+Obras Públicas, con igual fecha; : dos
 
-REPÚBLICA DE CHILE
+: + El Actade Evaluación de las Ofertas Técnicas de fecha 01 de diciembre de 1999, E
 
-ron
+Ñ : ¿E - E Ñ 7
 
-pl
+> El Acta de Apertura de la Ofertas Económicas de fecha 06 de diciembre de 1999; E
 
-Y JUL 200)
+> El Acta de Calificación de las Ofertas Económicas de fecha 20 de diciembre de 1999; | 0 Ex
 
-it
+* El Acta de Adjudicación del Director General de Obras Públicas de fecha 18 de enero del 2000. E:
 
-E
+. DECRETO E
 
-JUL.
+t.- — Adjudicase el contrato de concesión para la ejecución, conservación y explotación de la obra pública fiscal, l E
+denominada Concesión Internacional Sistema Oriente - Poniente al Grupo Licitante compuesto por O
+IMPREGILO SPA, EMPRESA CONSTRUCTORA FE GRANDE SA. y EMPRESA E
+CONSTRUCTORA TECSA S.A. 7
 
-os
+2.- Declárase que forman parte integrante de este Decreto, las Bases de Licitación para la concesión de la obra E 3
+pública fiscal denominada Concesión Internacional Sistema Oriente - Poniente, aprobadas por Resolución '. Ñ ES Ñ
 
-ere
+DGOP N* 286, del año 1999: las circulares aclaratorias N's 1, 2, 3, 4, 5 y 6, aprobadas por Resoluciones 4) Es
 
-MINISTERIO DE OBRAS PUBLICAS
+DGOP N” 358, 391, 411 y 422, todas del año 1999; y las Ofertas Técnica y Económica, en la forma - $e PE
 
-ALIRO VERDUGO LA!
+aprobada por el MOP, presentadas por el Grupo Licitante Adjudicatario compuesto por IMPREGILO ' E
 
-vf M
+S.P.A., EMPRESA CONSTRUCTORA FE GRANDE S.A. y EMPRESA CONSTRUCTORA, 0 Ps
 
-Vi
+TECSA S.A. En caso de discrepancia en la interpretación del presente contrato, primará lo dispuesto en las 2
 
-Subs
+Bases de Licitación y en sus circulares aclaratorias, por sobre lo establecido en la oferta presentada por el. E
 
-tolatlo \do Obray PúbHe
+Grupo Licitante Adjudicatario de la concesión, salvo el caso en que ésta contenga aspectos superiores a lo o
 
-a
+cxigido en las Bases de Licitación y sus circulares aclaratorias, lo que será calificado por el Director General pa
 
-‘
+| de Obras Públicas, o. a E
+- 3- Forman parte del contrato de concesión las disposiciones pertinentes de los siguientes cuerpos legales: l A :
+a) El Decreto Supremo MOP N? 200, de 1996, que fija el texto refundido, coordinado y sistematizado €
 
-Ñ
+| del DFL MOP N? 164, de 1991, Ley de Concesiones de Obras Públicas. | 3
+b) El Docreto Supremo MOP No 956, de 1997, Reglamento de la Ley de Concesiones de Obras. co
 
-Subjoganta Z
+Públicas. : | " EE
 
-:
+c) El DFL MOP No 850, de 1997, que fija el texto refundido, coordinado y sistematizado de la e AN : y
 
-¢ \
+15.840, de 1964, Orgánica del Ministerio de Obras Públicas y del DFL-N” 206, de 1960, PSN ln
 
-Ref;
+: PRI Sd
 
-M
+Caminos. Ñ FASIMA ON El
 
-ee
+po o á ¿UNA E) Es
 
-cc
+4.- — La concesión tendrá un plazo de duración de 360 meses según lo señalado en 1.10.2 de las dses de ++ Dos
+Licitación. Este plazo se contará desde el inicio dej plazo de la concesión, de acuerdo a lo seña) Sr es
 
-Adjudica contrato de concesión p
+1.10.1 de las Bases de Licitación. : OS
 
-la ejecución
+? LEA
 
->
+nt, 1 . . EOS
 
-MINISTERIO DE
+: NN CON SS
 
-denominada
+## Page 3
 
-conservación y explotación de la obra
-
-pública fiscal’
-
-2.
-
-8)
-
-y
-
-HACIENDA
-
-Concesión
-
-Oriente — Poniente,
-
-Internacional Sistema
-
-fe
-
-ay
-
-Cy
-
-os
-
-OFICINA DE PARTES
-
-= om
-
-RECIDIDO
-
-SANTIAGO, oh FEB, 2000
-
-SUBSECRETARIA DE OO. PP.
-
-CONTRALORIA GENFRAL
-
-OFICINA DE PARTES
-
-ae
-
-TOMA DE RAZON
-
-9375
-
-TRAMIFADO
-
-47 id,
-
-RECEPCION
-
-7100 VISTOS;
-
-FECHA $ 2 ABR 2000
-
-DEPART,
-
-JURIDICO
-
-- El Artículo 87 del DFL MO
-
-texto refundido, coordi
-
-P N°
-
-850, de 1997, que fija el
-
-| DEP. TA,
-
-15.840
-
-nado y sist
-
-emaiizado de la Ley N°
-
-- #
-
-de 1964, Orgánica del Mini
-
-,
-
-Steno de Obras Publ
-
-4 = §. “GISTRO
-
-del DFL N° 206, de 1960, Ley de
-
-Caminos;
-
-icas y
-
-DEPART.
-
-CONTABIL.
-
-- El D.S. MOP N
-
-o
-
-900
-
-de 4996, que fija el texto
-
-refundido,
-
-0
-
-SUB. DEP,
-
-coordinado y sist i
-
-mai
-
-del DFL MOP N° 164
-
-C. CENTRAL
-
-Ley de Concesiones de Ob
-
-ras Públicas;
-
-, de 1991,
-
-SUB. DEP.
-
-at
-
-E. CUENTAS
-
-- El D.S. MOP N° 956, de 1997, R
-
-cglamento de la Ley de
-
-Concesiones de Obras Públicas;
-
-SUB. DEP, -
-
-BIENES MAC.
-
-- El Oficio N° 359/350, de O1 de ab
-
-ril de 1997, del Sr.
-
-DEPART.
-
-Ministro de Hacienda, que
-
-aprucba
-
-las Bases
-
-AUDITORIA
-
-Precalificación del Registro Esp
-
-ecial Inter
-
-de
-
-acional para el
-
-DEPART.
-
-“Primer Programa de
-
-Concesiones Urbanas”.
-
-V.O.P..U. y T.
-
-at
-
-- Las Resoluciones DGOP N°
-
-SUB. DEP,
-
-N° 649, de 05 de septiemb
-
-257, de 15 de abril de 1997 y
-
-MUNICIP,
-
-re de 1997, que aprueban las
-
-Bases de Precalificación y!
-
-as circulares aclaratorias N° 1, 2,
-
-ro.)
-
+4 : ES
+l EA
+5.- El Concesionario construirá, explotará y conservará las obras que se indican cn las Bases Técnicas de las Ss
+Bases de Licitación, situadas cn los ejes Costanera Norte y Avenida Presidente Kennedy indicadas cn el NE
+. . .. . . go x
+artículo 1,2,3 de las Bases de Licitación que comprenden lo siguiente: E
+o AA
+Cláusulas de las a E le
+Dases de Licitación ES E
+E o a EE
 e
+2. Mejoramiento de atadas | E
+serv INN TN EEN 2d
+5. Desvio de Trámilo INN ETERNA e
+2._ Estructuras Desniveladas a] A
+Su: cr o
+2. Paisajismo y equipamiento Ñ :
+cumunitario e
+E) Servicios Especiales Cs +
+Obligatorios sos
+l. Servicios de Control y Gestión de EN
+Tráfico ' a
+- | F)Obra Opcional Extensión Eje : NS
+Costanera Norte Tramo Américo url
+Vespucio Poniente hasta la Ruta 68 Ñ E
+Para cllo utilizará los Proyectos y Anteproyectos Referenciales entregados por el MOP y que el CE
+concesionario hizo suyos en la Oferta Técnica, que contienen las obras minimas a realizar. En todo caso, . . A] 5
+cl Concesionario deberá cumplir con todos los estándares e indicadores establecidos en las Dascs o CE
+PR Técnicas realizando las obras adicionales que scan necesarias para ello. El concesionario podrá proponer ' a
+CEN al Inspector Fiscal modificaciones a los Proyectos y Anteproyectos Referenciales en los términos . A
+: previstos en 1.8.1.1. de las Bases de Licitación. Podrá también, el concesionario, proponer mo. CHE
+modificaciones cn el discño de pavimentos y cambios a las obras de ingeniería del Túnel, debiendo o ET
+. Someter dichos proyectos a la aprobación del Inspector Fiscal antes del inicio de ejecución de la obra E
+correspondiente, en las condiciones establecidas en 2.2.2.3 y 2.2.2.5.1 respectivamente de las Bases de UN o
+Licitación. E
+No obstante, cl MOP podrá modificar por razones de interés público, las caracteristicas de las obras | ro
+y servicios contratados cn los términos previstos en 1.11.3.1 de las Bases de Licitación. ; De;
+6.- De confonnidad cun cl artículo 1.7.21 de las Bascs de Licitación, la Sociedad Concesionaria podrá o E z
+- Construir la obra opcional Extensión eje Costancra Norte entre A. Vespucio Poniente hasta la Ruta 68, q,
+descrita en cl artículo 2.3.6 de las Bases de Licitación. Para cllo la Sociedad Concesionaria, deberá  : " SE 5
+. manifestar la intención de construirlas presentando en la oficina de partes de la Dirección General de  * EE
+Obras Públicas, cn el periodo comprendido entre los 210 y 240 dias contados desde la publicación del o, CE
+presente Decreto Supremo de Adjudicación en el Diario Oficial, una carta dirigida al DGOP señalando : dE ;
+su decisión de incorporar cestas obras en la concesión. La no presentación de dicho documento en los EA
+DE plazos y formas establecidos, significará que la Sociedad Contesionaria renuncia a la opción de realizar A
+E DR ¡ ¡ idas por cl MOP. | E
+SSL dichas obras, pudiendo éstas scr construidas por cl MOP A y E
+Y CEE
+52 % : capi ' z
+2 | o A
+CHILE o E
+. LEA . . .. . . | AA . , ] 0 0% PEO ES
+
+## Page 4
+
+: mE
+e EE
+| A AS
+, E
+yx
+?.- El MOP se hará cargo de la ejecución y financiamiento de los proyectos de ingenieria, y de las obras E
+relacionadas con todos los cambios de los servicios públicos existentes (húmedos y no húmedos) que e
+se vean afectados por la ejecución de las obras de la concesión, de acuerdo con lo establecido en el EN
+proyecto referencial entregado por el MOP y según lo dispuesto en 1,7.9.2.3 de las Bases de E
+Licitación. " E
+Los Puentes sobre cl Rio Mapocho indicados en la Tabla 1-3 del artículo 1.7.9.2.1 de las Bases de E
+Licitación y las Defensas Fluviales para las riberas norte y sur del Río Mapocho, detalladas en el E
+Proyccto de Ingenierta Referencial aprobado por el Departamento de Obras Fluviales del MOP, NES
+podrán ser ejecutadas por el Ministerio de Obras Públicas o la Sociedad Concesionaria según ERA
+corresponda, en la forma, plazos y condiciones señaladas en los articulos 1.7.9.2.1 y 1.7.9.2.2. de las E
+Bases de Licitación. l A
+8.- El Mor entregará a la Sociedad Concesionaria la infraestructura preexistente en el estado en que se EE
+encuentre. Dicha entrega se hará, mediante la anotación que realice el Inspector Fiscal en el Libro de EA
+Obras de Construcción a que alude el ertículo 1.8.2.1. E
+La Sociedad Concesionaria tendrá la responsabilidad de efectuar la mantención y conservación de esta E k
+infraestructura a partir de las fechas indicadas en la Tabla 1-2 del artículo 1.7.9.1 de las Bases de A
+Licitación y, de acucrdo con los estándares para la concesión, indicados en las Bases Técnicas de las DN A
+Bases de Licitación. Ea E
+La infraestructura existente que se entregará al concesionario será: l le: 3
+. .. . m. - = z
+* Av. Kennedy, desde 500 mts. al oriente de la intersección con Av. Tabancura, en el límite de las put á
+Comunas de Las Condes y Vitacura, hasta su término en el puente Lo Saldes, en el limite de las E
+Mismas comunas, incluyendo las obras de los desniveles de esta vía con Av. Las Condes, Av. Padre eE
+Hurtado, Av. Gerónimo de Alderete, Av, Manquehue, Américo Vespucio y rotonda Pérez Zujovie, ESE
+además del puente Lo Saldes. 0 3%
+eS
+* Avenida Comodoro Arturo Merino Benítez, desde su inicio en el puente Centenario, en la comuna £a 7
+de Vitacura, hasta su término en la intersección con el puente Lo Saldes en el límite de las comunas EE
+de Vitacura y Providencia. mE
+e Puente La Dehesa, sobre el Rio Mapocho, en la comuna de Lo Barnechea. E Me
+* Av. Sor Teresa de Los Andes, desde Tabancura hasta 600 mis. al oriente de La Gran Vía. E E
+Eccha de Entrega de la Infraestructura Existente EE
+$ 23
+Infracstructura ut. Fecha de entrega :: +. 4. o Hen us. E
+existente A hs.
+: El día de inicio del plazo de concesión indicado en 1.10.1 de A Vel
+las Bases de Licitación : E
+Av. Comodoro El día de inicio del plazo de concesión indicado en 1.10,1 de E
+Arturo Merino las Bases de Licitación. ¡E
+Benitez | E
+Av. Sor Teresa de El dia de inicio del plazo de concesión indicado en 1.10.1 de ES
+Los Andes las Bases de Licitación. E
+Desnivel Padre 01 de Octubre de 2001 ESE
+Hurtado e
+Desnivel 31 de Diciembre de 2002 DE
+e Gerónimo de : 4d
+Alderete | | El
+Puente La Dehesa 31 de Agosto de 2002 E E
+(1) Considera toda la Av. Kennedy, a excepción de los desniveles de Padre Hurtado y Gerónimo de 24 -
+Alderete. 0
+¿6 DES E
+o o . EN
+3 sl ES ) > N A
+Ñ Es
+* cre Y pS Zn EXA Le
+NES ns eE
 
-3, 4, 5, 6, 7, 8, 9 y 10 de
+## Page 5
 
-{ Registro Especial Internacional
+oa
 
-para el “Primer Programa
+, ] EL
 
-Resoluciones DGOP N°
+9.- De acuerdo con lo dispuesto por cl articulo 1.12 de las Bases de Licitación y según la oferta E
+: presentada por cl Grupo Licitanto Adjudicatario se adoptó un sistema abierto de cobro de tanfas, Ex
+tanto en el eje Kennedy como en el eje Costanera Norte, utilizando la tecnología de Comunicaciones : ES
+Corto Alcance o DSRC (Dedicater Short Range Communication), Punto de Cobro Electrónico . BE
+Vehiculo, de acuerdo al estándar desarrollado por el Comité Técnico TC278 del Comité Europeo de ES
+Normalización (CEN) para los niveles OSI 1,2 y 7, según lo definido cn los articulos 1.14.3.2 y EE
+2.2.2.13.2.5 de las l3ases de Licitación. E
+Dicho estándar es complementado con la oferta presentada por el Grupo Licitante Adjudicatario, con EE
 
-de Concesiones Urbanas”; las
+las normas ENV1225), ENVI12795, ENV12834, ENV13372 todas del Comité Europeo de 3
+Normalización (CEN), 150 ENV14906 del Comité Técnico ISO/TC204, y con las especificaciones E
+industriales GSS (versión 2.0) y TR 4001 Al (versión ER9_1.3). E
+Según la oferta del grupo licitante adjudicatario los puntos de cobro se ubicarán en: : z ES E
+EJE COSTANERA NORTE - 0 : LEE
+ORIENTE PONIENTE A EE:
+Puente Tabancura — Gran Via | Kilomevo 4 ES
 
-180, de 05 de marzo de 1998 y N°
+Puente Centenario — Puente Lo Saldes E ES
+Viyaceta — Walker Martinez -——— Kilometro 207 Ent
+a E E
+EJE KENNEDY — o E
+ORIENTE PONIENTE e e
+PONIENTE ORIENTE po. il
 
-« -» REFRENDACION
+Puente “Tabancura — Gran Via Kilomctro 4 e > :
 
-408, de 27 de mayo de
+Puente Centenario — Puente Lo Saldos Kilometro 10 ¡ a
 
-1998, que aprueban las circulares
+Puente El Cerro — Bifurcación Bellavista / Santa Maria ¡ | E
+Recoleta - Vivaceta Kilometro 17,5 7] oo
+Vivaccta — Walker Martinoz Kilometro 20.7 | Pe
+Petersen — Américo Vespucio Poniente | E
 
-aclaratorias N° }] y 12,
+EJE KENNEDY — po E
+PONIENTE ORIENTE po E
 
-REF. POR $
+Estoril - Padre Hurtado Kilometro 2 e.
+Rotonda Pérez Zujovic - Puente Lo Saldes Kilometro 7 e E
+Durante la Etapa de Explotación de la concesión, el concesionario podrá modificar tanto la ubicación EA
+como la cantidad de los puntos de cobro, previa autorización del Inspector Fiscal. ME
+El concesionario sólo podrá cobrar tarifa en el eje Kennedy cuando se Encuentren terminadas las o E
+obras del eje Costanera Norte comprendidas entre Puente Lo Saldes y Puente Bulnes, inclusive. : DE Ñ
+Só La Sociedad Concesionaria está facultada para cobrar a todos los vehiculos que circulen por la obra  ' Ñ E;
+conccsionada una tarifa única. En €aso que opte por este sistema, la tarifa Única que podrá cobrar será la y e
 
-mencionadas y la Resoluci
+que corresponda al vehiculo tipo 1 de la tabla que se indica a continuación, contabilizándose los ingresos : E
 
-de las Bases de Precalificación
+con esta única tarifa para todo lipo de vehiculos. No obstante lo anterior el Concesionario podrá optar . ESE
 
-IMPUTAC/
+por el cobro de tarifas diferenciadas por tipo de vehiculo de acuerdo a la tabla 1-10 de las Bases de . e E
+Licitación: o o
+._Vipotogía de vehículos : E
 
-ón DGOP N°
+V TIPO CLASIFICACIÓN ¡ E
 
-179, de 08 de junio
+| Motos y motonetas — po CA t
 
-ANOT. POR $
+. — | Autos y camionctas ( E
 
-de 1999, que aprueba la circular acl
+Autos y camionctas con remolque : : Es
 
-aratoria N*13 de las
+| | 2 | Buses y Camiones | | : E
+| 3 7] Camiones con remolque Po E :
 
-IMPUTAC,
-
-Bases de Precalificación referidas.
-
-mutes,
-
-DEOUC. OTO._
-
-- El Oficio SEGPRES (D.EJEC) N°
-
-441, de 09 de abril de 1997,
-
-de Su Excelencia el Presidente de
-
-la República, que aprueba la
-
->
-
-ejecución de la obra pública fi
-
-scal denominada Concesión
-
-i
-
-Internacional Sistema
-
-On
-
-mie -
-
-concesiones
-
-Poniente, por el sistema de
-
-co, Stem,” by
-
-1 DE pss
-
-ROSA
-
-- El Ofici
-
-£
-
-o 81
-
-He 25 de junio de 1999, del Sr. Ministro
-
-VES
-
-de
-
-que ap
-
-Cal
-
-e
-
-ón y
-
-heba el Estudio de Factibili
-
-Prospecto
-
-r.-
-
-ES.
-
-<q
-
-ases de Licitación de la
-
-o».
-
-Jn
-
-*) At)
-
-Orjente — Poniente;
-
-Poncesión
-
-\\
-
-e)
-
-e
-
-TOMAR
-
-CHILE
-
-%
-
-Ez
-
->
-
->
-
-2 RAZON. /
-
-we
-
-eo -
-
-Sear mens
-
-BR. 2000
-
-wt
-
-IT.
-
-/
-
-(Ma
-
-DE
-
-AE
-
-GENERA
-
-e. no
-
-PÚBLICA
-
-E] ve
-
-Y
-
-J
-
-1
-
-v
-
-ls
-
-Oy
-
-se
-
-yy
-
-A.
-
-Ma
-
-## Página 2
-
-“E a
-
-,
-
-. ~
-
-23 -X
-
-$.
-
-“4
-
-5
-
-e
-
-fo
-
-* y
-
-es
-
-El llamado a Licitación Pública del proyecto de
-
-ve
-
-Concesién Intemacional
-
-Sistema Oriente - Poniente, publicedo
-
-ta
-
-Ae FY
-
-en el Diario Oficial, de fecha 02 de julio de |
-
-999:
-
-=
-
-©
-
-La Resolución DGOP N° 286, de
-
-12 de agosto de 1999,
-
-“e
-
-pública fiscal denominada Concesi
-
-que aprueba las Bases de
-
-Licitación de la obra
-
-ón intemacional Sistem
-
-a Oriente - Poniente;
-
-e
-
-2
-
-Las Resoluciones DGOP N* 358, de 27 de
-
-septiembre de 1999: Ne
-
-ts y
-
-411, de 09 de noviembre de
-
-1999 y Ne
-
-422, de 15 de noviembre d
-
-.
-
-391, de 27 de octubre de 1999: No
-
-de las refi
-
-en
-
-e 1999, que aprueban las circulares
-
-ta
-
-aclaratorias N° 1, 2, 3, 4, 5 y 6
-
-das Bases de Licitación:
-
-El Acta de R
-
-at
-
-ecepción de las Ofertas y Apertura de las Ofertas Técnicas de fecha 16 de noviembre de 1999
-
-fa -
-
-El Oficio DGOP Ne 2056, de fecha 26 de
-
-noviembre de 1999, med;
-
-aclaraciones y rectificaciones
-
-que
-
-di
-
-y la carta de
-
-ante el cual se solicitó y los L
-
-icitentes, las
-
-licitación de féctra 30 de n
-
-oviem
-
-bro d
-
-1999,
-
-respuesta del Gry
-
-po Licitante Adjudi
-
-caterio de la
-
-32
-
-‘Obras Públicas, con igual fec
-
-ha;
-
-ingresadn
-
-en la Oficina de Partes de la Direcc;
-
-ón General de
-
-El. Acta de Evaluación de las Ofertas Técnicas de fecha 01 de diciembre de 1999;
-
-=>
-
-El Acta de Apertura de la Ofertas Económicas de fecha 06 de diciembre de 1999:
-
-ike.
-
-sy
-
-el
-
-El Acta de Calificación de las Ofertas Económicas de fecha 20 de diciembre de 1999;
-
-El Acta de Adjudicación del Director General de Obras Públicas de fecha 18 de enero del 2000.
-
-rt
-
-, DECRETO |
-
-te
-
-Adjudicase el contrato de concesi
-
-On para la e
-
-denominada Concesión Internac
-
-jocución, conservación y explotación de la
-
-obra
-
-IMPREGILO S.PA., EMP
-
-ional Sistema Oriente - Poniente al
-
-Grupo Licitante co
-
-pública fiscal,
-
-mpuesto
-
-ig
-
-es
-
-CONSTRUCTORA TECSAS
-
-RESA CONSTRUCTORA FE G
-
-RANDE S.A. y EMPRESA
-
-Lo
-
-ge
-
-2.»
-
-Declárase que forman
-
-publ
-
-parte integrante de este Decreto
-
-ica fiscal denomi
-
-nada Con
-
-Ón intenacional Si
-
-las Bases de Licitación
-
-para la concesión de la obrn
-
-DGOP Ne
-
-286, del año 1999 1
-
-stema Oriente
-
-Ponient
-
-e, aprobadas por Resoluc
-
-ión !
-
-DGOP N°
-
-35
-
-391, 411 y 4
-
-as circulares eclaratorias N°
-
-78,
-
-aprobada por el MO
-
-22, todas del año 1999 y
-
-las Ofertas Técni
-
-51,2,3,4,5y6,
-
-aprobadas por Resoluciones |
-
-S.PA
-
-el Grupo Licitant
-
-e Adjudicatario
-
-ca y Económica, en la forma
-
-eye
-
-wa
-
-EMPRESA
-
-da O
-
-RA FE GRAND
-
-com
-
-puesto por IMPREGILO
-
-y
-
-TECSA S.A. En
-
-caso de discrep
-
-E S.A. y EMPR
-
-ESA CONSTRUCTORA :
-
-Bases de Licitaci
-
-Ón y en sus cir
-
-ancia en la interpretación d
-
-el presente contrato
-
-cularcs aclaratori
-
-as, por sobre lo establecido
-
-primará lo dispuesto en las
-
-Grupo Licitante Adjudicatario d
-
-c la concesión,
-
-salvo el caso en que ésta conten
-
-la oferta presentada por el,
-
-exigido en las Bases de Licitaci
-
-ga aspectos
-
-supenores a lo
-
-Y e
-
-de Obras Públicas,
-
-On y sus circulares aclaratorias, lo que será calif
-
-cado por el Director Genera]
-
-3.
-
-O
-
-Forman parte del contrato de concesión las disposiciones pertinentes de los siguientes cu
-
-erpos legales:
-
-3
-
-a) El Decreto Supremio MOP N°
-
-900, de 1996, que fija el texto refundid
-
-Pr
-
-ais
-
-del DFL MOP N° 164, de 199
-
-l
-
-, Ley de Con
-
-0, coordinado y sistematizado
-
-b) El Decreto Supremo MOP N
-
-o
-
-cesiones de Obras Públicas.
-
-Públicas.
-
-956, de 1997, Reglamento de ta Ley de Concesion
-
-es de Obras.
-
-c) El DFL MOP N° 850, de 1997, que
-
-fi
-
-15.840, de 1964, Orpanica del Mini
-
-ja el texto refundido, coordinado y sistematizado de la
-
-Caminos.
-
-sterio de Obras Públicas y del DFL.N? 206, de 196
-
-»
-
-4
-
-HAs
-
-AT RON
-
-$
-
-.
-
-a
-
-A
-
-4.-
-
-ES
-
-DID See
-
-Fz
-
-La concesión tendrá un plazo de d
-
-.
-
-uración de 360 meses
-
-Re El
-
-/
-
-1.
-
-Licitación. Este plazo se contard d
-
-sepin lo señalado en 1.10.2 de las
-
-at
-
-+s
-
-pt
-
-.
-
-1.10.1 de las Bases de Licitación.
-
-esde el inicio del plazo
-
-de la concesión, de acuerdo a lo seña
-
-tz
-
-rta
-
-E
-
-ee
-
-OS
-
-.
-
-.
-
-.
-
-RA
-
->?
-
-A
-
-A có
-
-me
-
-£
-
-\ . NY
-
-yn 3
-
-## Página 3
-
-ly
-
-co y
-
-AY
-
-AS
-
-Ly
-
-$..
-
-El Concesionario construirá, ex
-
-Bases de Licitación
-
-plotará y conservará las obras que se indican cn las Bases Técnicas de las
-
-,
-
-situadas e
-
-ertículo 1.2.3 de las Bases de
-
-n los ejes Costanera Norte y Avenida Presidente Kennedy indicadas cn el
-
-Licitación que comprenden lo siguiente;
-
-Cláusulas de las
-
-Dases de Licitación
-
--. Y
-
-YX
-
-A) Obras Viales
-
-E e
-
-”
-
-2.3.1
-
-l.
-
-Vías Nuevas
-
-2.3.1.1
-
-.
-
-2. Mejoramiento de Calzadas
-
-2.3.1.2
-
-3, Seguridad Via)
-
-2.3.1.3
-
-4. Semaforización
-
-2.3.1.4
-
-5.
-
-Desvios de Transito
-
-2.3.1.5
-
-B) Puentes y Estructuras
-
-2.3.2
-
-A wg
-
-1.
-
-Puentes Nuevos
-
-we 3
-
-2.3.2.1
-
-2,
-
-Estructuras Desniveladas
-
-3,
-
-2.3.2.2,
-
-oy
-
-Pasarclas Pcatonales
-
-sv t
-
-2.3.2.3
-
-C) Túnel
-
-2.3.3
-
-Qu
-
-re
-
-l,
-
-Trinchera Cubierta
-
-So
-
-E
-
-2.3.3.1
-
-D)Obras Complementarias
-
-2.3.4
-
-I,
-
-0 *
-
-Iluminación
-
-2.3.4.1
-
-2. Paisajismo y equipamiento
-
-cumunilario
-
-2.3.4.2
-
-E)
-
-Servicios
-
-Especiales
-
-2.3.5
-
-Obligatorios
-
-l. Servicivs de Control y Gestión de
-
-2.3.5.1
-
-Trafico
-
-F)Obra Opcional Extension Eje
-
-2.3.6
-
-Costanera Norte Tramo Américo
-
-Vespucio Poniente hasta ta Ruta 68
-
-Para cllo utilizará los Proyectos y Anteproyectos Referenciales
-
-we
-
-concesionario hizo suyos en la Oferta Técnica,
-
-entregados por el MOP y que el
-
-que contienen las obras minimas a realizar. En todo caso,
-
-en.
-
-cl Concesionario deberá cumplir con todos
-
-Técnicas realizando las obras adicionales que s
-
-los estándares e indicadores establecidos cn las Bases
-
-A ;
-
-can necesarias para ello. El concesionario
-
-podrá proponer
-
-de
-
-al Inspector Fiscal modificaciones a los Pr
-
-Oycctos y Anteproyectos Referenciales
-
-na
-
-previstos en 1.8.1.1, de las Bases de L
-
-icitación,
-
-en los términos
-
-Podrá también, el concesionario, proponer
-
-modificaciones en cl discño de pavimentos y cambios
-
-a las obras de ingenieria del Tunel, debiendo
-
-sonicier dichos proyectos a la aprobación del Inspector
-
-Fiscal antes del inicio de ejecución de la obra
-
-correspondiente, en las condiciones establecidas en 2.2.
-
-Lo
-
-Licitación.
-
-2.3 y 2.2.2.5.1 respectivamente de las Bases de
-
-No obstante, el MOP
-
-y servicios contratad
-
-podrá modificar por razones de interés público, las caracteristicas de las obras
-
-os en los términos previstos en 1.11.3.1 de las Bases de Licitación,
-
-6.-
-
-y
-
-De confonnidad cun el artículo 1.7.21 de las Bases de Licitación,
-
-la Sociedad Concesionaria podrá
-
-construir la obra opcional Extensión eje Costancra Norte entre A. Ve
-
-spucio Poniente hasta la Ruta 68,
-
-descrita en cl artículo 2.3.6 de las Bases de Licitación. Para cllo |
-
-oe
-
-a Sociedad Concesionaria, deberá
-
-mee
-
-manifestar la intención de construirlas presentando en la oficina de
-
-partes de la Dirceción General de
-
-fe
-
-ho awh
-
-Obras Públicas, en cl periodo comprendido entre los 210 y 240 dias
-
-contados desde la publicación del
-
-presente Decreto Supremo de Adjudicación en el Diario Oficial, una
-
-carta dirigida al DGOP señalando
-
-su decisión de incorporar estas obras en la concesión. La no presen
-
-tación de dicho documento en los
-
-AS]
-
-plazos y formas establecidos, significará que la Sociedad Contesionaria renuncia a Ja opción de realizar
-
-.
-
-A
-
-oo
-
-OS
-
-CAG
-
-dichas obras, pudiendo éstas ser construidas por cl MOP.
-
-52
-
-HILE
-
-E
-
-ves
-
-at
-
-VA
-
-eet
-
-ae 3
-
-## Página 4
-
-Sd
-
-AA
-
-EY
-
-ho
-
-Ye
-
-oe
-
-e?
-
-3
-
-A
-
-ay
-
-AS
-
-7.
-
-i
-
-El MOP se hará ca
-
-rgo de la ejecuc
-
-ion y financiam
-
-a 4
-
-relacionadas con to
-
-dos los ca
-
-tento de los
-
-proyectos de ingenierla,
-
-%
-
-mbios de los servicio
-
-s públicos existe
-
-y de las obras
-
-se vean afectados por la ej
-
-ecución de las obras d
-
-ntes (húmedos y no
-
-húmedos) que
-
-Ne vse
-
-ved
-
-proyecto referencial entr
-
-e la concesión,
-
-de acuerdo con lo est
-
-ablecido en ¢]
-
-Licitación,
-
-egado por el MOP y
-
-según lo dispu
-
-oe
-
-=e
-
-esto en 1.7.9.2.3 de las Bases de
-
-2A LS
-
-Los Puentes sobre cl Rlo Ma
-
-pocho ind
-
-at
-
-”
-
-Licitación y las De
-
-fensas Fluviales
-
-icados en la Tabla 1-3 del articulo 1 7
-
-9.2.1
-
-de las Bases de
-
-<5
-
-Proyecto de Ingeni
-
-Para las riberas norte y
-
-sur del Río Mapocho,
-
-erla Referencial
-
-probado por el Depart
-
-detalladas en el
-
-ot
-
-podrán ser ejecuta
-
-das por el Minist
-
-amento de Obras Fluy
-
-iales del MOP,
-
-ie
-
-cotresponda, en la
-
-forma
-
-erio de Obras Pública
-
-o la Sociedad Cone
-
-Bases de Licitación.
-
-plazos y co
-
-ndiciones señaladas en los
-
-esionaria según
-
-artículos 1.7.9.2.1 y
-
-1.7.9,2.2. de las
-
-8.-
-
-El MOP entregará a la §
-
-ociedad Concesiona
-
-encuentre,
-
-Dicha entrega
-
-ria la infraestructura
-
-preexistente en
-
-Obras de €
-
-se hará, mediante |
-
-a anotación
-
-el estado en que se
-
-onstrucción a que alude el artículo
-
-1.8.2, 1 L
-
-que renlice el Inspector
-
-Fiscal en el Libro de
-
-ar 2
-
--.
-
-La Sociedad Concesiona
-
-na te
-
-inf
-
-ndrá la responsabilidad de efectuar la ma
-
-s i :
-
-racstruclura a partir de la
-
-nlencion y conservación de esta
-
-.z
-
-Licitación y, de acuerdo con
-
-s fechas indicadas en la Tabla 1.2 del
-
-art
-
-iculo 1.7.9.1 de las Bases de
-
-Bases de Licitación.
-
-los estándares para la concesión, indica
-
-dos en las Bases Técnicas de las
-
-e.
-
-mo
-
-pS
-
-y
-
-Eo
-
-0
-
-La infraestructura existente que se entregará al concesionario seri:
-
-Av. Kennedy, desde 500 mts. al
-
-oriente de la intersecc
-
-Comunas de Las Condes y Vitac
-
-ura, hasta su térmi
-
-ión con Av, Tabancura, en el limite de las
-
-mismas comunas, incluyendo las
-
-obras de ]
-
-no en el puente Lo Saldes,
-
-e”
-
-Hurtado, Av, Gcrónim
-
-os desniveles de esta via con Ay, Las
-
-en el limite de las
-
-o de Alderete, Av, Manquehue,
-
-Condes, Ay, Padre
-
-wit
-
-además del puente Lo Saldes.
-
-Américo Vespucio y roto
-
-nda Pérez Zujovic,
-
-Avenida Comiodor
-
-Oo Arturo Merino Benitez
-
-de Vilacura
-
-,
-
-hasta
-
-desde su inicio en el
-
-e.
-
-su término en la Intersecci
-
-on con el puente Lo
-
-puente Centenario
-
-en la comuna
-
-de Vitacura y Prov
-
-idencia,
-
-Saldes en el límite d
-
-e las comunas
-
-0
-
-Puente La Dehesa, sobre el Rio Mapocho, en la comuna de Lo Bamechea.
-
-0
-
-Av. Sor Teresa de Los Andes, desde Tabancura hasta 600 mis,
-
-al oriente de La Gran Vía,
-
-£É
-
-3
-
-Fecha de Entrega de la Infraestructura Existente
-
-sto
-
-nar Fecha de entrega :
-
-ta
-
-1
-
-e
-
-e
-
-e
-
-RS
-
-eet ope
-
-,
-
-t
-
-4
-
-.
-
-? oF
-
-y
-
-e
-
-6
-
-t, 3° E
-
-nye sa “Sar
-
-$9
-
-met
-
-wt
-
-Av. Kennedy (1)
-
-El dia de inicio del
-
-plazo de concesid
-
-n indicado en 1.10.1 de
-
-las Bases de Licita
-
-ción
-
-oe,
-
-Av. Comodoro
-
-Arturo Merino
-
-El dia de inicio del plazo de conces
-
-ión indicado en 1.10,1 de
-
-Benitez
-
-las Bases de Licitación,
-
-sa?
-
-mid
-
-Av. Sor Teresa de
-
-ss
-
-Los Andes
-
-El dia de inicio de
-
-| plazo de concesion in
-
-las Bases de Licit
-
-ación.
-
-dicado en 1.10.1 de
-
-Desnivel Padre
-
-ae
-
-Hurtado
-
-01 de Octubre de 2001
-
-in
-
-Desnivel
-
-31 de Diciembre de 2002
-
-Gcrónimo de
-
-| Alderete
-
-ae
-
-ae,
-
-ess
-
-Puente La Dehesa
-
-31 de Aposto de 2002
-
-2 :
-
-=f,
-
-treet
-
-(1) Considers toda la Av. K
-
-ennedy,
-
-a excepción de los desniveles de Padre Hurtado y Gerónimo de
-
-Alderete,
-
-po]
-
-DE
-
-AD
-
-CRe
-
-2
-
-Ll -
-
-Les
-
-293
-
-Or
-
-ote
-
-LA
-
-Liz
-
-S CHILE
-
-ae om
-
-UN
-
-ee
-
-i
-
-## Página 5
-
-SES ome
-
-Y
-
-me e
-
-ey
-
-Y
-
-Pe
-
-wa
-
-9.
-
-¿E
-
-$
-
-E
-
-De acuerdo con lo dispuesto
-
-por cl art
-
-3
-
-presentada por cl Gru
-
-iculo 1.12 de las Bases de Licit
-
-of.
-
-aa
-
-po Licilanto Adjud
-
-Icalar}
-
-acion y según la oferta
-
-AS
-
-se
-
-tanto cn el eje Kenne
-
-dy como cen cl eje Costane
-
-O se adoptó un sistema abi
-
-crto de cobro de larifas
-
-,
-
-Corto Alcance o
-
-ra Norte
-
-utilizando la tec
-
-nología de
-
-DSRC (Dedicatet Short Ran
-
-Comunicaciones
-
-- +
-
-Vehiculo, de acuc
-
-rdo al estándar desarrollado
-
-ge Communication)
-
-Punto de
-
-Cobro Electrénico «
-
-sw
-
-Normalización (
-
-por el Comité Técnico TC278 de
-
-ta”
-
-$
-
-2.2.2.13.2.5 de )
-
-CEN) para los niveles OSI 1
-
-2 y 7, según lo definido en los
-
-| Comité Europco de
-
-a
-
-y,
-
-as Bascs de Licitación,
-
-articulos 1.14.3.2 y
-
-foes
-
-La,
-
-Dicho estándar esc
-
->
-
-omplementado con la
-
-oferta presentada
-
-las normas ENV]
-
-2253
-
-ENV12795
-
-ENV12834, ENV
-
-por el Grupo Licitante Adjudicatario, con
-
-oz
-
-Normalizaci
-
-ún (C
-
-EN), ISO ENV14906
-
-13372
-
-del Comité Técnico ISO
-
-/TC204
-
-todas del Comité Europco de
-
-X
-
-industriales GSS (
-
-versión 2,0) y TR 4001
-
-y con las especificaciones
-
-3t
-
-“Al(version ER9_
-
-1.3).
-
-Según la oferta del grupo licitante adjudicatario los puntos de cob
-
-ro se ubicarán en:
-
-JE COSTANERA NORTE -
-
-ENTE PONIENTE
-
-UBICACIÓN
-
-Puente Tabancura — Gran Vía
-
-Puente Centenario — p
-
-.
-
-K
-
-Ometro 4
-
-uente Lo Saldes
-
-Pues
-
-Ue El Cerro - Bi
-
-furcación Be
-
-K
-
-ometro 10
-
-Vivaceta - Walker Martínez
-
-ilavista / Santa Maria
-
-4
-
-Sen
-
-ometro 12,8
-
-arrascal ~ Petersen
-
-K
-
-ometro 20
-
-¡Carrascal - Pe
-
-EJE KENNEDY —
-
-K
-
-Tr
-
-LADA |
-
-o 26
-
-ORIENTE PONIENTE
-
-Estoril - Padre Hurtado
-
-E:
-
-rra
-
-Rolonda Pérez Zujov
-
-ic - Puente Lo Saldes
-
-Kilometro ].2
-
-EJE COSTANER
-
-Kilometro 7
-
-A NORTE -
-
-PONIENTE ORIENTE
-
-Puente “Tabancura — Gran Via
-
-K
-
-Arr
-
-Puente Centenario — P
-
-ucnte Lo Saldes
-
-omel rod
-
-ee
-
-Puente El Cerro —
-
-lBifurcación Be
-
-K
-
-ometro 10
-
-Recolcta — Vivaceta
-
-llavista / Santa Maria
-
-K
-
-a
-
-yt
-
-ometro 12,8
-
-reee
-
-Vivaceta — Walker Martinez
-
-Kilometro 17,5
-
-Kilometro 20
-
-eee
-
-Petersen — Américo Ves
-
-ucio Poniente
-
-ee ee
-
-EJE KENNEDY —
-
-Kilometro 28,
-
-5
-
-PONIENTE ORIENTE
-
-Estoril — Padre ilurtado
-
-|
-
-e ras
-
-AAA O Ve - Puente Lo Saldes —
-
-totonda Pérez Zujovic - Puente Lo Saldes
-
-Kilometro 1,2
-
-Kilometro 7
-
-Durante la Etapa de Ex
-
-plotación de la concesi
-
-on
-
-ro
-
-como la cantidad de los
-
-puntos de cobro
-
-el concesionario podrá modi
-
-ficar tanto la ubicación
-
-ys
-
-20d
-
-previa autorizacion del In
-
-Spector Fiscal
-
-El concesionario sólo |
-
-ra cobrar tarifa en ef ej
-
-obras del eje Costanera No
-
-rc comprendidas entre P
-
-¢ Kennedy cuando se encuentren terminadas las
-
-Yt af
-
-uente Lo Saldes y Puente Bulnes
-
-inclusive
-
-a >
-
-a
-
-La Socicdad Concesionaria est
-
-concestonada una tarifa unica
-
-En ca
-
-á facultada para cobrar a todos los ve
-
-hiculos que circulen por la obra
-
-SO que opte por este sistema
-
-la la
-
-que corresponda al vehicula tipo 1 d
-
-e
-
-nfa única que podrá cobrar será la
-
-..
-
-con esta única tarifa
-
-la tabla que se indica a continua
-
-ción,
-
-contabilizándose los ingresos
-
-para todo tipo d
-
-e vehiculos,
-
-No obstante lo anterior
-
-por el cobro de tarifas d
-
-iferenciadas por tipo de
-
-el Concesionario podrá optar
-
-Licitación:
-
-vehículo de acucrdo a ]
-
-a tabla 1-10 de las Bases de
-
-Tipología de vehículos
-
-vie)
-
-.
-
-CLASIFICACIÓN
-
-Motos y motonctas
-
-Autos y camionctas
-
-as
-
-Buses
-
-Autos y camionctas con remolque
-
-y Camiones
-
-Camiones con remolque
-
-2
-
-d.>.
-
-JE
-
-SS
-
-RE
-
-LN
-
-WN
-
-ÉS
-
-> Me
-
-E =
-
-4
-
-ar
-
-5
-
-E,
-
-¿>
-
-WA
-
-tí
-
-= e
-
-wee
-
-si
-
-Ya
-
-dec E
-
-## Página 6
-
-SS
-
-*S
-
-e
-
-PA
-
-$
-
-ee
-
-y
-
-$
-
-¥
-
-El concesionario, de acu
-
-erdo al artículo 1.13.2 de las B
-
-tipos de tarifas máximas,
-
-ases de Licitación, tendrá derecho a cobrar tres
-
-que se indican a continuación;
-
-se
-
-fs
-
-TBEP;
-
-vg
-
-Tarifa maxima base en
-
-can)
-
-TBP:
-
-periodo fuera de punta en S/n
-
-a
-
-yv
-
-y
-
-TS:
-
-Tarifa máxima ba
-
-se en periodo punta en S/km
-
-Tarifa
-
-máxima
-
-en
-
-Perfodo punta
-
-aplicable
-
-en
-
-A
-
-condiciones de congesti
-
-ón de la vía en $
-
-Lan
-
-Zas
-
-Durante cada periodo temporal de
-
-180 días
-
-nuevas larifas máx
-
-mas a cobrar para el s
-
-se realizarán medicio
-
-nes que
-
-iguiente
-
-periodo temporal
-
-permitan determinar las
-
-el artículo 1.13.2 de las Bases de lic
-
-itación.
-
-de 180 dias,
-
-según se establece en
-
-Para la determinación de
-
-las tarifas máximas
-
-máximas indicadas anteri
-
-Ormente por el factor
-
-por tipo de vehiculo,
-
-se deberá multiplicar las
-
-tarifas
-
-correspondiente de la
-
-Tabla siguiente:
-
-o” *,
-
-Categoria
-
-Tipo de Vehiculo
-
-Ieee
-
-Factor
-
-a
-
-motonetas
-
-(F)
-
-E
-
-I
-
-Autos camionctas con remolque
-
-- f
-
-2
-
-E Ce
-
-Buses y camiones -
-
-a
-
-eo.
-
-A rr rt
-
-.
-
-7]
-
-Camiones con remolques
-
-2,0
-
-Qe
-
-30 |
-
-O
-
-y
-
-Las Tarifas Máximas (expresadas en pesos del 31.12.96) serán:
-
-ut
-
-.
-
-we,
-
-TBFP:
-
-20 $/knm
-
-TBP:
-
-..£
-
-40 S/km
-
-TS:
-
-60 S/km
-
-Las Tarifas Máximas por
-
-punto de cobro de
-
-1.13.2.2 de las Bases de Lic
-
-itación.
-
-¥
-
-berán ser calculadas de conformidad con el articulo
-
-Estas tarifas serán reaj
-
-ustadas según las fórmulas de
-
-54
-
-artículo 1.13.4 de las
-
-Bases de Licitación.
-
-=
-
-ajuste tarifario de acuerdo a lo estipulado en el
-
-e. o.
-
-10.-
-
-Para los efectos de lo di
-
-spuesto por el artículo 16 letra
-
-un 80% de los ingresos
-
-Sc) y h) del D.L. Ne
-
-de los ingresos por tari
-
-fi
-
-a
-
-por tarifa para pagar el precio
-
-del servicio de const
-
-825 de 1974, se imputara
-
-.y
-
-~~ «
-
-para pagar el preci
-
-rucción y el 20% restante
-
-establecido en el artículo
-
-O de los servicios de mantenci
-
-ón y explotación, según lo
-
-1.11.4 de las Bases
-
-de Licitación.
-
-e
-
-1.-
-
-ua
-
-El grupo licitante adjudicatario deberá
-
-pagar
-
-aad
-
-las Bases de Licitaci
-
-On y lo ofrecido en su OF
-
-al Estado, de conformidad con lo señalado en 1
-
-e .
-
-11.2 de
-
-ab
-
-Bienes o Derechos
-
-erta Econ
-
-omica,
-
-> 4,
-
-Ulilizados en la Concesi
-
-on
-
-Dicho
-
-pago d
-
-la suma de UF 456.000 por con
-
-cepto de
-
-nombre del DGOP
-
-ant
-
-eberá efectuarse mediante Val
-
-e Vista a
-
-cn 1.4.5, letra A), N°
-
-es de la constitucién de la Socj
-
-edad p
-
-$
-
-Adjud
-
-4 de las Base
-
-s de Licitación.
-
-i El no
-
-rometida en su Oferta Técnica
-
-señalada
-
-icalario no pueda constituir
-
-pago de
-
-esta cantidad implicará que ej
-
-legalmente la Socie
-
-dad Concesiona
-
-ria aplicándo
-
-inciso segundo del artículo 9°
-
-de la Ley de Concesiones. A
-
-se lo señalado en el
-
-at
-
-Boleta que garantiza el pago p
-
-demás el MOP
-
-podrá hacer efectiva la
-
-or Biencs o Derechos Utiliza
-
-dos en la Conce
-
-es
-
-Oferta Económica. Este pago n
-
-O podrá ser imputado a la
-
-sión acompañada en lo
-
-del capital de la misma ni reg
-
-istrarse en su contab
-
-Sociedad Concesio
-
-naria ni incluirse dentro
-
-ilidad durante todo el pl
-
-acuerdo con lo señalado en 1.6.
-
-I de las Bases de Lic
-
-itación,
-
-azo de la concesión, de
-
-12.-
-
-Las obligaciones y derechos del Co
-
-ncesionario son los establecidos
-
-precedentemente y toda la nonnati
-
-en los cuerpos legales citados
-
-Aclaratorias
-
-va legal vigente, en las Bases de
-
-|
-
-y en la Oferta Técnica
-
-y Económica presentada por el Gru
-
-Licitación, en sus Circulares
-
-29
-
-EGAe
-
-a forma aprobada por el MOP.
-
-po Licitante Adjudicatario en
-
-Sm
-
-52
-
-we
-
-AStS
-
-ne,
-
-ES
-
-Er
-
-sCun A
-
-LALO zp NZNN
-
-|
-
-ihe
-
-## Página 7
-
-e
-
-Sete Ne
-
-al
-
-ee
-
-Y
-
-Sin perjuicio de lo anterior, a título ejemplar,
-
-se indican las siguientes:
-
-de
-
-OBLIGACIONES DEL CONCESIONARIO
-
-.
-
-a) Constituir legalinente
-
-la sociedad conc
-
-ye >
-
-establecido en el
-
-esionaria prometida en la
-
-$
-
-+
-
-articulo 1.6.2 de las B
-
-Oferta Técnica, de acucrdo a lo
-
-cy A,
-
-ES
-
-ee
-
-contados desde la
-
-publicación en el Diar
-
-ases de Licitación,
-
-dentro del plazo fatal de 60 días corridos
-
-“Per
-
-ad
-
-io Oficial del prese
-
-nte Decreto Su
-
-of.
-
-contrato de concesión.
-
-premo de Adjudicación del
-
-adjudicatario deberá su
-
-Asimismo, dentro del plazo de 75
-
-dias contado
-
-scribir ante Notario
-
-ites transcripcio
-
-s desde la misma fecha, el
-
-x
-
-Adjudicación,
-
-cn señal de a
-
-nes del presente Decreto Supremo de
-
-Ceplacion de su contenido, debic
-
-- 1
-
-uno de sus ejemplares,
-
-según lo exigido en el artículo 1.6.3 d
-
-ndo protocolizar ante el mismo Notario
-
-<4
-
-c las Bases de Licitación.
-
-.
-
-ya
-
-de
-
-b) Al otorgarse la escritura de const
-
-tlución
-
-oe
-
-oe
-
-integramente el capital de
-
-de la sociedad concesion
-
-arta se deberá suscribir
-
-la sociedad
-
-que no podrá ser inferior a la s
-
-iv
-
-(cinta y cinco mil sciscic
-
-uma de $35.600.000.000.-
-
-Pa
-
-(siete mil quinientos millo:
-
-ntos millones de pe
-
-SOS) y pagarse al menos
-
-la suma de $7.500.000.000.-
-
-ies de pesos). El sal
-
-18 meses contados desd
-
-e la fecha de con
-
-do del capital deberá paga
-
-rse,
-
-en dinero, en el plazo de
-
-Slitucién de la sociedad con
-
-cesionaria, todo ello de
-
-Ja
-
-conformidad con lo dispu
-
-esto en el artículo 1.6.2 de las Bases de Licitación,
-
-xl Í
-
-e)
-
-En cl plazo de GO dias contados desd
-
-© 8u constitución,
-
-la Sociedad Concesionaria deberá haber
-
-solicitado su inscripción en el Registr
-
-o de la Superinten
-
-res
-
-acreditará con el correspondiente certi
-
-ficado. Concluido el
-
-dencia de Valores y Scguros
-
-lo que se
-
-proceso de inscripción en dich
-
-o Registro
-
-y a más tardar dentro de lus cinco di
-
-as siguientes, la Soc
-
-- ¢
-
-Inspector Fiscal
-
-iedad Concesionaria deberá p
-
-resentar al
-
-» Un certificado cn cl que conste haberse
-
-practicado dicha inscripción
-
-todo cilo
-
-of
-
-Bu
-
-conforme a lo señalado en cl artículo |
-
-.6.2 de las Bases de Li
-
-citación.
-
-d)
-
-Construir, conservar y explotar las obras a
-
-virtud de |
-
-os documentos que forman part
-
-e
-
-que se encuentre obligada la Sociedad Concesionaria, en
-
-d
-
-cl contrato de concesión, en la forma, modo y plazos
-
--”
-
-señalados cn dichos documentos.
-
-at
-
-c)
-
-A
-
-=2
-
-Efectuar cl cubro de tarifas de acuerdo a lo indicado en numeral 9 precedente, de este decreto.
-
-mm. A
-
-La Sociedad Concesionaria de
-
-1.7.9 de las Bases de Licita
-
-berá pagar al MOP, por la infracstructura
-
-Preexistente, indicada en
-
-ción, un monto expresado en unidades de
-
-siguiente detalle:
-
-fomento, de acuerdo al
-
-Calendario de Pagos Concesionario
-
-No
-
-Fecha de Pago
-
-Monto
-
-Cuota
-
-(UF)
-
-60 días de constituida la Sociedad Concesionaria
-
-154.300
-
-KO
-
-20%
-
-ts
-
-270 dias de constituida la Socicdad Concesionaria
-
-116.300
-
-<
-
-a >
-
-630 dias de constituida la Sociedad Concesionaria
-
-58.200
-
-e €
-
-,
-
-990 dias de constituida la Sociedad Concesionaria
-
-31.300
-
-he
-
-we
-
-Ll pago se deberá realizar cn pesos,
-
-al valor de la unidad de fomento del último día hábil del mes
-
-¿de
-
-calendario anterior al pago.
-
-se
-
-aw.
-
-En cl caso de atraso en el pago de cual
-
-qt
-
-quicra de estas cantidades el MOP hará efectivas las
-
-garantias establecidas en 1.7.4,
-
-Bases de Licitación.
-
-y sin perjuicio de lo dispuesto en 1.1 1.5, ambos artículos de las
-
-8) Una vez cumplida la relación señalada en 1.11.7.2 de las Bases de
-
-Licitación, comenzará a regir la
-
-Coparticipación del Estado cu los ingresos de la Socicdad Conce
-
-sionaria, en la forma, condiciones
-
-y proporción que señalan las Bases de Licitac
-
-ión. El no pago de la Coparticipación al Estado por
-
-A]
-
-parte de la Socicdad Concesionaria, scrá caus
-
-al de incumplimiento del contrato y dará derecho al
-
-cobro de las multas establecidas en 1.7.13 de
-
-las Bases de Licitación, de las garantias establecidas
-
-ones legales correspondientes.
-
-en 1.7.1 de las Bases de Licitación y a las acci
-
-h) El Concesionario deberá contratar los seguros de Responsabilidad Civil
-
-por Daños a Terce
-
-Catástrofe de acuerdo a lo señalado en 1
-
-—
-
-ween
-
-¿RE
-
-.1.17 y 1.7.18 de las Bases de Licitación,
-
-ros y Por
-
-r
-
-¿Ta
-
-.
-
-a
-
->
-
-fi
-
-fas
-
-Ba
-
-f1LE
-
-ot
-
-. +.
-
-e...
-
-ew +
-
-- 4
-
-y
-
-NA
-
-p
-
-Al
-
-## Página 8
-
-~
-
-So te
-
-SS
-
-2
-
-Zid
-
-2.8
-
-ES
-
-i)
-
-La implementación de
-
-las medidas ambientales impuestas
-
-por las Ba
-
-. at
-
-Ae
-
-Resolucion Ambiental
-
-eprobada por Resolución
-
-Exenta N°335 —
-
-ses de Licitacion y por la
-
-AS
-
-ee
-
-9
-
-1998 y Resolución Ex
-
-A/98 de fecha 10 de Julio de
-
-Regional del Medio A
-
-enta N°367/98 de.24 de J
-
-ulio de 1998, a
-
-9
-
-mbiente de la Re
-
-gión Metropolitana,
-
-mbas emitidas por la Comisión
-
-Licitante Adjudicatario
-
-o de la Sociedad
-
-será de cargo exclusivo de
-
-| Grupo
-
-Es
-
-se generen producto de dic
-
-ha implementa
-
-Concesionaria,
-
-según corresponda. Todos los co
-
-ción y de la api
-
-icación de las mismas,
-
-stos que
-
-cargo de la Sociedad Conc
-
-esionaria,
-
-serán de exclusivo
-
-Az
-
-5d
-
-¿RECH 3
-
+AN EOS Ñ e :
+S2t a dE
+ñ ÉS 3 A ea
+./ IN E
 Co
 
--SIONARI
+## Page 6
+
+, O ' Z $
+l ÓN: o, > eS
+? ES
+, . eE
+. A
+? o EE
+|OoEZ%
+El concesionario, de acuerdo al artículo 1.13.2 de las Bases de Licitación, tendrá derecho a cobrar tres EE
+tipos de tarifas máximas, que se indican a continuación: ES
+a JE +
+| TUFP: Tarifa máxima base en periodo fuera de punta en S/km EE
+TBP: Tarifa máxima base en periodo punta en S/km ES
+TS: Verifa máxima en período punta aplicable en ce
+condiciones de congestión de la vía en $/am | e
+Durante cada periodo temporal de 180 días, se realizarán mediciones que permitan determinar las . E
+nuevas tarifas máximas a cobrar para el siguiente periodo temporal de 180 dias, según se establece en Y
+el artículo 1.13.2 de las Bases de licitación, E
+Para la determinación de las tarifas máximas por tipo de vehiculo, se deberá multiplicar las tarifas El
+máximas indicadas anteriormente por el factor correspondiente de la Tabla siguiente: can
+EE
+Autos y camionetas . 2. q
+| Autos y camionetas con remolave e
+Ll Camiones con remolques lao] e Es
+Las Tarifas Máximas (expresadas en pesos del 31.12.96) serán: S z
+TDFr: 20 S/km a
+TDP: 40 S/km e.
+TS: 60 $/km | EE
+o Las Tarifas Máximas por punto de cobro deberán ser calculadas de conformidad con el articulo ES z
+1.13.2.2 de las Bases de Licitación, +:
+Estas tarifas serán reajustadas según las fórmulas de ajuste tarifario de acuerdo a lo estipulado en el a 1
+artículo 1.13.4 de las Bases de Licitación. NE
+10.- Para los efectos de lo dispuesto por el articulo 16 letras c) y h) del D.L. N* 825 de 1974, se imputará A E
+un 80% de los ingresos por tarifa para pagar el precio del servicio de construcción y el 20% restante Dn CS
+de los ingresos por tarifa para pagar el precio de los servicios de mantención y explotación, según lo EE
+establecido en cl artículo 1.11.4 de las Bases de Licitación, a 0
+-—M.- El grupo licitante adjudicatario deberá pagar al Estado, de conformidad con lo señalado en 1.11.2 de ed E
+las Bases de Licitación y lo ofrecido en su Oferta Económica, la suma de UF 456.000 por concepto de E
+Bienes o Derechos Ulilizados en la Concesión. Dicho pago deberá efectuarse mediante Vale Vista a E
+nombre del DGOP, antes de la constitución de la Sociedad prometida en su Oferta Técnica señalada : y Ñ
+cn 1.4.5, letra A), N%% de las Bases de Licitación. El no pago de esta cantidad implicará que ej A
++= Adjudicatario no pueda constituir legalmente la Sociedad Concesionaria aplicándose lo señalado en el ae
+inciso segundo del artículo 9* de la Ley de Concesiones. Además el MOP podrá hacer efectiva la cai
+Boleta que garantiza el pago por Bienes o Derechos Utilizados en la Concesión acompañada en la DE
+Oferta Económica. Este Pago no podrá ser imputado a la Sociedad Concesionaria ni incluirse dentro Ne
+del capital de la misma ni registrarse en su contabilidad durante todo el plazo de la concesión, de DE :
+acuerdo con lo señalado en 1.6.1 de las Bases de Licitación, , E 3
+12.- Las obligaciones y derechos del Concesionario son los establecidos en los cuerpos legales citados E
+precedentemente y toda la normativa legal vigente, en las Bases de Licitación, en sus Circulares e
+Aclaratorias y en la Oferta Técnica y Económica presentada por el Grupo Licitante Adjudicatario en MS
+78D o IN
+AECAR ESA la forma aprobada por cl MOP. E
+ko) Ys : " cd ES
+' OH ES A
+Aspás 9 2 | UN E
+* Lo Y rm ] . da Á
+Chun € 7 ÍS
+
+## Page 7
+
+OS : o
+i es
+» ES
+Sin perjuicio de lo anterior, a titulo ejemplar, se indican las siguientes: E
+
+a) Constituir legalinente la sociedad concesionaria prometida en la Oferta Técnica, de acuerdo a lo E |
+establecido en el artículo 1.6.2 de las Bases de Licitación, dentro del plazo fatal de 60 dias corridos . Ed
+contados desde la publicación en cl Diario Oficial del presente Decreto Supremo de Adjudicación del E
+contrato de concesión, Asimismo, dentro del plazo de 75 dias contados desde la misma fecha, el DAS
+adjudicatario deberá suscribir amte Notario tres lanscripciones del presente Decreto Supremo de E
+Adjudicación, cn señal de aceptación de su contenido, debiendo protocolizar ante cl mismo Notario " EA
+uno de sus ejemplares, según lo exigido cn el articulo 1.6.3 de las Bases de Licitación. Ed
+b) Al otorgarse la escrilura de constitución de la sociedad concesionaria se deberá suscribir 57 E
+Íntegramente cl capital de la sociedad, que no podrá ser inferior a la suma de $35.600.000.000.- CA
+(trcinta y cinco mil sciscientos millones de Pesos) y pagarse al menos la suma de 57.500.000.000.- E
+i (siete mil quinientos millones de pesos). El saldo del capital deberá pagarse, en dinero, en el plazo de Ez
+18 meses contados desde la fecha de constitución de la sociedad concesionaria, todo ello de E
+conformidad con lo dispuesto en el artículo 1.6.2 de las Bases de Licitación. | 5
+€) En el plazo de 60 dias contados desde su constitución, la Sociedad Concesionaria deberá haber E 4
+solicitado su inscripción en el Registro de la Superintendencia de Valores y Scguros, lo que se ESE
+acreditará con el correspondiente certificado. Concluido el proceso de inscripción en dicho Registro E
+y a más tardar dentro de los cinco dias siguientes, la Sociedad Concesionaria deberá presentar al E
+So Inspector Fiscal, un certificado en cl que conste haberse practicado dicha inscripción, todo cllo SERE
+PEN conforme a lo señalado en cl artículo 1.6.2 de las Bases de Licitación. La
+d) Construir, conservar y explotar las obras a que se encuentre obligada la Sociedad Concesionaria, cn 0 z
+virtud de los documentos que forman parte del contrato de concesión, en la forma, modo y plazos a
+señalados en dichos documentos. a E
+c) Efectuar cl cubro de tarifas de acuerdo a lo indicado en numcral 9 precedente, de este decreto. Z E
+f) La Sociedad Concesionaria deberá pagar al MOP, por la infracstructura preexistente, indicada cn EN z
+1.7.9 de las Bases de Licitación, un monto expresado en unidades de fomento, de acucrdo al MESE
+siguiente detalle: O
+Calendario de Pagos Concesionario Le
+N? Fecha de Pago dez
+Cuota : Pito
+l 60 días de constituida la Socicdad Concesionaria 154.300 : a
+2 270 dias de constituida la Sociedad Concesionaria 116.300 E
+EQ y 3 630 días de constituida la Sociedad Concesionaria 58.200 A
+=7 4 290 dias de constituida la Sociedad Concesionaria 31.300 E
+Ll pago se deberá realizar cn pesos, al valor de la unidad de fomento del último día hábil del mes ES :
+calendario anterior al pago. po
+NENE
+En cl caso de atraso en el pago de cualquicra de estas cantidades el MOP hará efectivas las ce, 4
+garantias establecidas cn 1.7.1, y sin perjuicio de lo dispuesto en 1.1 1.5, ambos artículos de las ue
+Bases de Licitación. | A
+£) Una vez cumplida la relación señalada en 1.11.7.2 de las Bases de Licitación, comenzará a regir la ES E
+- Coparticipación del Estado en los ingresos de la Sociedad Concesionaria, en la forma, condiciones as
+y proporción que señalan las Bases de Licitación. El no pago de la Coparticipación al Estado por ps E E
+parte de la Sociedad Concesionaria, será causal de incumplimiento del contrato y dará derecho al : dE Ñ
+cobro de las multas establecidas en 1.7.13 de las Bases de Licitación, de las garantias establecidas 2
+en 1.7.1 de las Bases de Licitación y a las acciones legales correspondientes. a
+hi) El Concesionario deberá contratar los seguros de Responsabilidad Civil por Daños a Terceros y po o E z
+DE Catástrofe de acuerdo a lo señalado en 1.7.17 y 1.7.18 de las Bases de Licitación. ES E
+:REÑA o a
+LO NA e
+53 | ( Cas, as
+RS o os, LA
+*, ——, : LARA
+€ Vo A ee
+. SN e AS LE
+.». : IES
 
-a) Explotar las obras a contar de
+## Page 8
 
-aulorizacion de Pues
+o a “E
 
-término de la concesión, todo
+LIE
 
-a
+. o OS
+TE
 
-ta en Servicio Provisoria de las mismas, hasta el
+: : : CAE,
 
-Licitación,
+rr? de
 
-lo de conformidad a
+, . . . A
 
-lo señalado en el artículo 1.9.1 de las Bases de
+? ES
 
-b) Cobrar las tarifas a todos los usua
+NE
 
-rios de la concesión de acuerdo
+. os .. .. z e 3
 
-1.12, 1,13 y 1.14 de las Ba
+i) La implementación de las medidas ambientales impuestas por las Bases de Licitación y por la ES
 
-ses de Licitación.
+Resolución Ambiental aprobada por Resolución Exenta N*335 — AJ98 de fecha 10 de Julio de DE
+1998 y Resolución Exenta N*367/98 de 24 de Julio de 1998, ambas emitidas por la Comisión EE
 
-El
+Regional del Medio Ambiente de la Región Metropolitana, será de cargo exclusivo del Grupo E
 
-8 lo establecido en los artículos
+..». , . , s . . , . SA
 
-cobro podrán ser obj
+Licitante Adjudicatario o de la Sociedad Concesionaria, segun corresponda. Todos los costos que E
 
-cto de revisión por solicitud
+se gencren producto de dicha implementación y de la aplicación de las mismas, serán de exclusivo Ñ ES
 
-sistema de reajus
+cargo de la Sociedad Concesionaria, A
 
-te de las tarifas y el sistema de
+:RECHOS DE ESIONAR] SE
 
-en 1.13.4 de Ins Ba
+a) Explotar las obras a contar de la autorización de Puesta en Servicio Provisoria de las mismas, hasta el E E
 
-el concesionario
+término de la concesión, todo ello de conformidad a lo señalado en el artículo 1.9.1 de las Bases de ES
+Licitación, | : LE
 
-Lhe a
+. . te . .. + Ñ í
 
-ses de Licitación,
+b) Cobrar las tarifas a todos los usuarios de la concesión de acuerdo u lo establecido en los artículos ¿ER
 
-de conformidad con lo previsto
+1,12, 1,13 y 1.14 de las Bases de Licitación, El sistema de reajuste de las tarifas y el sistema de Ez
 
-4°
+cobro podrán ser objeto de revisión por solicitud del concesionario de conformidad con lo previsto ES
 
-Sa Y
+en 1.13,4 de las Bases de Licitación, CA
 
-c) Percibir un Ingreso Minimo
+c) Percibir un Ingreso Minimo Garantizado ofrecido por el Estado, cuando procediere de acuerdo a lo Zo z E
 
-ntizado ofrecido por el Estado
+establecido en el artículo 1.1 1.7.1 de las Bases de Licitación y en la Oferta Económica del grupo e SE
 
-“Z
+Licitante Adjudicatario, cuyo monto para cada año de explotación de la concesión se indica en e] DD
 
-establecido en el artículo |.
+siguiente cuadro: ch
+T IMG, E
 
-th
+Aín Calendarlo de Opcració Ingresos Mínimos Garantizados O
 
-+ cuando procediere de acuerdo a lo
+(miles de U.F.) Az
 
-Licitante Adjudicatario,
+1.098 ES:
 
-I de las Bases de Licitación
+INEA — 1 E
 
-~ f
+4 E
 
-siguiente cuadro:
+' 5 es :
 
-cuyo monto para cada año de explot
+6 E
 
-y en la Oferta Económica del grupo
+a A
 
-ación de la concesión se indica en cl
+7 : 0 a
 
-A
+mo. ST
 
-Ailo Calendario de Operación
+9 1.366 En ca
 
-IMG,
+10 1.416 o Aa
 
-Ingresos Mínimos Garantizados
+E NINOS ONE ES
 
-et
+16 yA ES
 
-(miles de U.F.)
+17 [A ES
 
-7 of
+. 18 1.883 e
 
-Pers
+| 20 IN ER
+Para efectos de este mecanismo de Ingreso Minimo, se establece como primer año calendario de SE ;
 
-1.098
+explotación, aquel que comienza el 1* de Enero del año en que se autorice la Puesta en Servicio E
 
-1.118
+Definitiva del total de las Obras. 5
 
-es
+| Para los cfectos del pago de parte del Estado, para el primer año calendario de operación de la E z
+Concesión, en el caso que considere menos de 12 meses de explotación, contados desde la Puesta ue
 
-1.140
+SOT > en Servicio Definitiva de las Obras, cl Ingreso Mínimo Garantizado será por la proporción de los ES
+SEO meses que cfectivamente operó la Concesión. — : o. E
+hn >: q : Cd . :
+[za HO 52 e
+3 RES A - Ñ AN CS Hd
+de * Hd : añ de, E
 
-1.162
+EN LIMA » e, Z- Y er . AL : —
 
-1.185
+## Page 9
 
-1.228
-
-1.272
-
-8
-
-. ~~
-
-1.319
-
-9
-
-1.366
-
-10
-
-de
-
-$
-
-1.416
-
-La
-
-~ €
-
-11
-
-12
-
-1.467
-
-e >.
-
-13
-
-1.520
-
-e
-
-¡El
-
-1.576
-
-an
-
-1,633
-
-15
-
-we.
-
-1.692
-
-16
-
-1.753
-
-17
-
-18
-
-1.817
-
-w=
-
-19
-
-1.883
-
-1.951
-
-20
-
-2.022
-
-Para efectos de este mecanis:
-
-no de Ingreso Minimo,
-
-explotación, aquel que comie
-
-se establece como primer año calendario de
-
-i
-
-SE
-
-nza el 1° de Enero del
-
-año en que se autorice la Puesta en Servicio
-
-"9
-
-Definitiva del total de las Obr
-
-as. :
-
-ir,
-
-ig
-
-Para los efectos del
-
-pago de parte del Estado,
-
-Concesión,
-
-en cl caso que considere menos de
-
-para el primer año calendario de operación de la
-
-12 meses de explotación, contados desde la Puesta
-
+, . PS
 E
-
-¿EORE
-
-en Servicio Definitiva de las Obras, cl Ingreso
-
-SN
-
-meses que efectivamente operó la Concesión.
-
-jz OF
-
-Minimo Garantizado será por la proporción de los
-
-et
-
-S Stores
-
-AS
-
-1
-
-1 5%
-
-ox
-
-SW CHILE
-
-PLZ
-
-A
-
-.
-
-VN os,
-
-y
-
-Les
-
-## Página 9
-
-%
-
-OPT
-
-a
-
-al
-
-13.-
-
-Las garantías que deberá
-
-4
-
-A
-
-or Ne
-
-Nye
-
-indican a continuación:
-
-entregar cl Concesionario por construcción y explotación de las obras, se
-
-ts
-
-S
-
-o
-
-a
-
-GARANTIA DE CONSTRUCCION
-
-EN
-
-food
-
-El Concesionario entregará la
-
-garantía de construcción,
-
-~y
-
-ferta, dentro de los treinta (3
-
-0) días previos al
-
-inicio d
-
-cn reemplazo de la garantía de seriedad de la
-
-deberá estar constituida por d
-
-tez (10) boletas de garantí
-
-c la construcción de las obras. Dicha garantia
-
-Ast
-
-Vista, cinitidas
-
-por un Banco con oficina cn Sant
-
-a bancarias, del mismo monto, pagadcras a la
-
-Obras Públicas
-
-iago
-
-por un valor total de UF 427
-
-000 (cuatro
-
-de Chile a nombre del Director General de
-
-cuyo plazo de vigencia de cada una de ellas s
-
-cientas veintisiete mil unidades de fom
-
-ento),
-
-erá de 48 m
-
-eses, contados desde la fecha de su emi
-
-sión.
-
-Una vez
-
-declaraci
-
-que haya sido acreditada la ejecución del 40%
-
-ates
-
-On de avance prev
-
-ista en 1.8
-
-2.3
-
-la garantía de con
-
-de la obra mediante la correspondiente
-
-boletas de garantia bancaria
-
-strucción deberá ser reem
-
-plazada por diez
-
-de igual monto
-
-por un valor t
-
-otal de UF 315.000 (tresci
-
-unidades de fomento) y cu
-
-yo plaz
-
-o de vigencia será |
-
-entas quince mil
-
-transcurrido hasta la coresp
-
-a diferencia entre 36 me
-
-Ses y el tiempo
-
-ondiente declaración de avance
-
-e, más 3 meses,
-
-»i
-
-Una vez que se haya ejecutado el 70% de la ob
-
-ra, acreditado a través de la
-
-2 4s
-
-avance prevista cn 1.8.2.3, la garantía aludid
-
-respectiva declaración de
-
-a en el párrafo inmediata
-
-mente anterior, deberá ser
-
-reemplazada por diez bolctas de garantía ban
-
-caria, de igual monto,
-
-a
-
-(ciento cincuenta mil unidades de fomento) y
-
-por un valor total de UF 150.000
-
-cuyo plazo de vigenci
-
-a será la diferencia entre 36 meses
-
-y cl tiempo transcurrido hasta la pertinente de
-
-claración de avance,
-
-más 3 meses.
-
-Todas las boletas de garantía de construcció
-
-n deberán ser
-
-pagaderas a la vista
-
-durante todo cl perio
-
-do de construcción de la
-
-ob
-
-y permanccer vigentes
-
-ra, más 12 meses,
-
-hubicre entregado la
-
-Bolcta de Garantia Bancar
-
-sin perjuicio que el concesionario
-
-presentes Bases.
-
-ia de Explotación,
-
-según lo indicado en 1.7.3 de las
-
-it
-
-La garantía de construcción de la ob
-
-ra scrá devuelta a la socied
-
-totalidad de las obras y entregados
-
-los d
-
-ad concesionaria
-
-una vez lerminadas Ja
-
-ocumentos exigidos por el contrato
-
-Sicmpre que sc haya entregado la totalid
-
-ad de |
-
-para finalizar esta clapa,
-
-a garantía de explotación ac
-
-onformidad del MOP y de
-
-acuerdo a lo señalado cn el Reglamento de la L
-
-ey de Concesiones.
-
-delas 20 4
-
-e cl concesionario opte por construir la obra
-
-as antes del inicio de la construcción de d
-
-icha obra
-
-opcional descrita en 2.3.6, éste deberá dentro
-
-adicional por un valor de UF 40.0
-
-» Entregar una garantla de construcción
-
-00 (cuarenta mil unidades de
-
-con todos los requerimientos esta
-
-blecidos cn este articulo.
-
-fomento), garantía que deberá cumplir
-
-.
-
-eee
-
-ah.
-
-Por concepto de la construcción de
-
-las terceras pistas a lo largo del eje de
-
-opte cl concesionario por construi
-
-r la obra opcional descrila en 1.7.21
-
-Costanera Norte(opte o no
-
-dentro de los 30 dias antes del in
-
-), el concesionario deberá
-
-4
-
-icio de Ja construcción de dicha obr
-
-construcción adicional por un val
-
-or de UF 20.000 (veinte mil unidade
-
-S
-
-a, entregar una garantia de
-
-deberá cumplir con todos los requ
-
-crimientos establecidos en este artículo.
-
-de fomento), garantía que
-
-GARANTIA DE EXPLOTACION
-
-Dentro de los 30 dias
-
-1.8.2.4
-
-cl concesionar
-
-previos a la puesta en servicio
-
-provisorio de cada sector de la obra señalado
-
-lo entregará al MOP la garant
-
-cxplotación de cada se
-
-ctor deberá estar constituida
-
-la: de explotación del mismo.
-
-La garantía de
-
-por dicz boletas de garantía banca
-
-ría, del mismo
-
-thonto, emitidas por u
-
-n Banco con oficina en San
-
-tiago de Chile, a nombre del Dire
-
-Obras Públicas. El valor total de las b
-
-ctor General de
-
-olclas de garantia de explotación es el que se
-
-indica en el cuadro
-
-siguiente:
-
-CAE
-
-Pw
-
-ae
-
-Gl
-
-SBRES
-
-ad!
-
-YE
-
-ene
-
-qa
-
-oD
-
-GD AS
-
-ARS
-
-st
-
-NA
-
-de 3
-
-## Página 10
-
-a ‘
-
-a
-
-Le
-
-» ah
-
-VY
-
-Valor total Boletas de Garantía de Explotación
-
-A
-
-Ay
-
-ES
-
-yo
-
-Eje Vial
-
-Sector
-
-N°
-
-Valor total Boletas
-
-ta
-
-re
-
-y
-
->
-
-de Garantia (UF)
-
-Xx
-
-Puente La Dehesa — Puente Centenario
-
-55.000
-
-aw
-
-yr
-
-Eje Costanera | Puente Centenario = Vivaceta
-
-ove
-
-Norte
-
-82.500
-
-=~ 4%
-
-zt
-
-Vivaceta — A. Vespucio
-
-82.500
-
-Eje Kennedy
-
-Estoril — Puente Lo Saldes
-
-27.500
-
-Ze
-
-Cada boleta deberá tener un
-
-Y
-
-obstante, el concesionario pod
-
-plazo de vigencia igual al periodo de explotac
-
-ión más 12 meses. No
-
-rá optar por entregar boletos de garantía
-
-cuya vigencia sea menor, con un
-
-qe
-
-plazo no inferior a 5 años y
-
-renovarlas 90 días antes de su término d
-
-Se
-
-accplado por el DGOP y ca
-
-da documento sea entregado antes del y
-
-e vigencia, siempre que ello sea
-
-último caso el plazo de las ú
-
-encimiento del anterior, En este
-
-12 mescs,
-
-llimas boletas de garantía será lo que rest
-
-e del período de explotación más
-
-vt
-
-¿A
-
-El MOP, no otorgará la autorizac
-
-ión de puesta en servicio provisoria de los sectores indicados en
-
-1.8.2.4, si no se da cumplimiento a
-
-la obligación de entregar la garantía de explotación.
-
-Adicionalmente, cuando fallen 24 meses
-
-para la extinción del Contrato,
-
-waet?
-
-dicz, boletas de garantía bancaria,
-
-del mismo monto,
-
-el concesionario deberá entregar
-
-Chile, a nombre del Director General de Obras
-
-emitidas por un Banco con oficina en Santiago de
-
-Públicas por un valor equivalente a UF 220.000
-
-rantía adicional tendrá una vigencia de 3 años,
-
-(doscientas veinte mil unidades de fomento). Esta ga
-
-ta
-
-Todas las bolctas de garantía de explotación deberán ser pagaderas a la vista,
-
-Las bolctas bancarias de garantía serán devuel
-
-Fiscal de la explotación certifi
-
-tas en el plazo de 15 días, contados desde que el Inspector
-
-con el MOP.
-
-que que el concesionario ha cumplido todas las obligaciones contraidas
-
-.
-
-En caso que cl concesionario o
-
-ve
-
-los 30 días antes de la Pucs
-
-pte por construir la obra opcional descrita en 2.3.6, éste deberá dentro de
-
-ta en Servicio Provisoria de la Obra Opcional entregar una garantía de
-
-explotación adicional por
-
-un valor de UF 27.500 (veintisiete mil quinientas unidades de fomento),
-
-garantía que deberá cumpli
-
-r con todos los requerimientos establecidos en este artículo,
-
-ted
-
-vw a4
-
-“io
-
-14.-
-
-La Sociedad Concesionaria y el MOP realizarán los pagos
-
-establecidos en el contrato en los plazos
-
-señalados cn las Bases de Licitación. En el caso de q
-
-devengarán un interés real diario de 0,0198%
-
-ue se produzcan retrasos, dichos pagos
-
-todo ello de conformidad con 1.11.5 de las Bases de
-
-Licitación. Sin perjuicio de ello, el retraso de
-
-los pagos que la Sociedad Concesionaria tenga que
-
-xt
-
-realizar al Estado dará derecho al cobro,
-
-a lo previsto en 1.7.1 letra j) de las Bases
-
-por parte del MOP,.de la correspondiente garantía conforme
-
-de Licitación.
-
-15.-
-
-Las multas que procedan se aplicarán conforme a lo es
-
-tipulado en las Bases de Licitación, Circulares
-
-Aclaratorias, en cl D.S. MOP N° 900 de 1996, que fij
-
-a el texto refundido, coordinado y sistematizado
-
-del DFL MOP N” 164 de 1991, Ley de
-
-Concesiones de Obras Públicas y en el D.S. MOP N° 956 de
-
-1997, Reglamento de la Ley de Concesio
-
-nes.
-
-e.
-
-16.-
-
-La Dirección Gencral de Obras Públicas será el servicio del Ministerio de Obras Públicas que fiscalizará
-
-el contrato de concesión en sus diversos aspectos.
-
-,
-
-Fo
-
-A PAY RE
-
-IN
-
-y!
-
-Dm
-
-ON
-
-ANOTESE, TOMESE RAZON Y PUBLIQUESE
-
-2 ASO
-
-ws
-
-wt
-
-}
-
-A /
-
-fide LE eT ow
-
-## Página 11
-
-Sí
-
-~ 4%
-
-week
-
-Ge Po
-
-<>
-
-RS
-
-e A
-
-ey
-
-eS
-
-Pa.
-
-“4s
-
-ot
-
-Ste NS
-
-f
-
-a
-
-tun A
-
-En
-
-Laas
-
-wp sg
-
-(>
-
-Y
-
-EDUARDO FREI RUIZ - TAGLE
-
-RESIDENTE DE LA REPÚBLICA
-
-y
-
-we
-
-|"
-
-Ce
-
-as
-
-LA
-
-p
-
-4E TO
-
-COX
-
-ALEZ
-
-r.
-
-sv
-
-ALVARO CLARKE DE LA' CERDA
-
-be
-
-Fier gin
-
-Mibistro de Hecienda (S)
-
-ee
-
-ce
-
-e
-
->
-
-! ,
-
-(ki
-
-sa 2
-
-=?
-
-a: 3
-
-o
-
-7
-
-NY
-
-CONTRALORIA GENERAL
-
-A
-
-División de la Vivienda y Urbanismo
-
-%
-
-ta
-
-y Obras Públicas y Transportes
-
-oe
-
-ts
-
-tl,
-
-RECEPCION
-
-MAR. 2000
-
-..
-
-se
-
-ay
-
-kp ok
-
-Sub -
-
-División Jone
-
-ca
-
-Ls)
-
-po
-
-Y
-
-MZ
-
-Ac
-
-y
-
-y
-
-= &.
-
-Jato
-
-CE
-
-RTIFICADO: Se deja constancia que,
-
-señal de aceptación del decreto ut supra, firmaron
-
-JO
-
-ante mí, los señores Giacomo Orsatti, C.
-
-Lp
-
-ra extranjero
-
-López, CL.
-
-34.713.612-9; Juan Manuel Torres
-
-dive
-
-de 2000.-
-
-N°4.091.745-4; y Enrique Loehne Coster, Cl
-
-Ne
-
-6.099-8. Santiago, 3 de Julio
-
-lo
-
-tf
-
-RY
-
-Xs
-
-HE 5
-
-6
-
-y?
-
-ae
-
-ES
-
-2
-
-:
-
-ered we
-
-ween
-
-a
-
-d
-
-Dl
-
-y
-
->.
-
 E
-
-z :
-
-.
-
-E
-
-.
-
-O E
-
-lee
-
-Sa
-
-i
-
-Wier
-
-y
-
-CA AES
-
+a
 A
-
-CITI ee Tot gee
-
-Pis
-
-ee SP Vive
-
-7
-
-i
-
-y
-
-ate,
-
-oe
-
-aie ra
-
-Y
-
-ES
-
-a
-
-awe
-
-O
-
-<
-
-% 4 + y
-
-DES
-
-AS
-
-Te.
-
-x
-
-“E my? ret Se aa io wt 4
-
-*:
-
-<
-
-1
-
-## Página 12
-
-oe
-
-at
-
-fa
-
-..
-
-La
-
-Ya.
-
-te
-
-owt,
-
-oe
-
-bat of
-
-¿>
-
-By
-
-e.
-
-e,
-
-23
-
-ES
-
-a?
-
-A
-
-.
-
-ia
-
-iy
-
-a]
-
-SS
-
-EN
-
-mk
-
-se
-
-e,
-
-e.
-
-ÉS
-
-.
-
-.
-
-E
-
-2
-
-gee
-
-AAA Y
-
-at
-
-ee
-
-va
-
-a
-
-..
-
-..
-
-ava
-
-wo?
-
-57
-
-ai me gt
-
-ote
-
-..
-
-yr
-
-E
-
-Jr
-
-eL
-
-qe
-
-o
-
-ae
-
-ae
-
-e
-
-o.
-
-on
-
-,.
-
-2 4x
-
-$:
-
-“ye
-
-iy
-
-e.
-
-ri
-
-a
-
-..
-
-© cone ome
-
-.?r
-
-one
-
-ESO
-
-€
-
-oh.
-
-Petia!
-
-e?
-
-ow
-
-een
-
-..
-
-...
-
-.
-
-Ne
-
-ee
-
-Ceee- ceo Pe BVOUa
-
-oe
-
-.
-
-om enue
-
-AS
-
-ES
-
-Py
-
-am.
-
-$
-
-7%
-
-» y
-
-..
-
-salt me
-
-wo
-
-,
-
-eee
-
-.. e... 09.4
-
->
-
-te
-
-le nt.
-
-2
-
-.
-
-> Ye
-
-...
-
-..
-
-PUES
-
-a
-
-Lara
-
-..
-
-su
-
-fe
-
-.
-
-Nit...
-
-3 JUL 200:
-
-ot et © ve Ceamenesecoe
-
-e
-
-53
-
-ee
-
-ores
-
-se
-
-de
-
-ast
-
-REZA
-
-ee.
-
-wae oy
-
-ae
-
-EN
-
-ar
-
-ag
-
-ada?
-
-x.
-
-is
-
-Sey
-
-> EN
-
-te
-
-af
-
-Wa a.
-
-a
-
-oe
-
--
-
-..
-
-SS
-
-..
-
-.
-
-of
-
-”
-
-we,
-
-te
-
-ate
-
-=
-
-ES
-
-ai"
-
-ae
-
-y
-
-e -
-
-:3
-
-e
-
-y
-
-..
-
-o.
-
-Agen
-
-¿E
-
-ue
-
-wh
-
-q
-
-es
-
-Ye
-
-ye
-
-ae,
-
-8
-
-al
-
-de
-
-..
-
-.
-
-Se,
-
-..
-
-as
-
-cay
-
-Ww
-
-ee
-
-.
-
-.
-
-oe
-
-a
-
-ce So
-
-€
-
-Ya
-
-..
-
-e. Ur
-
-Lx.
-
-we
-
-a
-
-=
-
-SS
-
-de
-
-Es,
-
-A
-
-rat
-
-..
-
-AS
-
-Re
-
-o
-
-..
-
-5
-
-23
-
-..
-
-e
-
-$
-
-.*
-
-oe
-
-oy
-
-ee
-
-PA:
-
-pe
-
-os
-
-as
-
-ve
-
-23.
-
-54
-
-he
-
-we
-
-+
-
-LA
-
-e ple
-
-wz,
-
-“4;
-
-i
-
-ve
-
-ia
-
-iy
-
-ee
-
-..
-
-a4
-
-eet
-
-We
-
-' Y,
-
-"oe
-
-..
-
-A,
-
-ne
-
-Mey
-
-ese
-
-..
-
-..
-
-te
-
-4
-
-ee
-
-wi
-
-on
-
-=
-
-Ye
-
-on
-
-..
-
-EN
-
-v*
-
-“6
-
-oe
-
-a5
-
-PE
-
-to
-
-YA
-
-E
-
-op
-
-EA
-
-de
-
-ae
-
-E
-
-ar
-
-ary
-
-“e
-
-‘en
-
-or
-
-A
-
-q
-
-2.
-
-of
-
-se
-
-ee
-
-..
-
-de
-
-..
-
-pe
-
-a
-
-Es
-
-..
-
-> Mya
-
-ES
-
-at
-
-A)
-
-2,
-
-ate
-
-at
-
-te
-
-y
-
-is]
-
-435
-
-Ye
-
-e
-
-e
-
-e.
-
-AS
-
-dood
-
-* at
-
-oy
-
-Rs
-
-we
-
-El
-
-FE
-
-3
-
-aT
-
-297
-
-is
-
-ve
-
-..
-
-3
-
-1%
-
-Laie ¢
-
-os)
-
-ai
-
-144
-
-añ
-
-“e
-
-rare wary
-
-fib)
-
-Ay
-
->
-
-vay
-
-e
-
-da
-
-dl
-
-we
-
-..
-
-La
-
-A
-
-We
-
-Gay
-
-RE
-
-qe
-
-DEI
-
-IES
-
-oe
-
-aye”
-
-$0
-
-2
-
-“Fe
-
-ig
-
-ray
-
-Jig
-
-oe
-
-y
-
-A
-
-eS
-
-SO
-
-..
-
-6d
-
-te
-
-ES
-
-A
-
+, E
+13.- Las garantías que deberá entregar el Concesionario por construcción y explotación de las obras, se EX
+indican a continuación: . SE
 AA
+. CRES
+EE
+0) . E +
+GARANTIA DE CONSTRUCCION ES
+El Concesionario cutregará la garantia de construcción, cn reemplazo de la garantía de seriedad de la EE
+oferta, dentro de los treinta (30) días previos al inicio de la construcción de las obras. Dicha garantia EE
+deberá estar constituida por diez (10) boletas de garantía bancarias, del mismo monto, pagadceras a la E E
+vista, emitidas por un Banco con oficina cn Santiago de Chile a nombre del Director General de Ez
+Obras Públicas, por un valor total de UF 427.000 (cuatrocientas veintisiete mil unidades de fomento), DE
+cuyo plazo de vigencia de cada una de ellas será de 48 meses, contados desde la fecha de su emisión. EY
+Una vez que haya sido acreditada la ejecución del 40% de la obra mediante la correspondiente | EE
+declaración de avance prevista en 1.8.2.3, la garantia de construcción deberá ser reemplazada por diez o Ea
+bolctas de garantia bancaria, de igual monto, por un valor total de UF 315.000 (trescientas quince mil ES z
+unidades de fomento) y cuyo plazo de vigencia será la diferencia entre 36 meses y el tiempo E
+transcurrido hasta la correspondiente declaración de avance, más 3 meses. ES Y.
+. Una vez que se haya ejecutado el 10% de la obra, acreditado a través de la respectiva declaración de E
+avance prevista en 1.8.2.3, la garantía aludida en el párralo inmediatamente anterior, deberá ser ENE
+reemplazada por diez boletas de garantía bancaria, de igual monto, por un valor total de UF 150.000 A
+Eu (ciento cincuenta mil unidades de fomento) y cuyo plazo de vigencia será la diferencia entre 36 meses E
+y y cl tiempo transcurrido hasta la pertinente declaración de avance, más 3 meses. e
+Todas las boletas de garantía de construcción deberán ser pagaderas a la vista y permanecer vigentes E :
+durante todo cl periodo de construcción de la obra, más 12 meses, sin perjuicio que el concesionario a
+hubiere entregado la Boleta de Garantía Bancaria de Explotación, según lo indicado en 1.7.3 de las Ez
+presentes Bases. al
+. La garantía de construcción de la obra scrá devuelta a la sociedad concesionaria una vez terminadas la Ea
+totalidad de las obras y entregados los documentos exigidos por el contrato para finalizar esta ctapa, DI
+" siempre que se haya entregado la totalidad de la garantia de explotación a conformidad del MOP y de 2
+acucrdo a lo señalado cn el Reglamento de la Ley de Concesiones. : EE
+En caso que el concesionario opte por construir la obra opcional descrita en 2.3.6, éste deberá dentro . = Ñ
+de los 30 días antes del inicio de la construcción de dicha obra, entregar una garantía de construcción * z A x
+adicional por un valor de UF 40.000 (cuarcnla mil unidades de fomento), garantia que deberá cumplir TE
+con todos los requerimientos establecidos en este articulo. EE
+- Por concepto de la construcción de las terceras pistas a lo largo del eje de Costanera Norte(opte o no EN :
+ESO opte el concesionario por construir la obra opcional descrita en 1.7.21), el concesionario deberá E:
+Sl dentro de los 30 días antes del inicio de la construcción de dicha obra, entregar una garantia de E
+construcción adicional por un valor de UF 20.000 (veinte mil unidades de fomento), garantía que cu
+deberá cumplir con todos los requerimientos establecidos en este artículo. : E
+Dentro de los 30 días previos a la puesta en servicio provisorio de cada sector de la obra señalado | ES :
+1.8.2.4, el concesionario entregará al MOP la garantía de explotación del mismo. La garantia de . E
+caplotación de cada sector deberá estar constituida por dicz boletas de garantía bancaria, del mismo Ñ Ex
+honta, emitidas por un Banco con oficina cn Santiago de Chile, a nombre del Director General de E
+Obras Públicas. El valor total de las bolcias de garantia de explotación es el que se indica en el cuadro cia
+| siguiente: | Ps
+DE : IF Ñ
+CREAN Ñ Es
+TE A. O ”
+; 52 cs A
+SERES 5) Mi dE
+* EE
+ME LE o E
+= ys A . SE
+y e,
 
-ua
+## Page 10
 
-At
+ZE
+co CN
+| | E
+Valor total Boletas de Garantía de Explotación EE
+Eje Vial Valor total Boletas AN
+de Garantía (UF) ES
+Puente La Dehesa — Puente Centenario PO Es
+" . Eje Costanera | Puente Centenario — Vivaceta 82.500 e
+Norte , Y :
+Vivaceta —- A. Vespucio MO 82.500 : z Es
+Eje Kennedy | Estoril — Puente Lo Saldes MS 27.500 E
+Cada bolcta deberá tencr un plazo de vigencia igual al periodo de explotación más 12 meses. No E Él
+obstante, cl concesionario podrá Optar por entregar boletas de garantía cuya vigencia sea menor, con un E
+plazo no inferior a $ años y renovarlas 90 dias antes de su término de vigencia, siempre que ello sea En
+accptado por el DGOP y cada documento sea entregado antes del vencimiento del anterior. En este E
+último caso el plazo de las últimas boletas de garantía será lo que reste del periodo de explotación más E
+12 meses, PA cb
+E a
+El MOP, no otorgará la autorización de puesta en servicio provisoria de los sectores indicados en Ñ E
+1.8.2.4, si no se da cumplimiento a la obligación de entregar la garantía de explotación. l o
+Adicionalmente, cuando falten 24 meses para la extinción del Contrato, el concesionario deberá entregar E
+dicz. boletas de garantía bancaria, del mismo monto, emitidas por un Banco con oficina en Santiago de E
+Chile, a nombre del Director General de Obras Públicas por un valor equivalente a UF 220.000 E
+(doscientas veinte mil unidades de fomento). Esta garantía adicional tendrá una vigencia de 3 años. E
+Todas las bolctas de garantía de explotación deberán ser pagaderas a la vista, EN :
+Las bolctas bancarias de garantía serán devueltas en el plazo de 15 dias, contados desde que el Inspector e
+Fiscal de la explotación certifique que el concesionario ha cumplido todas las obligaciones contraidas E
+con el MOP, o. 0
+En caso que cl concesionario opte por construir la obra opcional descrita en 2.3.6, éste deberá dentro de E E :
+los 30 días antes de la Puesta en Servicio Provisoria de la Obra Opcional entregar una garantía de o
+explotación adicional por un valor de UF 27.500 (veintisiete mil quinientas unidades de fomento), eS E
+garantía que deberá cumplir con todos los requerimientos establecidos en este artículo. EA Ls
+14.- La Socicdad Concesionaria y el MOP realizarán los pagos establecidos en el contrato en los plazos 3 :
+scivalados cn las Bases de Licitación. En el caso de que se produzcan retrasos, dichos pagos Ez
+devengarán un interés real diario de 0,0198% todo ello de conformidad con 1.11.5 de las Bases de E .
+: Licitación. Sin perjuicio de cilo, el retraso de los pagos que la Sociedad Concesionaria tenga que E
+realizar al Estado dará derecho al cobro, por parte del MOP, de la correspondiente garantía conforme e
+a lo previsto en 1.7.1 letra j) de las Bases de Licitación. Fa
+IS.- Las multas que procedan se aplicarán conforme a lo estipulado en las Bases de Licitación, Circulares A :
+Aclaratorias, en cl D.S. MOP N? 900 de 1996, que fija el texto refundido, coordinado y sistematizado A
+del DF MOP N” 164 de 1991, Ley de Concesiones de Obras Públicas y en el D.S. MOP N? 956 de Nel cs
+| 1997, Reglamento de la Ley de Concesiones. E
+16.- La Dirección General de Obras Públicas será el servicio del Ministerio de Obras Públicas que fiscalizará dE
+el contrato de concesión en sus diversos aspectos. ¿E
+DES, E E
+(SSA ANÓTESE, TÓMESE RAZÓN Y PUBLÍQUESE Y: LE
+Ñ LS OF EX | E e E
+a 20 A Ser , EN
+AE Ass E ) AN 0 Ce
 
-pnd
+## Page 11
 
-“
+. CR
 
-UN
+l o RS
 
-ay
+IR
 
-$
+: E
 
-Set
+o , , | | , MES
+ES
 
-AS
+Y CA
 
-te
+t E
 
-4h
+: . aa
 
-Hd
+/ / > O
 
-Le
+. ". 0 o
 
-as
+: CR z
 
-mn
+1 mn * . . / 7 A
+SL: EDUARDO FREI RUIZ - TAGLE O
+A, . y ' LR
+N RESIDENTE DELTA REPÚBLICA . E
+| ,, Es
 
-e
+y , | En
 
-Ay
+“SN. o A o
 
-ay
+dios Z IDHA GON ALEZ . ALVARO “CLARKE DE LA' CERDA Ñ dy
 
-ca
+JS | | E:
+LA — V — E
 
-ae
+Ln - A E ¿
 
-A Be
+A CONTRALORIA GENERAL o EE
 
-rs
+| « | División de la Vivienda y Urbanismo es e ae
+y Obras Públicas y Transportes a Po. . | - E
 
-LS
+o - ES
 
-we
+RECERCION 1 7A MAR, 2000 Mr ti, ES EE
 
-e.
+¡Comite /SecY_— X TU “2 ODE : Z Ane
 
+, E
+
+CERTIFICADO: Se deja constancia que, en señal de aceptación del decreto ut supra, firmaron o e
+
+ante mí, los señores Giacomo Orsatti, C.I para CU ATI 6123; Juan Manuel Torres o E
+
+López, C.[. N%4.091.745-4; y Enrique LoehneX Coster, C.1. No 16.099-8. Santiago, 3 de Julio "a, a
+
+de 2000.- o AN | | ES
+
+ome A A— A ”. 0
+NQTO - : TEA
 E
 
+enga r 33 E A E o RR A RS
+
+## Page 12
+
+. s , . i
+i se A
+o e
+E e E :
+. « «¡he A
+ER
+. A
+E 0% i
+e :
+. 4 Y o ¿
+: y AA e ;
+. AS
+2% o
+" --. CU ve i
+. . A A i
+. : A :
+a ERE A h
+PE
+RAR .
 O
-
-str,
-
-4
-
-a
-
-pot
-
-Ae
-
-Ys
-
-ES
-
-e
-
-pe
-
-SD
-
-ve
-
-LA
-
-tá
-
-..
-
-ES,
-
-€ *
-
-..
-
-E
-
-£
-
-..
-
-aS
-
-ee Ht
-
-sys
-
-ee:
-
-we
-
-aru
-
-ES
-
-4%
-
-me
-
-we
-
-Y
-
-ES
-
-ES
-
-ES
-
-eS
-
-E
-
-et
-
-sy
-
-E
-
-SS
-
-owt
-
-to
-
-pa
-
-a
-
-A
-
-ae
-
-on
-
-A
-
-Se.
-
-sl
-
-ee.
-
-o
-
-a y
-
-ce
-
-3
-
-aa
-
-..
-
-ay
-
-a
-
-78.
-
-rat:
-
-a
-
--
-
-st
-
-A
-
-a
-
-e
-
-ae
-
-..
-
-we
-
-© ‘3
-
-oe
-
-at
-
-A
-
-45%
-
-o.
-
-a
-
-bya
-
-nh
-
-Ate
-
-ae
-
-tu
-
-oe
-
-ue
-
-xy
-
-cu
-
-ys
-
-RA
-
-ES
-
-AS,
-
-LE
-
-aN
-
-ño
-
-ME
-
-Bs ay
-
-de:
-
-is
-
-fae
-
-$e
-
-2h]
-
-1
-
-Y
-
-fa Ror
-
-E
-
-ES
-
-ae
-
-eA
-
-AS
-
-ape
-
-SS
-
-E
-
-an
-
-end
-
-i
-
-tad
-
-oe,
-
-pas
-
-te
-
-eet
-
-8
-
-e
-
-er
-
-rs
-
-SS
-
-xy.
-
-mos
-
-sane
-
-pains
-
-Es
-
-rts,
-
-areas
-
-"3°
-
-San
-
-nce
-
-Sane
-
-as
-
-De
-
-Pa
-
-Stet
-
-eB
-
-peas
-
-cae
-
-Feb
-
-pa
-
-SÓN,
-
-in ek ASN
-
-Reve
-
-we
-
-e
-
-ray
-
-aoe
-
-ef
-
+SEG:
+Mu MW OS
 EN
-
+. Mx Y
+ende Ñ
+a Y En
 e
-
-een.
-
-EZ
-
-RS
-
-GA
-
-Pon
-
-Acre
-
+E
+: A
+. yr Fo bo
+Ñ a de E
+: AR E o
+CRA É z
+. . a e. P 5
+A vi
+' ES ;
+! po HE a
+o. ” ES
+ES E
 A
-
-NWT
-
-ae
-
-dé
-
-LAIR:
-
-ets
-
-RA
-
-SR
-
-AN
-
-ities
-
-PR
-
-Sana reeds
-
-Hs
-
-eS
-
-seen
-
-soe
-
-ESTAS
-
-ih
+EA
+2: SÉ Í
+. e
+. . e
+. RS “E E
+.. E AO E
+a : Xi o
+o E TA
+a CAE
+a - e N ;
+ÓN . AOS
+o e A EN
+: : : o o.” O CTA e + ;
+z : : a =
+; OS y EA
+: : . .. . . - k E y
+. » . ps e É
+2 a ns E
+. o .! — ABRE pa
+. - * Cm E
+. La | ... +. O: von... Peovena EOS ;
+LR
+> - A É
+. as ms PTE IS AS |
+. . .* . IA
+. 2. La AA il ¿Herr eonarrrusoo.. e. .onoeses CAE
+: : A
+. IT
+4? on A $
+g 4 A E
+: . + y , * e a > pS cl
+: ¿ 1 : Ft
+E .... . 0... ne coanrrarnonos * AA ?
+. A L
+Lo, A . . A E h
+A LA bro
+ON . CA
+IA Ñ A o
+A , A = do.
+Me E
+E EA
+EN E
+o CIS
+AS a
+E e E
+qe ho el a 3
+Eo . . o taa E
+EsSd AA eS
+So o a
+Do Ps A y
+a PA e
+, . z ' > PS)
+: Al 0 AN E
+.. EE ne o E
+. O 2 Po
+.. DS . E
+. 4 E A] el
+. “e, ES 0
+nt , E
+, .o, E E 2
+. . mz 3 ps
+: . > ES ds
+UN - . hd es] MS se
+. ur A A
+] - O ad
+. OS SS
+AE es
+de A
+ES
+EE
+p : PS, pe 4
+: Pan
+. A
+A
+E:
+. a
+ES 3 E
+La - o “4 Ue Es
+PS . cr ES
+o . . . LA 0
+ÓN . Ñ - e, - 154
+O ero A 8
+EA go A
+OS : :
+o . : . er 08
+ON E 3 RC E
+Po e A
+- AE DE pa 2
+EN e . o E > ES E
+AN : : : . Mo 9
+e E o : . ARO e
+AS e A
+PA . SO
+Rae a AN . > A e po
+SS . a “a A 3
+PESO - . . g E OR 552
+PE . ES SN
+a ERA a
+E - . Ñ . A E ES
+Pres : : : : IS E E
+a : . E E
+F : . LA € Mn a
+Po . . A
+Ml . : . - . RAE
+. E ad de
+. : a IR EE
+ne IEA ER
+a . OS. E a A
+7] SE E EEE de
+. A RO AE EA
+- Sy E ET EE 0d
+. j ES A
+: E
+E EA
+. . AA
+Ñ IA A
+E E
+, : . EN
+, EA RI
+. , ACA al
+so , AAA dll
+. Ñ E A RES 054
+% Co . . Es > Nx Le
+La . EA E
+ÓN A
+Ent: . A A es
+2 . . AE
+ÓN A a
+eo : . cr IS 53
+eN , , : oo E ? Bs
+O CI
+A : E e
+RS : ; TN
+AN . “ : . NN . re
+o : . oo ke
+E SS e ot TOA
+Ms . . IN
+o CS 08
+E EN o
+o : IN
+o : ES Y
+PS o . > + .s E
+o . ] , A
+oo A Ñ : OS 9
+py RAS Dad UE DEA A 203
+SN oo ds
+A E Y a E
+Mn a A
+e A 3
+SAN 2 Es a e
+O ES A
+o : , ES O
+ON O A
+Eo QRÓN a E
+o : , SS A de
+PE : - : . O
+ESE. : , A
+Li : DS ES ASES
+E o A
+O a RE
+E E A
+O . IS ES
+iO ES:
+E AS 0
+eS O AS po
+5 AAC
+. Y Eo
+ARA E
+. e h
+“haa $
+yet: Te ps
+. . A
+. va, Er e 3 E
+: ES YH
+. Fo va
+a > ya >.
+. AS . ES 3
+. . A te y ]
+: : : A
+Ea ES
+A . ES :
+SN . : . AS 2
+e . . . . ES IS $
+A, A e EN Pos Ls A : . ON : o > * ES ES
+A A Ia TI : Y E RN Na O O E
+A A O A e A A A A A A a A e e a La en e Cd A a o DN AT oda Ñ A A A A a dl ed E A SE
+E e SS IO O Ae A O o BO
+A O E 0 o a O A e a o e a o
+A A A O O OR A O Ea NE UE O O UR O RN SAL ARONA eN oa o EOS A E codos 5 A
+E O OR IAE A Er RA RAN O OR INS AROSA Li STO ESO IDA RO O a AO ADMI RON E ER dto A ES CEA
+EE CON NS OA O TRA AA OS MENA IRA RP AR O RAS E SCAR RA RON A O RR RR RNE RA A RARA RE RAN DAN O NOIA A AAA RA ii de > A

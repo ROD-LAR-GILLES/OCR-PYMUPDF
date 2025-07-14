@@ -1,6 +1,6 @@
 # ──────────────────────────────────────────────────────────────
 #  File: src/adapters/ocr_adapter.py
-#  Mac M1 • Python 3.11 • sólo fitz, PIL, pytesseract
+#  Python 3.11 • sólo fitz, PIL, pytesseract
 # ──────────────────────────────────────────────────────────────
 
 """Propósito: OCR básico por página usando PyMuPDF + pytesseract
@@ -24,81 +24,115 @@ Ejemplo de uso:
   image_to_string(img, lang="spa", config="--psm 6 --oem 1")
 """
 
-from PIL import Image
-from io import BytesIO
-import cv2
-import numpy as np
 import logging
-import pytesseract
+from io import BytesIO
+
+import re
+import unicodedata
+
+# Terceros
+import cv2
 import fitz
-import os
+import numpy as np
+import pytesseract
+from PIL import Image
 
 # ───────────────────────── Configuración global ─────────────────────────
-DPI                 = 600
-TESSERACT_CONFIG    = f"--psm 11 --oem 1 -c user_defined_dpi={DPI}"
-OCR_LANG            = os.getenv("TESSERACT_LANG", "spa+eng")
-TESSERACT_LANG_MODE = os.getenv("TESSERACT_LANG_MODE", "auto")
-MIN_W, MIN_H        = 200, 40
-OUT_DIR_NAME        = "ocr_tablas_cv"
+DPI              = 600
+TESSERACT_CONFIG = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
+OCR_LANG         = "spa"
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
 # ───────────────────────── OCR Principal ─────────────────────────
 
+
 def perform_ocr_on_page(page: fitz.Page) -> str:
     """
-    Realiza OCR sobre una página de PDF utilizando Tesseract vía pytesseract,
-    ajustando automáticamente el modo PSM y el idioma si está activado.
+    Realiza OCR sobre una página de PDF utilizando Tesseract vía pytesseract.
 
-    Args:
-        page (fitz.Page): Página de PyMuPDF a procesar.
-
-    Returns:
-        str: Texto extraído por OCR.
+    Simplifica el preprocesamiento para mejorar estabilidad.
     """
     pix = page.get_pixmap(dpi=DPI, alpha=False)
     img = Image.open(BytesIO(pix.tobytes("png")))
-    img = preprocess_image(img)
-    psm = estimate_psm_for_page(img)
 
-    if TESSERACT_LANG_MODE == "auto":
-        temp_text = pytesseract.image_to_string(
-            img, lang=OCR_LANG, config=f"--psm 11 --oem 1 -c user_defined_dpi={DPI}"
-        )
-        lang = detect_language(temp_text)
-    else:
-        lang = OCR_LANG
+    # Preprocesamiento liviano: escala de grises
+    gray = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
+    img = Image.fromarray(gray)
 
-    config = f"--psm {psm} --oem 1 -c user_defined_dpi={DPI}"
-    return pytesseract.image_to_string(img, lang=lang, config=config)
+    # Configuración fija: PSM 6 (bloques uniformes), idioma español
+    config = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
+    lang = "spa"
 
-# ─────────────────────── Preprocesamiento ───────────────────────
+    raw = pytesseract.image_to_string(img, lang=lang, config=config)
+    # Eliminar guiones de fin de línea que cortan palabras
+    raw = re.sub(r"-\n(\w+)", r"\1", raw)
+    cleaned = _cleanup_text(raw)
+    return detect_structured_headings(cleaned)
 
-def preprocess_image(img_pil: Image.Image) -> Image.Image:
+
+# ───────────────────── Post‑OCR cleanup ──────────────────────
+def _cleanup_text(text: str) -> str:
     """
-    Preprocesa la imagen para mejorar la precisión OCR.
-
-    Pasos:
-        1. Corrige rotación automática.
-        2. Convierte a escala de grises.
-        3. Aplica CLAHE para realzar contraste.
-        4. Desenfoque Gaussiano para reducir ruido.
-        5. Binariza con umbral adaptativo inverso.
+    Normaliza y limpia el texto OCR:
+    • Normaliza Unicode a NFKC.
+    • Elimina caracteres no imprimibles.
+    • Convierte múltiples espacios en uno.
+    • Retira líneas con muy baja proporción de caracteres alfabéticos (<30 %).
 
     Args:
-        img_pil (Image.Image): Imagen RGB original.
+        text (str): Texto bruto OCR.
 
     Returns:
-        Image.Image: Imagen binarizada lista para OCR.
+        str: Texto limpio.
     """
-    img_pil = correct_rotation(img_pil)
-    gray = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
-    enhanced = clahe.apply(gray)
-    blur = cv2.GaussianBlur(enhanced, (5, 5), 0)
-    thresh = cv2.adaptiveThreshold(
-        blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 15, 10
-    )
-    return Image.fromarray(thresh)
+    text = unicodedata.normalize("NFKC", text)
+    # Normalización Unicode y limpieza de ruido OCR
+    # Sustituir cualquier carácter que NO sea letra, número, puntuación básica o espacio
+    text = re.sub(r"[^\w\sÁÉÍÓÚÜÑñáéíóúü¿¡.,;:%\-()/]", " ", text)
+    # Colapsar espacios repetidos
+    text = re.sub(r"\s{2,}", " ", text)
+
+    # Filtrar líneas con mucho ruido
+    cleaned_lines = []
+    for line in text.splitlines():
+        letters = sum(c.isalpha() for c in line)
+        ratio = letters / max(len(line), 1)
+        if ratio >= 0.3:
+            cleaned_lines.append(line.strip())
+    return "\n".join(cleaned_lines)
+
+# ──────────────── Visualización de regiones OCR ────────────────
+
+def visualize_ocr_regions(page: fitz.Page, output_path: str = "ocr_regions.png") -> None:
+    """
+    Dibuja las regiones de texto detectadas por Tesseract en la imagen de una página y guarda el resultado.
+
+    Args:
+        page (fitz.Page): Página PDF a procesar.
+        output_path (str): Ruta donde guardar la imagen con las cajas dibujadas.
+    """
+
+
+    pix = page.get_pixmap(dpi=DPI, alpha=False)
+    img_pil = Image.open(BytesIO(pix.tobytes("png")))
+    img = np.array(img_pil)
+
+    # Convertir a RGB si es necesario
+    if img.ndim == 2:
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+    data = pytesseract.image_to_data(img, lang=OCR_LANG, config=TESSERACT_CONFIG, output_type=pytesseract.Output.DICT)
+
+    n_boxes = len(data['level'])
+    for i in range(n_boxes):
+        (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    # Guardar o mostrar la imagen
+    Image.fromarray(img).save(output_path)
+    logging.info(f"Regiones OCR visualizadas en: {output_path}")
+
+# ─────────────────────── Preprocesamiento ───────────────────────
 
 def correct_rotation(img_pil: Image.Image) -> Image.Image:
     """
@@ -145,36 +179,14 @@ def estimate_psm_for_page(img_pil: Image.Image) -> int:
     num_boxes = len(contours)
 
     if num_boxes < 5:
-        return 7 
+        return 7
     elif num_boxes > 50:
-        return 11 
+        return 11
     elif 20 < num_boxes <= 50:
-        return 4 
+        return 4
     else:
-        return 6 
+        return 6
 
-def detect_language(text: str) -> str:
-    """
-    Detecta el idioma dominante de un texto para ajustar el parámetro 'lang' de Tesseract.
-
-    Args:
-        text (str): Texto plano extraído por OCR preliminar.
-
-    Returns:
-        str: Código de idioma compatible con Tesseract (ej. 'spa', 'eng', etc.)
-    """
-    try:
-        from langdetect import detect
-        code = detect(text)
-        return {
-            "es": "spa",
-            "en": "eng",
-            "fr": "fra",
-            "de": "deu",
-            "pt": "por"
-        }.get(code, "eng")
-    except Exception:
-        return "eng"
 
 def has_visual_table(img_pil: Image.Image) -> bool:
     """
@@ -219,3 +231,31 @@ def needs_ocr(page: fitz.Page) -> bool:
         bool: True si no hay texto y se debe aplicar OCR.
     """
     return page.get_text("text").strip() == ""
+
+# ────────────────── Extraer bloques visuales del layout ──────────────────
+def extract_blocks(page: fitz.Page) -> list[tuple[float, float, float, float, str]]:
+    """
+    Extrae bloques de texto con coordenadas de la página.
+
+    Returns:
+        Lista de tuplas (x0, y0, x1, y1, texto)
+    """
+    blocks = page.get_text("blocks")
+    return [(b[0], b[1], b[2], b[3], b[4].strip()) for b in blocks if b[4].strip()]
+
+# ────────────── Detección y jerarquización de encabezados legales ──────────────
+def detect_structured_headings(text: str) -> str:
+    """
+    Aplica formato Markdown a encabezados legales típicos como 'VISTOS', 'CONSIDERANDO', 'RESUELVO', 'DECRETO', etc.
+
+    Args:
+        text (str): Texto OCR limpio.
+
+    Returns:
+        str: Texto con encabezados jerarquizados en Markdown.
+    """
+    headings = ["VISTOS", "CONSIDERANDO", "RESUELVO", "DECRETO", "FUNDAMENTO", "TENIENDO PRESENTE", "POR TANTO"]
+    for heading in headings:
+        # Reemplaza solo si aparece como línea sola o seguida de dos puntos
+        text = re.sub(rf"(?m)^\s*{heading}[:\s]*", f"\n### {heading}\n", text)
+    return text

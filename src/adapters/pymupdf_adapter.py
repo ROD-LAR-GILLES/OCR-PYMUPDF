@@ -14,11 +14,9 @@ serving as a bridge between domain logic and external libraries.
 """
 
 from __future__ import annotations
-
 import io
 from pathlib import Path
 from typing import List
-
 import camelot
 import fitz
 import pdfplumber
