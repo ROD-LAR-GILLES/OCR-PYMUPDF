@@ -34,11 +34,12 @@ import fitz
 import os
 
 # ───────────────────────── Configuración global ─────────────────────────
-DPI                = 600
-TESSERACT_CONFIG   = f"--psm 11 --oem 1 -c user_defined_dpi={DPI}"
-OCR_LANG           = os.getenv("TESSERACT_LANG", "spa+eng")
-MIN_W, MIN_H       = 200, 40
-OUT_DIR_NAME       = "ocr_tablas_cv"
+DPI                 = 600
+TESSERACT_CONFIG    = f"--psm 11 --oem 1 -c user_defined_dpi={DPI}"
+OCR_LANG            = os.getenv("TESSERACT_LANG", "spa+eng")
+TESSERACT_LANG_MODE = os.getenv("TESSERACT_LANG_MODE", "auto")
+MIN_W, MIN_H        = 200, 40
+OUT_DIR_NAME        = "ocr_tablas_cv"
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
 def needs_ocr(page: fitz.Page) -> bool:
@@ -55,7 +56,8 @@ def needs_ocr(page: fitz.Page) -> bool:
 
 def perform_ocr_on_page(page: fitz.Page) -> str:
     """
-    Realiza OCR sobre una página de PDF utilizando Tesseract vía pytesseract.
+    Realiza OCR sobre una página de PDF utilizando Tesseract vía pytesseract,
+    ajustando automáticamente el modo PSM y el idioma si está activado.
 
     Args:
         page (fitz.Page): Página de PyMuPDF a procesar.
@@ -66,7 +68,18 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     pix = page.get_pixmap(dpi=DPI, alpha=False)
     img = Image.open(BytesIO(pix.tobytes("png")))
     img = preprocess_image(img)
-    return pytesseract.image_to_string(img, lang=OCR_LANG, config=TESSERACT_CONFIG)
+    psm = estimate_psm_for_page(img)
+
+    if TESSERACT_LANG_MODE == "auto":
+        temp_text = pytesseract.image_to_string(
+            img, lang=OCR_LANG, config=f"--psm 11 --oem 1 -c user_defined_dpi={DPI}"
+        )
+        lang = detect_language(temp_text)
+    else:
+        lang = OCR_LANG
+
+    config = f"--psm {psm} --oem 1 -c user_defined_dpi={DPI}"
+    return pytesseract.image_to_string(img, lang=lang, config=config)
 
 def preprocess_image(img_pil: Image.Image) -> Image.Image:
     """
@@ -92,3 +105,57 @@ def preprocess_image(img_pil: Image.Image) -> Image.Image:
         blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 15, 10
     )
     return Image.fromarray(thresh)
+
+def estimate_psm_for_page(img_pil: Image.Image) -> int:
+    """
+    Estima automáticamente el valor de PSM (Page Segmentation Mode) para Tesseract
+    según las características visuales de la imagen renderizada.
+
+    Heurística:
+        - Pocas líneas -> PSM 7 (una sola línea)
+        - Muchas columnas visibles -> PSM 4 (flujo de columnas)
+        - Distribución moderada -> PSM 6 (bloques uniformes)
+        - Muy ruidoso o disperso -> PSM 11 (OCR general)
+
+    Args:
+        img_pil (Image.Image): Imagen renderizada de la página.
+
+    Returns:
+        int: Valor de PSM sugerido.
+    """
+    img = np.array(img_pil.convert("L"))
+    _, binary = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    contours, _ = cv2.findContours(255 - binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    num_boxes = len(contours)
+
+    if num_boxes < 5:
+        return 7 
+    elif num_boxes > 50:
+        return 11 
+    elif 20 < num_boxes <= 50:
+        return 4 
+    else:
+        return 6 
+
+def detect_language(text: str) -> str:
+    """
+    Detecta el idioma dominante de un texto para ajustar el parámetro 'lang' de Tesseract.
+
+    Args:
+        text (str): Texto plano extraído por OCR preliminar.
+
+    Returns:
+        str: Código de idioma compatible con Tesseract (ej. 'spa', 'eng', etc.)
+    """
+    try:
+        from langdetect import detect
+        code = detect(text)
+        return {
+            "es": "spa",
+            "en": "eng",
+            "fr": "fra",
+            "de": "deu",
+            "pt": "por"
+        }.get(code, "eng")
+    except Exception:
+        return "eng"
