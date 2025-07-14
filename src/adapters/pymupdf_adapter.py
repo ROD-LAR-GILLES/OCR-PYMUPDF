@@ -17,22 +17,27 @@ def extract_tables_markdown(pdf_path: Path) -> str:
     """
     Extrae tablas del PDF y las devuelve en formato Markdown.
 
-    Prioridad:
-        1. Camelot (tablas con bordes).
-        2. pdfplumber (respaldo para tablas sin bordes).
+    Estrategia:
+        1. Usa Camelot con 'lattice' (tablas con bordes).
+        2. Si no se detectan tablas, reintenta con 'stream' (tablas sin bordes).
+        3. Si Camelot falla o no encuentra tablas, recurre a pdfplumber como respaldo.
 
     Args:
         pdf_path (Path): Ruta al PDF.
 
     Returns:
-        str: Markdown con todas las tablas o cadena vacía.
+        str: Markdown con todas las tablas encontradas o cadena vacía.
     """
     md_parts: list[str] = []
 
-    # Intento con Camelot
+    # Intento con Camelot (lattice y luego stream si falla)
     try:
-        tables = camelot.read_pdf(str(pdf_path), pages="all")
-        if tables:
+        tables = camelot.read_pdf(str(pdf_path), pages="all", flavor="lattice")
+        if not tables or tables.n == 0:
+            logger.info("Camelot (lattice) no detectó tablas. Reintentando con flavor='stream'.")
+            tables = camelot.read_pdf(str(pdf_path), pages="all", flavor="stream")
+
+        if tables and tables.n > 0:
             md_parts.append("## Tablas Detectadas (Camelot)\n")
             for i, tabla in enumerate(tables, 1):
                 md_parts.append(f"### Tabla {i}\n\n")
