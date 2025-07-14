@@ -68,7 +68,8 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     # Eliminar guiones de fin de línea que cortan palabras
     raw = re.sub(r"-\n(\w+)", r"\1", raw)
     cleaned = _cleanup_text(raw)
-    return detect_structured_headings(cleaned)
+    segmented = segment_text_blocks(cleaned)
+    return detect_structured_headings(segmented)
 
 
 # ───────────────────── Post‑OCR cleanup ──────────────────────
@@ -260,3 +261,36 @@ def detect_structured_headings(text: str) -> str:
         # Reemplaza solo si aparece como línea sola o seguida de dos puntos
         text = re.sub(rf"(?m)^\s*{heading}[:\s]*", f"\n### {heading}\n", text)
     return text
+
+# ──────────────── Aplica segmentación por bloques heurística ────────────────
+
+def segment_text_blocks(text: str) -> str:
+    """
+    Aplica segmentación por bloques heurística:
+    • Divide por saltos de línea dobles.
+    • Inserta encabezados Markdown si el bloque comienza con ciertas palabras clave o está en mayúsculas.
+
+    Args:
+        text (str): Texto plano preprocesado.
+
+    Returns:
+        str: Texto con divisiones y encabezados Markdown.
+    """
+    blocks = text.split("\n\n")
+    out_blocks = []
+
+    for block in blocks:
+        stripped = block.strip()
+        if not stripped:
+            continue
+
+        # Heurística 1: Si el bloque está en mayúsculas y es corto, asumimos encabezado
+        if stripped.isupper() and len(stripped) < 80:
+            out_blocks.append(f"### {stripped}")
+        # Heurística 2: Palabras clave típicas de secciones legales
+        elif any(stripped.startswith(word) for word in ["Artículo", "Capítulo", "Sección", "Título"]):
+            out_blocks.append(f"### {stripped}")
+        else:
+            out_blocks.append(stripped)
+
+    return "\n\n".join(out_blocks)
