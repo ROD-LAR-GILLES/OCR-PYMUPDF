@@ -86,10 +86,11 @@ def preprocess_image(img_pil: Image.Image) -> Image.Image:
     Preprocesa la imagen para mejorar la precisión OCR.
 
     Pasos:
-        1. Convierte a escala de grises.
-        2. Aplica CLAHE para realzar contraste.
-        3. Desenfoque Gaussiano para reducir ruido.
-        4. Binariza con umbral adaptativo inverso.
+        1. Corrige rotación automática.
+        2. Convierte a escala de grises.
+        3. Aplica CLAHE para realzar contraste.
+        4. Desenfoque Gaussiano para reducir ruido.
+        5. Binariza con umbral adaptativo inverso.
 
     Args:
         img_pil (Image.Image): Imagen RGB original.
@@ -97,6 +98,7 @@ def preprocess_image(img_pil: Image.Image) -> Image.Image:
     Returns:
         Image.Image: Imagen binarizada lista para OCR.
     """
+    img_pil = correct_rotation(img_pil)
     gray = cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2GRAY)
     clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
     enhanced = clahe.apply(gray)
@@ -159,3 +161,22 @@ def detect_language(text: str) -> str:
         }.get(code, "eng")
     except Exception:
         return "eng"
+    
+def correct_rotation(img_pil: Image.Image) -> Image.Image:
+    """
+    Corrige la rotación de una imagen usando detección automática vía Tesseract OSD.
+
+    Args:
+        img_pil (Image.Image): Imagen original.
+
+    Returns:
+        Image.Image: Imagen rotada si se detectó desviación de ángulo.
+    """
+    try:
+        osd = pytesseract.image_to_osd(img_pil)
+        angle = int([line for line in osd.split('\n') if 'Rotate' in line][0].split(':')[-1])
+        if angle != 0:
+            return img_pil.rotate(-angle, expand=True)
+    except Exception:
+        pass  # Si falla, seguimos con la imagen original
+    return img_pil
