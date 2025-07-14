@@ -60,16 +60,16 @@ def extract_tables_markdown(pdf_path: Path) -> str:
 
                 # Quick visual gate
                 if not has_visual_table(img):
-                    logger.debug("[Page %s] No table structure detected — skipping", page_num)
+                    logger.debug(f"[Page {page_num}] No table structure detected — skipping")
                     continue
 
-                logger.info("[Page %s] Table detected visually — running Camelot", page_num)
+                logger.info(f"[Page {page_num}] Table detected visually — running Camelot")
 
                 # Camelot — lattice → stream
                 try:
                     tables = camelot.read_pdf(str(pdf_path), pages=str(page_num), flavor="lattice")
                     if tables.n == 0:
-                        logger.debug("[Page %s] lattice found none — trying stream", page_num)
+                        logger.debug(f"[Page {page_num}] lattice found none — trying stream")
                         tables = camelot.read_pdf(str(pdf_path), pages=str(page_num), flavor="stream")
 
                     if tables.n:
@@ -78,7 +78,7 @@ def extract_tables_markdown(pdf_path: Path) -> str:
                             md_parts.append(f"### Table {idx}\n\n{table.df.to_markdown()}\n")
                         continue
                 except Exception as exc:  # noqa: BLE001
-                    logger.warning("[Page %s] Camelot error → %s", page_num, exc)
+                    logger.warning(f"[Page {page_num}] Camelot error → {exc}")
 
                 # pdfplumber fallback
                 try:
@@ -92,10 +92,10 @@ def extract_tables_markdown(pdf_path: Path) -> str:
                                     f"### Table {idx}\n\n{tabulate(tbl, tablefmt='pipe')}\n"
                                 )
                 except Exception as exc:  # noqa: BLE001
-                    logger.warning("[Page %s] pdfplumber error → %s", page_num, exc)
+                    logger.warning(f"[Page {page_num}] pdfplumber error → {exc}")
 
     except Exception as exc:  # noqa: BLE001
-        logger.error("Table extraction failed for %s → %s", pdf_path, exc)
+        logger.error(f"Table extraction failed for {pdf_path} → {exc}")
 
     return "\n".join(md_parts)
 
@@ -113,16 +113,16 @@ def extract_markdown(pdf_path: Path) -> str:
     • One section per page.
     • A table appendix, if tables were found.
     """
-    logger.info("Processing %s …", pdf_path)
+    logger.info(f"Processing {pdf_path} …")
     page_parts: List[str] = []
 
     with fitz.open(pdf_path) as doc:
         for page_num, page in enumerate(doc, start=1):
             if needs_ocr(page):
-                logger.info("[Page %s] No embedded text — running OCR", page_num)
+                logger.info(f"[Page {page_num}] No embedded text — running OCR")
                 text = perform_ocr_on_page(page)
             else:
-                logger.debug("[Page %s] Extracting embedded text", page_num)
+                logger.debug(f"[Page {page_num}] Extracting embedded text")
                 text = page.get_text("text")
             page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
 
