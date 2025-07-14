@@ -42,17 +42,7 @@ MIN_W, MIN_H        = 200, 40
 OUT_DIR_NAME        = "ocr_tablas_cv"
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
-def needs_ocr(page: fitz.Page) -> bool:
-    """
-    Determina si una página necesita OCR revisando si contiene texto seleccionable.
-
-    Args:
-        page (fitz.Page): Página a analizar.
-
-    Returns:
-        bool: True si no hay texto y se debe aplicar OCR.
-    """
-    return page.get_text("text").strip() == ""
+# ───────────────────────── OCR Principal ─────────────────────────
 
 def perform_ocr_on_page(page: fitz.Page) -> str:
     """
@@ -81,6 +71,8 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     config = f"--psm {psm} --oem 1 -c user_defined_dpi={DPI}"
     return pytesseract.image_to_string(img, lang=lang, config=config)
 
+# ─────────────────────── Preprocesamiento ───────────────────────
+
 def preprocess_image(img_pil: Image.Image) -> Image.Image:
     """
     Preprocesa la imagen para mejorar la precisión OCR.
@@ -107,6 +99,28 @@ def preprocess_image(img_pil: Image.Image) -> Image.Image:
         blur, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 15, 10
     )
     return Image.fromarray(thresh)
+
+def correct_rotation(img_pil: Image.Image) -> Image.Image:
+    """
+    Corrige la rotación de una imagen usando detección automática vía Tesseract OSD.
+
+    Args:
+        img_pil (Image.Image): Imagen original.
+
+    Returns:
+        Image.Image: Imagen rotada si se detectó desviación de ángulo.
+    """
+    try:
+        osd = pytesseract.image_to_osd(img_pil)
+        angle = int([line for line in osd.split('\n') if 'Rotate' in line][0].split(':')[-1])
+        if angle != 0:
+            return img_pil.rotate(-angle, expand=True)
+    except Exception:
+        pass  # Si falla, seguimos con la imagen original
+    return img_pil
+
+# ───────────── Heurísticas y Detección de Tablas ────────────────
+
 
 def estimate_psm_for_page(img_pil: Image.Image) -> int:
     """
@@ -161,22 +175,47 @@ def detect_language(text: str) -> str:
         }.get(code, "eng")
     except Exception:
         return "eng"
-    
-def correct_rotation(img_pil: Image.Image) -> Image.Image:
+
+def has_visual_table(img_pil: Image.Image) -> bool:
     """
-    Corrige la rotación de una imagen usando detección automática vía Tesseract OSD.
+    Detecta si una imagen contiene una tabla visualmente, evaluando líneas horizontales/verticales.
 
     Args:
-        img_pil (Image.Image): Imagen original.
+        img_pil (Image.Image): Imagen de la página.
 
     Returns:
-        Image.Image: Imagen rotada si se detectó desviación de ángulo.
+        bool: True si se detecta estructura tabular, False si no.
     """
-    try:
-        osd = pytesseract.image_to_osd(img_pil)
-        angle = int([line for line in osd.split('\n') if 'Rotate' in line][0].split(':')[-1])
-        if angle != 0:
-            return img_pil.rotate(-angle, expand=True)
-    except Exception:
-        pass  # Si falla, seguimos con la imagen original
-    return img_pil
+    img = np.array(img_pil.convert("L"))
+    blurred = cv2.GaussianBlur(img, (5, 5), 0)
+    edges = cv2.Canny(blurred, 50, 150)
+
+    # Detección de líneas
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=100,
+                            minLineLength=50, maxLineGap=10)
+    if lines is None:
+        return False
+
+    horizontal = 0
+    vertical = 0
+    for x1, y1, x2, y2 in lines[:, 0]:
+        if abs(y2 - y1) < 10:  # Horizontal
+            horizontal += 1
+        elif abs(x2 - x1) < 10:  # Vertical
+            vertical += 1
+
+    return horizontal >= 2 and vertical >= 2
+
+# ─────────────────────── Utilidades OCR ─────────────────────────
+
+def needs_ocr(page: fitz.Page) -> bool:
+    """
+    Determina si una página necesita OCR revisando si contiene texto seleccionable.
+
+    Args:
+        page (fitz.Page): Página a analizar.
+
+    Returns:
+        bool: True si no hay texto y se debe aplicar OCR.
+    """
+    return page.get_text("text").strip() == ""

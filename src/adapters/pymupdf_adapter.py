@@ -1,98 +1,135 @@
 """
-Adaptador para extracción de contenido de archivos PDF a formato Markdown, utilizando PyMuPDF4LLM para PDFs digitales
-y OCR (Tesseract) como mecanismo de respaldo en caso de PDFs escaneados (sin texto seleccionable).
+PDF‑to‑Markdown adapter.
 
-Este módulo cumple la función de adaptador dentro de la arquitectura limpia, delegando la lógica de extracción de texto
-a herramientas externas y encapsulando la decisión sobre el método adecuado de procesamiento.
+• Uses PyMuPDF (fitz) to extract embedded text from digital PDFs.
+• Falls back to selective OCR (see ``ocr_adapter``) when pages have no selectable text.
+• Table extraction workflow:
+    1. Render each page to an image (``_RENDER_DPI``).
+    2. Visually detect pages with table‑like structures.
+    3. Run Camelot ―first *lattice*, then *stream*― on those pages.
+    4. If Camelot finds nothing, fall back to pdfplumber.
+
+This module resides in the *infrastructure* layer of the clean architecture,
+serving as a bridge between domain logic and external libraries.
 """
+
+from __future__ import annotations
+
+import io
 from pathlib import Path
-import fitz
-from loguru import logger
-from adapters.ocr_adapter import perform_ocr_on_page, needs_ocr
+from typing import List
+
 import camelot
+import fitz
 import pdfplumber
+from PIL import Image
+from loguru import logger
 from tabulate import tabulate
 
+from adapters.ocr_adapter import has_visual_table, needs_ocr, perform_ocr_on_page
+
+# DPI used when rendering pages to images
+_RENDER_DPI = 300
+
+
+# ───────────────────────── Table extraction ──────────────────────────
 def extract_tables_markdown(pdf_path: Path) -> str:
     """
-    Extrae tablas del PDF y las devuelve en formato Markdown.
+    Extracts visually detected tables from *pdf_path* and returns them in Markdown.
 
-    Estrategia:
-        1. Usa Camelot con 'lattice' (tablas con bordes).
-        2. Si no se detectan tablas, reintenta con 'stream' (tablas sin bordes).
-        3. Si Camelot falla o no encuentra tablas, recurre a pdfplumber como respaldo.
+    Steps
+    -----
+    1. Render every page at ``_RENDER_DPI`` DPI.
+    2. Skip pages that do not appear tabular (fast visual check).
+    3. On table pages run Camelot: lattice, then stream.
+    4. If Camelot fails, use pdfplumber as fallback.
 
-    Args:
-        pdf_path (Path): Ruta al PDF.
-
-    Returns:
-        str: Markdown con todas las tablas encontradas o cadena vacía.
+    Returns
+    -------
+    str
+        Concatenated Markdown for all tables (empty if none found).
     """
-    md_parts: list[str] = []
+    md_parts: List[str] = []
 
-    # Intento con Camelot (lattice y luego stream si falla)
     try:
-        tables = camelot.read_pdf(str(pdf_path), pages="all", flavor="lattice")
-        if not tables or tables.n == 0:
-            logger.info("Camelot (lattice) no detectó tablas. Reintentando con flavor='stream'.")
-            tables = camelot.read_pdf(str(pdf_path), pages="all", flavor="stream")
+        with fitz.open(pdf_path) as doc:
+            for page_num, page in enumerate(doc, start=1):
+                # Render page to PIL
+                pix = page.get_pixmap(dpi=_RENDER_DPI, alpha=False)
+                img = Image.open(io.BytesIO(pix.tobytes("png")))
 
-        if tables and tables.n > 0:
-            md_parts.append("## Tablas Detectadas (Camelot)\n")
-            for i, tabla in enumerate(tables, 1):
-                md_parts.append(f"### Tabla {i}\n\n")
-                md_parts.append(tabla.df.to_markdown())
-                md_parts.append("\n")
-    except Exception as exc:
-        logger.warning(f"Error con Camelot: {exc}")
+                # Quick visual gate
+                if not has_visual_table(img):
+                    logger.debug("[Page %s] No table structure detected — skipping", page_num)
+                    continue
 
-    # Respaldo con pdfplumber
-    if not md_parts:
-        try:
-            with pdfplumber.open(pdf_path) as pdf:
-                for i, pg in enumerate(pdf.pages, 1):
-                    tablas = pg.extract_tables()
-                    if tablas:
-                        md_parts.append(f"## Tablas Detectadas (Página {i})\n")
-                        for j, t in enumerate(tablas, 1):
-                            md_parts.append(f"### Tabla {j}\n\n")
-                            md_parts.append(tabulate(t, tablefmt="pipe"))
-                            md_parts.append("\n")
-        except Exception as exc:
-            logger.warning(f"Error con pdfplumber: {exc}")
+                logger.info("[Page %s] Table detected visually — running Camelot", page_num)
+
+                # Camelot — lattice → stream
+                try:
+                    tables = camelot.read_pdf(str(pdf_path), pages=str(page_num), flavor="lattice")
+                    if tables.n == 0:
+                        logger.debug("[Page %s] lattice found none — trying stream", page_num)
+                        tables = camelot.read_pdf(str(pdf_path), pages=str(page_num), flavor="stream")
+
+                    if tables.n:
+                        md_parts.append(f"## Tables (Camelot · page {page_num})\n")
+                        for idx, table in enumerate(tables, start=1):
+                            md_parts.append(f"### Table {idx}\n\n{table.df.to_markdown()}\n")
+                        continue
+                except Exception as exc:  # noqa: BLE001
+                    logger.warning("[Page %s] Camelot error → %s", page_num, exc)
+
+                # pdfplumber fallback
+                try:
+                    with pdfplumber.open(pdf_path) as pdf_pl:
+                        pg = pdf_pl.pages[page_num - 1]
+                        tbls = pg.extract_tables()
+                        if tbls:
+                            md_parts.append(f"## Tables (pdfplumber · page {page_num})\n")
+                            for idx, tbl in enumerate(tbls, start=1):
+                                md_parts.append(
+                                    f"### Table {idx}\n\n{tabulate(tbl, tablefmt='pipe')}\n"
+                                )
+                except Exception as exc:  # noqa: BLE001
+                    logger.warning("[Page %s] pdfplumber error → %s", page_num, exc)
+
+    except Exception as exc:  # noqa: BLE001
+        logger.error("Table extraction failed for %s → %s", pdf_path, exc)
 
     return "\n".join(md_parts)
 
+
+# ─────────────────────── Full‑document extraction ───────────────────────
 def extract_markdown(pdf_path: Path) -> str:
     """
-    Extrae el contenido de un archivo PDF en formato Markdown. Usa OCR si se detecta que una página no contiene texto.
+    Convert an entire PDF to Markdown, applying OCR selectively.
 
-    Args:
-        pdf_path (Path): Ruta al archivo PDF.
+    • If ``needs_ocr(page)`` is True → run OCR on that page.
+    • Else, extract embedded text with PyMuPDF.
 
-    Returns:
-        str: Contenido en formato Markdown.
+    The final Markdown includes:
+    • A top‑level title (file stem).
+    • One section per page.
+    • A table appendix, if tables were found.
     """
-    logger.info("Iniciando análisis de páginas individuales para aplicar OCR selectivo si es necesario.")
+    logger.info("Processing %s …", pdf_path)
+    page_parts: List[str] = []
 
     with fitz.open(pdf_path) as doc:
-        ocr_text: list[str] = []
-        for i, page in enumerate(doc):
+        for page_num, page in enumerate(doc, start=1):
             if needs_ocr(page):
-                logger.info(f"[Página {i + 1}] Sin texto detectable. Aplicando OCR...")
+                logger.info("[Page %s] No embedded text — running OCR", page_num)
                 text = perform_ocr_on_page(page)
             else:
-                logger.info(f"[Página {i + 1}] Texto detectado. Extrayendo directamente...")
+                logger.debug("[Page %s] Extracting embedded text", page_num)
                 text = page.get_text("text")
-            ocr_text.append(f"## Página {i + 1}\n\n{text.strip()}")
+            page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
 
-    full_markdown = f"# {pdf_path.stem}\n\n" + "\n\n".join(ocr_text)
+    md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
 
-    # Anexar tablas si existen
     tables_md = extract_tables_markdown(pdf_path)
     if tables_md:
-        full_markdown += "\n\n" + tables_md
+        md_out += "\n\n" + tables_md
 
-    return full_markdown
-
-
+    return md_out
