@@ -28,8 +28,20 @@ def convert_pdf_to_md(pdf_path: Path) -> Path:
     markdown = extract_markdown(pdf_path)
     md_path = save_markdown(pdf_path.stem, markdown)
 
-    # ── Pos-OCR: revisión interactiva ──
-    revisar_documento(markdown.split())   
-    train()                              
+     # ── Pos-OCR: revisión interactiva con contexto ──
+    tokens_meta = []
+    current_page = 0
+    for line in markdown.splitlines():
+        if line.startswith("## Page"):
+            try:
+                current_page = int(line.split()[2])
+            except ValueError:
+                current_page = 0
+            continue
+        for tok in line.split():
+            tokens_meta.append((tok, current_page, pdf_path.name))
+
+    revisar_documento(tokens_meta)
+    train()
 
     return md_path

@@ -16,17 +16,32 @@ def guardar_correccion(original: str, corregido: str):
         writer = csv.writer(f)
         writer.writerow([original.strip(), corregido.strip()])
 
-def revisar_palabras(palabras: list[str]):
+def revisar_palabras(palabras: list[tuple[str, int, str]]):
+    """
+    CLI de revisión.
+
+    Parameters
+    ----------
+    palabras : list[tuple[str, int, str]]
+        Lista de tuplas (token, page_num, doc_name).
+    """
     conocidas = cargar_diccionario()
-    for palabra in sorted(set(palabras)):
-        palabra_limpia = unidecode(palabra.lower())
-        if palabra_limpia not in conocidas:
-            print(f"\n¿Es correcta la palabra OCR: '{palabra}'?")
-            resp = input("[Enter] para confirmar, (c) para corregir, (s) para saltar: ").strip().lower()
-            if resp == "c":
-                nueva = input("Ingrese corrección: ").strip()
-                guardar_correccion(palabra, nueva)
-            elif resp == "":
-                guardar_correccion(palabra, palabra)
-            else:
-                print("Saltado.")
+    vistos: set[str] = set()
+
+    for token, page, doc in palabras:
+        token_norm = unidecode(token.lower())
+        # -- ya aceptada o en diccionario
+        if token_norm in conocidas or token_norm in vistos:
+            continue
+        vistos.add(token_norm)
+
+        print(f"\n Documento: {doc} · Página: {page}")
+        print(f"» Token OCR: '{token}'")
+        resp = input("[Enter]=Aceptar / (c)=Corregir / (s)=Saltar : ").strip().lower()
+        if resp == "c":
+            nueva = input("Corrección: ").strip()
+            guardar_correccion(token, nueva)
+        elif resp == "":
+            guardar_correccion(token, token)
+        else:
+            print("· Saltado.")
