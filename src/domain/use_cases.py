@@ -7,7 +7,8 @@ Se encarga de coordinar la extracción de contenido (a través del adaptador) y 
 from pathlib import Path
 from adapters.pymupdf_adapter import extract_markdown
 from infrastructure.file_storage import save_markdown
-
+from utils.detect_errores import revisar_documento
+from utils.train_fasttext import train 
 
 def convert_pdf_to_md(pdf_path: Path) -> Path:
     """
@@ -22,3 +23,13 @@ def convert_pdf_to_md(pdf_path: Path) -> Path:
     """
     markdown = extract_markdown(pdf_path)
     return save_markdown(pdf_path.stem, markdown)
+
+def convert_pdf_to_md(pdf_path: Path) -> Path:
+    markdown = extract_markdown(pdf_path)
+    md_path = save_markdown(pdf_path.stem, markdown)
+
+    # ── Pos-OCR: revisión interactiva ──
+    revisar_documento(markdown.split())   
+    train()                              
+
+    return md_path
