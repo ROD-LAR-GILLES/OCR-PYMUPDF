@@ -7,16 +7,18 @@ PDF-to-Markdown adapter.
     1. Render each page to an image (``_RENDER_DPI``).
     2. Visually detect pages with table-like structures.
     3. Run Camelot ―first *lattice*, then *stream*― on those pages.
-    4. If Camelot finds nothing, fall back to pdfplumber.
+    4. If Camelot fails, fall back to pdfplumber.
 
 This module resides in the *infrastructure* layer of the clean architecture,
 serving as a bridge between domain logic and external libraries.
 """
 
 from __future__ import annotations
+
 import io
 from pathlib import Path
 from typing import List
+
 # ──────── External imports ────────
 import camelot
 import fitz
@@ -24,44 +26,56 @@ import pdfplumber
 from PIL import Image
 from loguru import logger
 from tabulate import tabulate
+
 # ──────── Internal adapters ────────
 import adapters.ocr_adapter as ocr_adapter
 
-
-# DPI used when rendering pages to images
+# ──────── Configuración ────────
 _RENDER_DPI = 300
+
+
+###############################################################################
+#                      FULL DOCUMENT EXTRACTION FLOW                          #
+###############################################################################
+
+def extract_markdown(pdf_path: Path) -> str:
+    """
+    Convert an entire PDF to Markdown, applying OCR selectively.
+
+    • If ``needs_ocr(page)`` is True → run OCR on that page.
+    • Else, extract embedded text with PyMuPDF.
+
+    The final Markdown includes:
+    • A top-level title (file stem).
+    • One section per page.
+    • A table appendix, if tables were found.
+    """
+    logger.info(f"Processing {pdf_path} …")
+    page_parts: List[str] = []
+
+    with fitz.open(pdf_path) as doc:
+        for page_num, page in enumerate(doc, start=1):
+            if ocr_adapter.needs_ocr(page):
+                logger.info(f"[Page {page_num}] No embedded text — running OCR")
+                text = ocr_adapter.perform_ocr_on_page(page)
+            else:
+                logger.debug(f"[Page {page_num}] Extracting embedded text")
+                raw = page.get_text("text")
+                text = ocr_adapter.detect_lists(ocr_adapter._cleanup_text(raw))
+
+            page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
+
+    md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
+    tables_md = extract_tables_markdown(pdf_path)
+    if tables_md:
+        md_out += "\n\n" + tables_md
+
+    return md_out
 
 
 ###############################################################################
 #                           TABLE EXTRACTION FLOW                             #
 ###############################################################################
-def has_visual_table(img: Image.Image) -> bool:
-    """
-    Heurística simple que determina si una imagen tiene estructura tabular,
-    detectando líneas horizontales y verticales.
-
-    Args:
-        img (PIL.Image): Imagen de página.
-
-    Returns:
-        bool: True si hay estructura tabular visible.
-    """
-    import numpy as np
-    import cv2
-
-    gray = cv2.cvtColor(np.array(img.convert("RGB")), cv2.COLOR_RGB2GRAY)
-    _, binary = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY_INV)
-
-    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (40, 1))
-    vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 40))
-
-    detected_horizontal = cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel)
-    detected_vertical = cv2.morphologyEx(binary, cv2.MORPH_OPEN, vertical_kernel)
-
-    table_mask = cv2.add(detected_horizontal, detected_vertical)
-    contours, _ = cv2.findContours(table_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    return len(contours) > 0
 
 def extract_tables_markdown(pdf_path: Path) -> str:
     """
@@ -93,12 +107,10 @@ def extract_tables_markdown(pdf_path: Path) -> str:
 
                 logger.info(f"[Page {page_num}] Table detected visually")
 
-                # Verificar si es página escaneada (sin texto embebido)
                 if ocr_adapter.needs_ocr(page):
                     logger.info(f"[Page {page_num}] Página escaneada — usando OCR para tablas")
                     try:
                         from adapters.ocr_adapter import detect_table_regions, ocr_table_to_markdown
-
                         table_regions = detect_table_regions(img)
                         if table_regions:
                             md_parts.append(f"## Tables (OCR fallback · page {page_num})\n")
@@ -109,9 +121,8 @@ def extract_tables_markdown(pdf_path: Path) -> str:
                                     md_parts.append(f"### Table {idx}\n\n{md}\n")
                     except Exception as exc:
                         logger.warning(f"[Page {page_num}] OCR fallback error → {exc}")
-                    continue  # Saltar el resto del loop
+                    continue
 
-                # Página digital: usar Camelot y pdfplumber
                 logger.info(f"[Page {page_num}] Página digital — usando Camelot")
                 try:
                     tables = camelot.read_pdf(str(pdf_path), pages=str(page_num), flavor="lattice")
@@ -145,49 +156,29 @@ def extract_tables_markdown(pdf_path: Path) -> str:
     return "\n".join(md_parts)
 
 
-###############################################################################
-#                      FULL DOCUMENT EXTRACTION FLOW                          #
-###############################################################################
-def extract_markdown(pdf_path: Path) -> str:
+def has_visual_table(img: Image.Image) -> bool:
     """
-    Convert an entire PDF to Markdown, applying OCR selectively.
+    Simple heuristic to detect table structures using line detection.
 
-    • If ``needs_ocr(page)`` is True → run OCR on that page.
-    • Else, extract embedded text with PyMuPDF.
+    Args:
+        img (PIL.Image): Page image.
 
-    The final Markdown includes:
-    • A top-level title (file stem).
-    • One section per page.
-    • A table appendix, if tables were found.
+    Returns:
+        bool: True if visual table structure is detected.
     """
-    # --- Import helpers for text cleanup and list detection ---
-    import adapters.ocr_adapter as ocr_adapter
+    import numpy as np
+    import cv2
 
-    logger.info(f"Processing {pdf_path} …")
-    page_parts: List[str] = []
+    gray = cv2.cvtColor(np.array(img.convert("RGB")), cv2.COLOR_RGB2GRAY)
+    _, binary = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY_INV)
 
-    # --- Main page processing loop ---
-    with fitz.open(pdf_path) as doc:
-        for page_num, page in enumerate(doc, start=1):
-            # 1. Save visual blocks detected by LayoutParser (diagnostic)
-            
+    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (40, 1))
+    vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 40))
 
-            # 2. Decide if OCR is needed or extract embedded text
-            if ocr_adapter.needs_ocr(page):
-                logger.info(f"[Page {page_num}] No embedded text — running OCR")
-                text = ocr_adapter.perform_ocr_on_page(page)
-            else:
-                logger.debug(f"[Page {page_num}] Extracting embedded text")
-                raw = page.get_text("text")
-                text = ocr_adapter.detect_lists(ocr_adapter._cleanup_text(raw))
+    detected_horizontal = cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel)
+    detected_vertical = cv2.morphologyEx(binary, cv2.MORPH_OPEN, vertical_kernel)
 
-            # 3. Append section for this page
-            page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
+    table_mask = cv2.add(detected_horizontal, detected_vertical)
+    contours, _ = cv2.findContours(table_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # --- Combine all pages and append table appendix if any ---
-    md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
-    tables_md = extract_tables_markdown(pdf_path)
-    if tables_md:
-        md_out += "\n\n" + tables_md
-
-    return md_out
+    return len(contours) > 0
