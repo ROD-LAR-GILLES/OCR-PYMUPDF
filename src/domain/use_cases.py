@@ -7,7 +7,7 @@ Se encarga de coordinar la extracción de contenido (a través del adaptador) y 
 from pathlib import Path
 from adapters.pymupdf_adapter import extract_markdown
 from infrastructure.file_storage import save_markdown
-from utils.detect_errores import revisar_documento
+from utils.detect_errores import review_document
 from utils.train_fasttext import train 
 
 def convert_pdf_to_md(pdf_path: Path) -> Path:
@@ -41,7 +41,7 @@ def convert_pdf_to_md(pdf_path: Path) -> Path:
         for tok in line.split():
             tokens_meta.append((tok, current_page, pdf_path.name))
 
-    revisar_documento(tokens_meta)
+    review_document(tokens_meta)
     train()
 
     return md_path

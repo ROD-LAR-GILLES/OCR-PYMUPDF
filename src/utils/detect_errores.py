@@ -1,11 +1,11 @@
 """Filtra tokens con fastText y lanza revisión con contexto (doc + página)."""
 from pathlib import Path
 import fasttext
-from utils.ocr_lexicon import revisar_palabras
+from utils.ocr_lexicon import review_tokens
 
 MODEL_PATH = Path("models/ocr_correction_model.ftz")
 
-def revisar_documento(tokens_meta: list[tuple[str, int, str]]) -> None:
+def review_document(tokens_meta: list[tuple[str, int, str]]) -> None:
     """
     tokens_meta : list[(token, page_num, doc_name)]
     """
@@ -18,4 +18,4 @@ def revisar_documento(tokens_meta: list[tuple[str, int, str]]) -> None:
     else:
         sospechosas = tokens_meta
 
-    revisar_palabras(sospechosas)
+    review_tokens(sospechosas)
