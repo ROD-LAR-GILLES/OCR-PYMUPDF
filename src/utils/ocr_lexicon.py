@@ -4,7 +4,7 @@ OCR Lexicon Utilities
 • Maintains the legal dictionary (`data/legal_words.txt`).
 • Persists user corrections in `data/corrections.csv`.
 • Generates image snippets around OCR tokens for visual review.
-• Provides an interactive CLI (`revisar_palabras`) that lets the user
+• Provides an interactive CLI (`review_tokens`) that lets the user
   accept, correct, or skip each unknown token and records the decision.
 
 This module lives in the *utils* layer of the Clean Architecture so it
@@ -18,6 +18,9 @@ from io import BytesIO
 import fitz
 from PIL import Image
 import pytesseract
+import os
+import platform
+import subprocess
 
 SNIPPET_DIR = Path("resultado/snippets")
 SNIPPET_DIR.mkdir(parents=True, exist_ok=True)
@@ -102,6 +105,21 @@ def generate_snippet(token: str, page_num: int, pdf_path: str, dpi: int = 150) -
         pass
     return None
 
+
+# Helper: open image with default viewer depending on OS
+def _open_image(path: str) -> None:
+    """Try to open *path* with the default image viewer for the current OS."""
+    try:
+        if platform.system() == "Darwin":           # macOS
+            subprocess.Popen(["open", path])
+        elif platform.system() == "Windows":
+            os.startfile(path)                      # type: ignore[attr-defined]
+        else:                                       # Linux, WSL
+            subprocess.Popen(["xdg-open", path])
+    except Exception:
+        # Silent failure – CLI will still show the path
+        pass
+
 def review_tokens(tokens: list[tuple[str, int, str]]) -> None:
     """Interactive review loop for unknown OCR tokens.
 
@@ -120,15 +138,19 @@ def review_tokens(tokens: list[tuple[str, int, str]]) -> None:
         vistos.add(norm)
 
         snippet = generate_snippet(token, page, doc_path)
-        print(f"\n {Path(doc_path).name} · Página {page}")
+        print(f"\n {Path(doc_path).name} · page {page}")
         if snippet:
-            print(f"Snippet guardado en: {snippet}")
-        print(f"» Token OCR: '{token}'")
-        resp = input("[Enter]=Aceptar / (c)=Corregir / (s)=Saltar : ").strip().lower()
+            print(f"Preview saved → {snippet}")
+            _open_image(snippet)
+        else:
+            print(" No snippet found (token not located on page)")
+
+        print(f"» OCR token: '{token}'")
+        resp = input("[Enter]=Accept / (c)=Correct / (s)=Skip : ").strip().lower()
         if resp == "c":
-            nueva = input("Corrección: ").strip()
+            nueva = input("Correction: ").strip()
             save_correction(token, nueva)
         elif resp == "":
             save_correction(token, token)
         else:
-            print("· Saltado.")
+            print("· Skipped.")

@@ -5,6 +5,8 @@ services:
     volumes:
       - ./pdfs:/app/pdfs
       - ./resultado:/app/resultado
+      - ./tests:/app/tests
+      - ./tests/fixtures:/app/tests/fixtures       
     stdin_open: true
     tty: true
     environment:

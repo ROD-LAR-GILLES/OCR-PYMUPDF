@@ -12,6 +12,7 @@ RUN apt-get update && \
         libxrender-dev \
         build-essential \
         python3-dev \
+        libgl1 \
         ghostscript \
     && echo "Installed chi_tra traineddata" \
     && apt-get clean && \
@@ -27,6 +28,7 @@ RUN pip install --upgrade pip
 # Eliminar [cv] de camelot-py para evitar errores con pdftopng
 RUN sed -i 's/camelot-py\[cv\]/camelot-py/g' requirements.txt && \
     pip install --no-cache-dir -r requirements.txt
+RUN python -m nltk.downloader punkt
 
 COPY src/ src/
 COPY pdfs/ pdfs/
