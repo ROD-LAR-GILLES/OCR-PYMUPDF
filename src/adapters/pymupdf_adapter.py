@@ -18,6 +18,7 @@ from __future__ import annotations
 import io
 from pathlib import Path
 from typing import List
+import adapters.parallel_ocr as parallel_ocr
 
 # ──────── External imports ────────
 import camelot
@@ -54,15 +55,10 @@ def extract_markdown(pdf_path: Path) -> str:
     page_parts: List[str] = []
 
     with fitz.open(pdf_path) as doc:
-        for page_num, page in enumerate(doc, start=1):
-            if ocr_adapter.needs_ocr(page):
-                logger.info(f"[Page {page_num}] No embedded text — running OCR")
-                text = ocr_adapter.perform_ocr_on_page(page)
-            else:
-                logger.debug(f"[Page {page_num}] Extracting embedded text")
-                raw = page.get_text("text")
-                text = ocr_adapter.detect_lists(ocr_adapter._cleanup_text(raw))
+        # OCR all pages concurrently
+        texts = parallel_ocr.run_parallel(doc)
 
+        for page_num, text in enumerate(texts, start=1):
             page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
 
     md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)

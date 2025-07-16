@@ -1,3 +1,9 @@
+# ──────────────────────────── Helper: Tesseract config builder ────────────────────────────
+def build_tesseract_config(psm: int) -> str:
+    config = f"--psm {psm} --oem 3 -c user_defined_dpi={DPI}"
+    config += " --user-words data/legal_words.txt"
+    config += " --user-patterns data/legal_patterns.txt"
+    return config
 # ──────────────────────────────────────────────────────────────
 #  File: src/adapters/ocr_adapter.py
 #  Python 3.11 • sólo fitz, PIL, pytesseract
@@ -29,6 +35,7 @@ from io import BytesIO
 
 import re
 import unicodedata
+from pathlib import Path
 
 # src/adapters/ocr_adapter.py  (bloque completo del helper)
 import csv
@@ -85,11 +92,7 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
 
     # 5) PSM dinámico
     psm = estimate_psm_for_page(img_pil)
-    config = (
-        f"--psm {psm} --oem 3 -c user_defined_dpi={DPI}"
-        " --user-words /usr/share/tesseract-ocr/5/tessdata/legal_words.txt"
-        " --user-patterns /usr/share/tesseract-ocr/5/tessdata/legal_patterns.txt"
-    )
+    config = build_tesseract_config(psm)
 
     # 6) Idioma dinámico
     lang_param = "spa"
@@ -154,7 +157,8 @@ def ocr_table_to_markdown(img: Image.Image) -> str:
     """
     Aplica OCR sobre una imagen de tabla y la convierte a formato Markdown simple.
     """
-    raw_text = image_to_string(img, lang="spa", config="--psm 6")
+    config = build_tesseract_config(6)
+    raw_text = image_to_string(img, lang="spa", config=config)
     lines = raw_text.strip().splitlines()
     lines = [line for line in lines if line.strip()]
 
@@ -426,59 +430,6 @@ def detect_lists(text: str) -> str:
     return "\n".join(output)
 # ──────────────── Detección y extracción de tablas visuales ────────────────
 
-def extract_table_candidates(img_pil: Image.Image) -> list[tuple[int, int, int, int]]:
-    """
-    Detecta regiones candidatas a ser tablas mediante análisis de líneas horizontales y verticales.
-
-    Args:
-        img_pil (Image.Image): Imagen de la página renderizada.
-
-    Returns:
-        list[tuple[int, int, int, int]]: Lista de cajas delimitadoras (x, y, w, h) de posibles tablas.
-    """
-    img = np.array(img_pil.convert("L"))
-    _, binary = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-
-    # Detección de líneas horizontales y verticales
-    horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (40, 1))
-    vertical_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 40))
-
-    horizontal_lines = cv2.morphologyEx(binary, cv2.MORPH_OPEN, horizontal_kernel, iterations=1)
-    vertical_lines = cv2.morphologyEx(binary, cv2.MORPH_OPEN, vertical_kernel, iterations=1)
-
-    table_mask = cv2.add(horizontal_lines, vertical_lines)
-
-    contours, _ = cv2.findContours(table_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    boxes = [cv2.boundingRect(cnt) for cnt in contours]
-
-    # Opcional: filtrar por tamaño mínimo
-    boxes = [box for box in boxes if box[2] > 50 and box[3] > 30]
-
-    return boxes
-
-
-def ocr_table_to_markdown(img: Image.Image) -> str:
-    """
-    Aplica OCR sobre una imagen de tabla y la convierte a formato Markdown simple.
-
-    Args:
-        img (PIL.Image): Imagen de tabla recortada.
-
-    Returns:
-        str: Tabla en formato Markdown.
-    """
-    raw_text = image_to_string(img, lang="spa", config="--psm 6")
-    lines = raw_text.strip().splitlines()
-    lines = [line for line in lines if line.strip()]
-
-    if len(lines) < 2:
-        return ""
-
-    header = "| " + " | ".join(lines[0].split()) + " |"
-    separator = "| " + " | ".join(["---"] * len(lines[0].split())) + " |"
-    rows = ["| " + " | ".join(line.split()) + " |" for line in lines[1:]]
-
-    return "\n".join([header, separator] + rows)
 
 def extract_tables_from_page(page: fitz.Page) -> list[str]:
     """

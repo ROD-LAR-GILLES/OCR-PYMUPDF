@@ -33,5 +33,6 @@ RUN python -m nltk.downloader punkt
 COPY src/ src/
 COPY pdfs/ pdfs/
 COPY resultado/ resultado/
+COPY data/ data/
 
 CMD ["python", "-m", "main"]
