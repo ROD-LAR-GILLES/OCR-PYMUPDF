@@ -95,16 +95,8 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     psm = estimate_psm_for_page(img_pil)
     config = build_tesseract_config(psm)
 
-    # 6) Idioma dinámico
+    # 6) Idioma fijado a español
     lang_param = "spa"
-    try:
-        sample = pytesseract.image_to_string(img_pil, lang="spa", config="--psm 7")[:200]
-        if sample:
-            lang_code = detect(sample)
-            if lang_code != "es":
-                lang_param = f"spa+{lang_code}"
-    except LangDetectException:
-        pass
 
     # 7) OCR principal
     raw = pytesseract.image_to_string(img_pil, lang=lang_param, config=config)
