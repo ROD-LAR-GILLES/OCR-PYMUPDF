@@ -1,27 +1,39 @@
-"""
-Módulo principal del sistema OCR-PYMUPDF.
-
-Este archivo actúa como punto de entrada de la aplicación. Inicializa el sistema de logging y lanza la interfaz de
-línea de comandos (CLI) para que el usuario pueda seleccionar archivos PDF, procesarlos, y generar versiones en Markdown.
-
-Forma parte de la capa de interfaz del sistema, y está diseñado para ejecutarse como script principal.
-"""
-
 from loguru import logger
 from interfaces.cli_menu import mostrar_menu
 
 def main() -> None:
     """
-    Inicializa el registro de logs y ejecuta la interfaz principal de la aplicación.
+    Punto de entrada de la aplicación OCR-PYMUPDF.
 
-    Si ocurre una excepción durante la ejecución, se captura y se registra en un archivo de log.
+    Configura el sistema de logging para que:
+    * Se elimine el handler por defecto de Loguru (que escribe en consola).
+    * Se añada un handler que escribe en `ocr.json` en formato JSON
+      (``serialize=True``) y rota el archivo cada 10 MB.
+
+    Luego invoca el menú interactivo (CLI).  
+    Si ocurre cualquier excepción no controlada, la registra con
+    ``logger.exception`` y muestra un mensaje amigable en consola.
+
+    Returns
+    -------
+    None
     """
-    logger.add("ocr-pymupdf.log", rotation="1 MB")
+    # ─── Logging estructurado ─────────────────────────────────────────────
+    logger.remove()                                   # Elimina stdout default
+    logger.add(
+        "ocr.json",
+        serialize=True,                               # JSON estructurado
+        rotation="10 MB"                              # Rota al llegar a 10 MB
+    )
+    # Si deseas mantener la salida por consola, descomenta:
+    # logger.add(sys.stderr, level="INFO")
+
+    # ─── Lanzar CLI ──────────────────────────────────────────────────────
     try:
         mostrar_menu()
     except Exception as exc:
-        logger.exception(exc)
-        print("[ERROR] Ocurrió un problema. Revisa ocr-pymupdf.log")
+        logger.exception(exc)  # Traza completa al archivo JSON
+        print("[ERROR] Ocurrió un problema. Revisa ocr.json")
 
 
 if __name__ == "__main__":
