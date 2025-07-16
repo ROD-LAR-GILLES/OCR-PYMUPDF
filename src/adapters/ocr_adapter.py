@@ -30,23 +30,25 @@ from io import BytesIO
 import re
 import unicodedata
 
+# src/adapters/ocr_adapter.py  (bloque completo del helper)
+import csv
+
 # Terceros
 import cv2
 import fitz
 import numpy as np
 import pytesseract
 from PIL import Image
-from langdetect import detect, LangDetectException 
-
-# Agrega importación para image_to_string si no está presente
+from langdetect import detect, LangDetectException
 from pytesseract import image_to_string
 
 #
 # ───────────────────────── Configuración global ─────────────────────────
-DPI              = 600
-TESSERACT_CONFIG = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
-OCR_LANG         = "spa"
-logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
+DPI                         = 600
+TESSERACT_CONFIG            = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
+OCR_LANG                    = "spa"
+CORRECTIONS_PATH            = Path("data/corrections.csv")
+logging.basicConfig(format   ="%(levelname)s: %(message)s", level=logging.INFO)
 
 # ───────────────────────── OCR Principal ─────────────────────────
 
@@ -106,6 +108,7 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
     # 8) Limpieza y post-procesado existentes
     raw = re.sub(r"-\n(\w+)", r"\1", raw)
     cleaned = detect_lists(_cleanup_text(raw))
+    cleaned = apply_manual_corrections(cleaned)
     segmented = segment_text_blocks(cleaned)
 
     # 9) Detección de tablas OCR (tu lógica actual)
@@ -518,3 +521,18 @@ def extract_tables_from_page(page: fitz.Page) -> list[str]:
             tables_md.append(md_table.strip())
 
     return tables_md
+
+def apply_manual_corrections(text: str) -> str:
+    """
+    Sustituye errores comunes según data/corrections.csv (ocr, correct).
+    """
+    if not CORRECTIONS_PATH.exists():
+        return text
+
+    with CORRECTIONS_PATH.open(newline="", encoding="utf-8") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            bad, good = row["ocr"], row["correct"]
+            # Reemplazo sólo si coincide como palabra completa (evita falsos positivos)
+            text = re.sub(rf"\b{re.escape(bad)}\b", good, text, flags=re.IGNORECASE)
+    return text
