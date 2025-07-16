@@ -54,12 +54,10 @@ def extract_markdown(pdf_path: Path) -> str:
     logger.info(f"Processing {pdf_path} …")
     page_parts: List[str] = []
 
-    with fitz.open(pdf_path) as doc:
-        # OCR all pages concurrently
-        texts = parallel_ocr.run_parallel(doc)
+    texts = parallel_ocr.run_parallel(doc)
 
-        for page_num, text in enumerate(texts, start=1):
-            page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
+    for page_num, text in enumerate(texts, start=1):
+        page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
 
     md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
     tables_md = extract_tables_markdown(pdf_path)
