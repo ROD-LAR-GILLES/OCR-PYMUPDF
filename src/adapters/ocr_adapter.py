@@ -50,6 +50,8 @@ from langdetect import detect, LangDetectException
 from pytesseract import image_to_string
 from adapters.llm_refiner import refine_markdown
 import os
+from interfaces.cli_menu import LLM_MODE
+from adapters.llm_refiner import refine_markdown, prompt_refine
 
 
 #
@@ -123,12 +125,16 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
             segmented += "\n\n## Tablas detectadas\n" + "\n\n".join(tables_md)
 
     return detect_structured_headings(segmented)
-    try:
-        if os.getenv("OPENAI_API_KEY"):
+
+    
+try:
+    if os.getenv("OPENAI_API_KEY") and LLM_MODE != "off":
+        if LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
             segmented = refine_markdown(segmented)
-    except Exception as exc:
-        logging.warning(f"LLM refinement skipped → {exc}")
-    return detect_structured_headings(segmented)
+        elif LLM_MODE == "prompt" or (LLM_MODE == "auto" and not os.getenv("OPENAI_FT_MODEL")):
+            segmented = prompt_refine(segmented)
+except Exception as exc:
+    logging.warning(f"LLM refinement skipped → {exc}")
 
 # ──────────────── Detección de regiones de tabla ────────────────
 def detect_table_regions(img: Image.Image):
