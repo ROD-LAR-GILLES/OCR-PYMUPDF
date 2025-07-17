@@ -153,6 +153,7 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
                 segmented = prompt_refine(segmented)
     except Exception as exc:
         logging.warning(f"LLM refinement skipped → {exc}")
+    return detect_structured_headings(segmented)
 
 # ──────────────── Detección de regiones de tabla ────────────────
 def detect_table_regions(img: Image.Image):

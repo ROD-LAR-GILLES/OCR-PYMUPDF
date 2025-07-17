@@ -67,7 +67,6 @@ def extract_markdown(pdf_path: Path) -> str:
     if tables_md:
         md_out += "\n\n" + tables_md
 
-    return md_out
     # ─── Optional document-level LLM refinement ──────────────────────────
     
     try:
@@ -78,6 +77,7 @@ def extract_markdown(pdf_path: Path) -> str:
                 md_out = prompt_refine(md_out)
     except Exception as exc:
         logger.warning(f"LLM refinement skipped at document level → {exc}")
+    return md_out
 
 
 
