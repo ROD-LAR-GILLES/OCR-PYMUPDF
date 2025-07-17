@@ -25,7 +25,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=/app/src
 
 WORKDIR /app
 
@@ -36,4 +36,4 @@ COPY data/ data/
 COPY pdfs/ pdfs/
 COPY resultado/ resultado/
 
-CMD ["python", "-m", "main"]
+CMD ["python", "-m", "src.main"]
