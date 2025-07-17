@@ -1,9 +1,3 @@
-# ──────────────────────────── Helper: Tesseract config builder ────────────────────────────
-def build_tesseract_config(psm: int) -> str:
-    config = f"--psm {psm} --oem 3 -c user_defined_dpi={DPI}"
-    config += " --user-words data/legal_words.txt"
-    config += " --user-patterns data/legal_patterns.txt"
-    return config
 # ──────────────────────────────────────────────────────────────
 #  File: src/adapters/ocr_adapter.py
 #  Python 3.11 • sólo fitz, PIL, pytesseract
@@ -31,16 +25,13 @@ Ejemplo de uso:
 """
 
 import logging
-from io import BytesIO
-
+import os
 import re
 import unicodedata
+from io import BytesIO
 from pathlib import Path
-
-# src/adapters/ocr_adapter.py  (bloque completo del helper)
 import csv
-
-# Terceros
+# Third-party
 import cv2
 import fitz
 import numpy as np
@@ -48,8 +39,7 @@ import pytesseract
 from PIL import Image
 from langdetect import detect, LangDetectException
 from pytesseract import image_to_string
-from adapters.llm_refiner import refine_markdown
-import os
+# Local
 from interfaces.cli_menu import LLM_MODE
 from adapters.llm_refiner import refine_markdown, prompt_refine
 
@@ -61,6 +51,34 @@ TESSERACT_CONFIG            = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
 OCR_LANG                    = "spa"
 CORRECTIONS_PATH            = Path("data/corrections.csv")
 logging.basicConfig(format   ="%(levelname)s: %(message)s", level=logging.INFO)
+
+# ──────────────────────────── Helper: Tesseract config builder ────────────────────────────
+def build_tesseract_config(psm: int) -> str:
+    """
+    Construye la configuración de Tesseract OCR personalizada.
+
+    Args:
+        psm (int): Page Segmentation Mode para Tesseract.
+
+    Returns:
+        str: Cadena de configuración completa.
+    """
+    parts = [
+        f"--psm {psm}",
+        "--oem 3",
+        f"-c user_defined_dpi={DPI}"
+    ]
+
+    # Archivos personalizados de usuario (si existen)
+    words_path = Path("data/legal_words.txt")
+    patterns_path = Path("data/legal_patterns.txt")
+
+    if words_path.exists():
+        parts.append(f"--user-words {words_path}")
+    if patterns_path.exists():
+        parts.append(f"--user-patterns {patterns_path}")
+
+    return " ".join(parts)
 
 # ───────────────────────── OCR Principal ─────────────────────────
 
@@ -124,17 +142,18 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
         if tables_md:
             segmented += "\n\n## Tablas detectadas\n" + "\n\n".join(tables_md)
 
+    # 10) Refinamiento LLM opcional
+    try:
+        if os.getenv("OPENAI_API_KEY") and LLM_MODE != "off":
+            if LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
+                segmented = refine_markdown(segmented)
+            elif LLM_MODE == "prompt" or (LLM_MODE == "auto" and not os.getenv("OPENAI_FT_MODEL")):
+                segmented = prompt_refine(segmented)
+    except Exception as exc:
+        logging.warning(f"LLM refinement skipped → {exc}")
+
     return detect_structured_headings(segmented)
 
-    
-try:
-    if os.getenv("OPENAI_API_KEY") and LLM_MODE != "off":
-        if LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
-            segmented = refine_markdown(segmented)
-        elif LLM_MODE == "prompt" or (LLM_MODE == "auto" and not os.getenv("OPENAI_FT_MODEL")):
-            segmented = prompt_refine(segmented)
-except Exception as exc:
-    logging.warning(f"LLM refinement skipped → {exc}")
 
 # ──────────────── Detección de regiones de tabla ────────────────
 def detect_table_regions(img: Image.Image):
