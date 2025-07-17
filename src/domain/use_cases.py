@@ -22,3 +22,19 @@ def convert_pdf_to_md(pdf_path: Path) -> Path:
     markdown = extract_markdown(pdf_path)
     md_path = save_markdown(pdf_path.stem, markdown)
     return md_path
+
+def convert_pdf_to_html(pdf_path: Path) -> Path:
+    """
+    Convierte un archivo PDF a HTML y guarda el resultado.
+
+    Args:
+        pdf_path (Path): Ruta al archivo PDF.
+
+    Returns:
+        Path: Ruta al archivo HTML generado.
+    """
+    markdown = extract_markdown(pdf_path)
+    html = markdown.replace("\n", "<br>\n")  # Simple conversión, puedes mejorar usando markdown2
+    html_path = Path("resultado") / f"{pdf_path.stem}.html"
+    html_path.write_text(html, encoding="utf-8")
+    return html_path

@@ -28,7 +28,7 @@ def prompt_refine(raw: str) -> str:
     Does not require fine-tuning.
     """
     response = openai.ChatCompletion.create(
-        model=os.getenv("OPENAI_PROMPT_MODEL", "gpt-4o"),  # puedes cambiar a gpt-3.5-turbo si prefieres
+        model=os.getenv("OPENAI_PROMPT_MODEL", "gpt-4o"),
         temperature=0.2,
         messages=[
             {

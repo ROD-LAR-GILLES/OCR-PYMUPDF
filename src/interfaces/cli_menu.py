@@ -1,114 +1,121 @@
-"""Interfaz de línea de comandos (CLI) para el sistema OCR-PYMUPDF.
+"""CLI del sistema OCR-PYMUPDF.
 
-Permite listar archivos PDF, seleccionar y convertir a Markdown,
-y cambiar el modelo LLM de refinamiento."""
+Permite:
+1. Listar PDFs
+2. Convertir a Markdown
+3. Convertir a HTML
+4. Cambiar el modo LLM (off / ft / prompt / auto)
+"""
 
 import sys
 from pathlib import Path
 from loguru import logger
 from domain.use_cases import convert_pdf_to_md
-
 import config.state as state
+
+# ───────────────────────── Helpers ──────────────────────────
+def _choose_llm_mode(header: str = "Modo LLM para esta conversión:") -> None:
+    """Pregunta el modo LLM y actualiza ``state.LLM_MODE``."""
+    print(f"\n{header}")
+    print(f"1. Mantener actual ({state.LLM_MODE})")
+    print("2. Desactivado")
+    print("3. Fine-tune personalizado (ft)")
+    print("4. Prompt directo")
+    print("5. Auto (ft si existe, si no prompt)")
+    opt = input("Opción (1-5): ").strip()
+    if opt == "2":
+        state.LLM_MODE = "off"
+    elif opt == "3":
+        state.LLM_MODE = "ft"
+    elif opt == "4":
+        state.LLM_MODE = "prompt"
+    elif opt == "5":
+        state.LLM_MODE = "auto"
+    # con 1 (o entrada inválida) se mantiene el valor
+
+# ───────────────────────── Constantes ───────────────────────
 PDF_DIR = Path("pdfs")
 
+# ───────────────────────── Utilidades ───────────────────────
 def listar_pdfs() -> list[str]:
-    """Devuelve la lista de archivos PDF en el directorio de entrada."""
-    return [a.name for a in sorted(PDF_DIR.glob("*.pdf"))]
+    return [p.name for p in sorted(PDF_DIR.glob("*.pdf"))]
 
 def seleccionar_pdf() -> str | None:
-    """Solicita al usuario seleccionar un archivo PDF de la lista por consola."""
     archivos = listar_pdfs()
     if not archivos:
-        print("[INFO] No se encontraron PDF en ./pdfs. Copia alguno y vuelve a ejecutar.")
+        print("[INFO] No hay PDF en ./pdfs.")
         return None
-    print("Selecciona un PDF para convertir a Markdown:")
-    for i, archivo in enumerate(archivos, start=1):
-        print(f"{i}. {archivo}")
-    seleccion = input("Ingresa el número del archivo: ")
-    if seleccion.isdigit():
-        idx = int(seleccion) - 1
-        if 0 <= idx < len(archivos):
-            return archivos[idx]
+    print("Selecciona un PDF:")
+    for i, nombre in enumerate(archivos, 1):
+        print(f"{i}. {nombre}")
+    sel = input("Número: ").strip()
+    if sel.isdigit() and 1 <= int(sel) <= len(archivos):
+        return archivos[int(sel) - 1]
     print("[ERROR] Selección inválida.")
     return None
 
 def procesar_pdf(pdf_name: str) -> None:
-    """Procesa el PDF especificado y muestra la ruta del Markdown generado."""
     pdf_path = PDF_DIR / pdf_name
-    logger.info(f"Procesando archivo: {pdf_path}")
+    logger.info(f"Procesando a Markdown: {pdf_path}")
     try:
         md_path = convert_pdf_to_md(pdf_path)
         print(f"[OK] Markdown generado: {md_path}")
-        logger.info(f"Markdown generado: {md_path}")
-    except Exception as e:
-        logger.exception(f"Error al procesar {pdf_name}: {e}")
-        print("[ERROR] Ocurrió un problema al convertir el PDF.")
+    except Exception as exc:
+        logger.exception(exc)
+        print("[ERROR] Falló la conversión a Markdown.")
 
+# ───────────────────────── Menú principal ───────────────────
 def mostrar_menu() -> None:
-    """Muestra el menú principal interactivo y gestiona la interacción con el usuario."""
-   
     while True:
         print("\n¿Qué deseas hacer?")
-        print("1. Listar PDFs disponibles")
-        print("2. Convertir un PDF a Markdown")
-        print("3. Cambiar modelo LLM de refinamiento (actual: {})".format(state.LLM_MODE))
-        print("4. Salir")
+        print("1. Listar PDFs")
+        print("2. Convertir PDF a Markdown")
+        print("3. Convertir PDF a HTML")
+        print(f"4. Cambiar modo LLM global (actual: {state.LLM_MODE})")
+        print("5. Salir")
 
-        opcion = input("Selecciona una opción (1-4): ").strip()
+        op = input("Opción (1-5): ").strip()
 
-        if opcion == "1":
+        # 1) Listar
+        if op == "1":
             archivos = listar_pdfs()
             if archivos:
-                print("\nPDFs encontrados en ./pdfs:")
-                for nombre in archivos:
-                    print(f" - {nombre}")
+                print("\nPDFs encontrados:")
+                for n in archivos:
+                    print(" -", n)
             else:
                 print("[INFO] No se encontraron PDF en ./pdfs.")
-                
-        elif opcion == "2":
-            seleccion = seleccionar_pdf()
-            if not seleccion:
-                continue
 
-            # ─── Preguntar modo LLM solo para esta ejecución ──────────────────
-            print("\nModo LLM para esta conversión:")
-            print(f"1. Mantener actual ({state.LLM_MODE})")
-            print("2. Desactivado")
-            print("3. Fine-tune personalizado (ft)")
-            print("4. Prompt directo")
-            print("5. Auto (fine-tune si existe, si no prompt)")
-            modo = input("Opción (1-5): ").strip()
+        # 2) Markdown
+        elif op == "2":
+            sel = seleccionar_pdf()
+            if sel:
+                _choose_llm_mode()          # solo para esta conversión
+                procesar_pdf(sel)
 
-            if modo == "2":
-                state.LLM_MODE = "off"
-            elif modo == "3":
-                state.LLM_MODE = "ft"
-            elif modo == "4":
-                state.LLM_MODE = "prompt"
-            elif modo == "5":
-                state.LLM_MODE = "auto"
-            # opción 1 deja el valor como está
+        # 3) HTML
+        elif op == "3":
+            sel = seleccionar_pdf()
+            if sel:
+                _choose_llm_mode("Modo LLM para conversión a HTML:")
+                from domain.use_cases import convert_pdf_to_html
+                pdf_path = PDF_DIR / sel
+                logger.info(f"Procesando a HTML: {pdf_path}")
+                try:
+                    html_path = convert_pdf_to_html(pdf_path)
+                    print(f"[OK] HTML generado: {html_path}")
+                except Exception as exc:
+                    logger.exception(exc)
+                    print("[ERROR] Falló la conversión a HTML.")
 
-            procesar_pdf(seleccion)
-        elif opcion == "3":
-            print("\nSelecciona el modelo LLM:")
-            print("1. Desactivado")
-            print("2. Fine-tune personalizado (OPENAI_FT_MODEL)")
-            print("3. Prompt directo (OPENAI_PROMPT_MODEL)")
-            print("4. Auto (usa fine-tune si está configurado, sino prompt)")
-            modelo = input("Opción (1-4): ").strip()
-            if modelo == "1":
-                state.LLM_MODE = "off"
-            elif modelo == "2":
-                state.LLM_MODE = "ft"
-            elif modelo == "3":
-                state.LLM_MODE = "prompt"
-            elif modelo == "4":
-                state.LLM_MODE = "auto"
-            else:
-                print("[WARN] Selección inválida. Se mantiene el modelo actual.")
-        elif opcion == "4":
-            print("Saliendo del programa.")
+        # 4) Cambiar modo global
+        elif op == "4":
+            _choose_llm_mode("Selecciona modo LLM global:")
+
+        # 5) Salir
+        elif op == "5":
+            print("Hasta luego.")
             sys.exit(0)
+
         else:
             print("[ERROR] Opción no reconocida.")
