@@ -8,7 +8,7 @@ from pathlib import Path
 from loguru import logger
 from domain.use_cases import convert_pdf_to_md
 
-LLM_MODE = "auto"
+import config.state as state
 PDF_DIR = Path("pdfs")
 
 def listar_pdfs() -> list[str]:
