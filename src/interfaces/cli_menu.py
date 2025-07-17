@@ -64,10 +64,32 @@ def mostrar_menu() -> None:
                     print(f" - {nombre}")
             else:
                 print("[INFO] No se encontraron PDF en ./pdfs.")
+                
         elif opcion == "2":
             seleccion = seleccionar_pdf()
-            if seleccion:
-                procesar_pdf(seleccion)
+            if not seleccion:
+                continue
+
+            # ─── Preguntar modo LLM solo para esta ejecución ──────────────────
+            print("\nModo LLM para esta conversión:")
+            print(f"1. Mantener actual ({state.LLM_MODE})")
+            print("2. Desactivado")
+            print("3. Fine-tune personalizado (ft)")
+            print("4. Prompt directo")
+            print("5. Auto (fine-tune si existe, si no prompt)")
+            modo = input("Opción (1-5): ").strip()
+
+            if modo == "2":
+                state.LLM_MODE = "off"
+            elif modo == "3":
+                state.LLM_MODE = "ft"
+            elif modo == "4":
+                state.LLM_MODE = "prompt"
+            elif modo == "5":
+                state.LLM_MODE = "auto"
+            # opción 1 deja el valor como está
+
+            procesar_pdf(seleccion)
         elif opcion == "3":
             print("\nSelecciona el modelo LLM:")
             print("1. Desactivado")
