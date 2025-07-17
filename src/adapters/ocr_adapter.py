@@ -48,10 +48,13 @@ import pytesseract
 from PIL import Image
 from langdetect import detect, LangDetectException
 from pytesseract import image_to_string
+from adapters.llm_refiner import refine_markdown
+import os
+
 
 #
 # ───────────────────────── Configuración global ─────────────────────────
-DPI                         = 600
+DPI                         = 300
 TESSERACT_CONFIG            = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
 OCR_LANG                    = "spa"
 CORRECTIONS_PATH            = Path("data/corrections.csv")
@@ -119,6 +122,12 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
         if tables_md:
             segmented += "\n\n## Tablas detectadas\n" + "\n\n".join(tables_md)
 
+    return detect_structured_headings(segmented)
+    try:
+        if os.getenv("OPENAI_API_KEY"):
+            segmented = refine_markdown(segmented)
+    except Exception as exc:
+        logging.warning(f"LLM refinement skipped → {exc}")
     return detect_structured_headings(segmented)
 
 # ──────────────── Detección de regiones de tabla ────────────────
