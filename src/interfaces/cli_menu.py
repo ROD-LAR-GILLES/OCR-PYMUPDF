@@ -46,12 +46,12 @@ def procesar_pdf(pdf_name: str) -> None:
 
 def mostrar_menu() -> None:
     """Muestra el menú principal interactivo y gestiona la interacción con el usuario."""
-    global LLM_MODE
+   
     while True:
         print("\n¿Qué deseas hacer?")
         print("1. Listar PDFs disponibles")
         print("2. Convertir un PDF a Markdown")
-        print("3. Cambiar modelo LLM de refinamiento (actual: {})".format(LLM_MODE))
+        print("3. Cambiar modelo LLM de refinamiento (actual: {})".format(state.LLM_MODE))
         print("4. Salir")
 
         opcion = input("Selecciona una opción (1-4): ").strip()
@@ -76,13 +76,13 @@ def mostrar_menu() -> None:
             print("4. Auto (usa fine-tune si está configurado, sino prompt)")
             modelo = input("Opción (1-4): ").strip()
             if modelo == "1":
-                LLM_MODE = "off"
+                state.LLM_MODE = "off"
             elif modelo == "2":
-                LLM_MODE = "ft"
+                state.LLM_MODE = "ft"
             elif modelo == "3":
-                LLM_MODE = "prompt"
+                state.LLM_MODE = "prompt"
             elif modelo == "4":
-                LLM_MODE = "auto"
+                state.LLM_MODE = "auto"
             else:
                 print("[WARN] Selección inválida. Se mantiene el modelo actual.")
         elif opcion == "4":
