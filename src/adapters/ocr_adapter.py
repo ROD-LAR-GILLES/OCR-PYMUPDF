@@ -85,10 +85,20 @@ def build_tesseract_config(psm: int) -> str:
 
 def perform_ocr_on_page(page: fitz.Page) -> str:
     """
-    OCR de una página con:
-      • Corrección de rotación
-      • Preprocesamiento (CLAHE + binarizado adaptativo + denoise)
-      • PSM y lenguaje dinámicos
+    Realiza OCR sobre una página PDF.
+
+    Args:
+        page: Página PDF de PyMuPDF
+
+    Returns:
+        str: Texto extraído y procesado
+
+    Proceso:
+    1. Renderiza página
+    2. Corrige rotación 
+    3. Aplica preprocesamiento
+    4. Ejecuta OCR con configuración dinámica
+    5. Post-procesa resultado
     """
     # 1) Render
     pix = page.get_pixmap(dpi=DPI, alpha=False)

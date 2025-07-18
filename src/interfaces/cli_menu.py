@@ -1,10 +1,10 @@
 """CLI del sistema OCR-PYMUPDF.
 
-Permite:
+Funcionalidades:
 1. Listar PDFs
 2. Convertir a Markdown
-3. Convertir a HTML
-4. Cambiar el modo LLM (off / ft / prompt / auto)
+3. Convertir a HTML 
+4. Cambiar modo LLM
 """
 
 import sys
@@ -66,18 +66,21 @@ def procesar_pdf(pdf_name: str) -> None:
 
 # ───────────────────────── Menú principal ───────────────────
 def mostrar_menu() -> None:
+    """
+    Muestra menú principal interactivo.
+    """
     while True:
-        print("\n¿Qué deseas hacer?")
+        print("\nOpciones disponibles:")
         print("1. Listar PDFs")
         print("2. Convertir PDF a Markdown")
         print("3. Convertir PDF a HTML")
         print(f"4. Cambiar modo LLM global (actual: {state.LLM_MODE})")
         print("5. Salir")
-
-        op = input("Opción (1-5): ").strip()
+        
+        opcion = input("Seleccione opción (1-5): ").strip()
 
         # 1) Listar
-        if op == "1":
+        if opcion == "1":
             archivos = listar_pdfs()
             if archivos:
                 print("\nPDFs encontrados:")
@@ -87,14 +90,14 @@ def mostrar_menu() -> None:
                 print("[INFO] No se encontraron PDF en ./pdfs.")
 
         # 2) Markdown
-        elif op == "2":
+        elif opcion == "2":
             sel = seleccionar_pdf()
             if sel:
                 _choose_llm_mode()          # solo para esta conversión
                 procesar_pdf(sel)
 
         # 3) HTML
-        elif op == "3":
+        elif opcion == "3":
             sel = seleccionar_pdf()
             if sel:
                 _choose_llm_mode("Modo LLM para conversión a HTML:")
@@ -109,11 +112,11 @@ def mostrar_menu() -> None:
                     print("[ERROR] Falló la conversión a HTML.")
 
         # 4) Cambiar modo global
-        elif op == "4":
+        elif opcion == "4":
             _choose_llm_mode("Selecciona modo LLM global:")
 
         # 5) Salir
-        elif op == "5":
+        elif opcion == "5":
             print("Hasta luego.")
             sys.exit(0)
 
