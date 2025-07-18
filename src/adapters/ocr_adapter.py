@@ -90,7 +90,6 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
       • Preprocesamiento (CLAHE + binarizado adaptativo + denoise)
       • PSM y lenguaje dinámicos
     """
-    print("[DEBUG] Entrando a perform_ocr_on_page")
     # 1) Render
     pix = page.get_pixmap(dpi=DPI, alpha=False)
     img_pil = Image.open(BytesIO(pix.tobytes("png")))
