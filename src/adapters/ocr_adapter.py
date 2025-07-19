@@ -153,10 +153,16 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
 
     # 10) Refinamiento LLM opcional
     try:
-        if os.getenv("OPENAI_API_KEY") and state.LLM_MODE == "prompt":
+        use_llm = os.getenv("OPENAI_API_KEY") and state.LLM_MODE in {"prompt", "auto", "ft"}
+        if use_llm:
+            logging.info(f"[LLM] Page-level refinement via OpenAI · mode={state.LLM_MODE}")
             segmented = prompt_refine(segmented)
+        else:
+            logging.debug(
+                f"[LLM] Skipped page-level · mode={state.LLM_MODE} · key={'set' if os.getenv('OPENAI_API_KEY') else 'unset'}"
+            )
     except Exception as exc:
-        logging.warning(f"LLM refinement skipped → {exc}")
+        logging.warning(f"[LLM] Page-level refinement error → {exc}")
     return detect_structured_headings(segmented)
 
 # ──────────────── Detección de regiones de tabla ────────────────
@@ -434,7 +440,6 @@ def segment_text_blocks(text: str) -> str:
             out_blocks.append(stripped)
 
     return "\n\n".join(out_blocks)
-# ──────────────── Detección y formateo de listas ────────────────
 # ──────────────── Detección y formateo de listas ────────────────
 # Nueva versión detect_lists al final del archivo:
 def detect_lists(text: str) -> str:
