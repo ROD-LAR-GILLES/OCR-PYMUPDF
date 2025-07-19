@@ -41,7 +41,7 @@ from langdetect import detect, LangDetectException
 from pytesseract import image_to_string
 # Local
 import config.state as state
-from adapters.llm_refiner import refine_markdown, prompt_refine
+from adapters.llm_refiner import prompt_refine
 
 
 #
@@ -153,13 +153,8 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
 
     # 10) Refinamiento LLM opcional
     try:
-        if os.getenv("OPENAI_API_KEY") and state.LLM_MODE != "off":
-            if state.LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
-                segmented = refine_markdown(segmented)
-            elif state.LLM_MODE == "prompt" or (
-                state.LLM_MODE == "auto" and not os.getenv("OPENAI_FT_MODEL")
-            ):
-                segmented = prompt_refine(segmented)
+        if os.getenv("OPENAI_API_KEY") and state.LLM_MODE == "prompt":
+            segmented = prompt_refine(segmented)
     except Exception as exc:
         logging.warning(f"LLM refinement skipped → {exc}")
     return detect_structured_headings(segmented)

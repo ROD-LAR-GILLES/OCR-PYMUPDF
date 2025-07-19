@@ -3,8 +3,8 @@
 Funcionalidades:
 1. Listar PDFs
 2. Convertir a Markdown
-3. Convertir a HTML 
-4. Cambiar modo LLM
+3. Cambiar modo LLM
+4. Salir
 """
 
 import sys
@@ -19,18 +19,12 @@ def _choose_llm_mode(header: str = "Modo LLM para esta conversión:") -> None:
     print(f"\n{header}")
     print(f"1. Mantener actual ({state.LLM_MODE})")
     print("2. Desactivado")
-    print("3. Fine-tune personalizado (ft)")
-    print("4. Prompt directo")
-    print("5. Auto (ft si existe, si no prompt)")
-    opt = input("Opción (1-5): ").strip()
+    print("3. Prompt directo")
+    opt = input("Opción (1-3): ").strip()
     if opt == "2":
         state.LLM_MODE = "off"
     elif opt == "3":
-        state.LLM_MODE = "ft"
-    elif opt == "4":
         state.LLM_MODE = "prompt"
-    elif opt == "5":
-        state.LLM_MODE = "auto"
     # con 1 (o entrada inválida) se mantiene el valor
 
 # ───────────────────────── Constantes ───────────────────────
@@ -73,11 +67,10 @@ def mostrar_menu() -> None:
         print("\nOpciones disponibles:")
         print("1. Listar PDFs")
         print("2. Convertir PDF a Markdown")
-        print("3. Convertir PDF a HTML")
-        print(f"4. Cambiar modo LLM global (actual: {state.LLM_MODE})")
-        print("5. Salir")
+        print(f"3. Cambiar modo LLM global (actual: {state.LLM_MODE})")
+        print("4. Salir")
         
-        opcion = input("Seleccione opción (1-5): ").strip()
+        opcion = input("Seleccione opción (1-4): ").strip()
 
         # 1) Listar
         if opcion == "1":
@@ -96,27 +89,12 @@ def mostrar_menu() -> None:
                 _choose_llm_mode()          # solo para esta conversión
                 procesar_pdf(sel)
 
-        # 3) HTML
+        # 3) Cambiar modo global
         elif opcion == "3":
-            sel = seleccionar_pdf()
-            if sel:
-                _choose_llm_mode("Modo LLM para conversión a HTML:")
-                from domain.use_cases import convert_pdf_to_html
-                pdf_path = PDF_DIR / sel
-                logger.info(f"Procesando a HTML: {pdf_path}")
-                try:
-                    html_path = convert_pdf_to_html(pdf_path)
-                    print(f"[OK] HTML generado: {html_path}")
-                except Exception as exc:
-                    logger.exception(exc)
-                    print("[ERROR] Falló la conversión a HTML.")
-
-        # 4) Cambiar modo global
-        elif opcion == "4":
             _choose_llm_mode("Selecciona modo LLM global:")
 
-        # 5) Salir
-        elif opcion == "5":
+        # 4) Salir
+        elif opcion == "4":
             print("Hasta luego.")
             sys.exit(0)
 

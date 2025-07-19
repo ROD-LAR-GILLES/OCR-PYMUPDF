@@ -21,7 +21,7 @@ from typing import List
 import adapters.parallel_ocr as parallel_ocr
 import os
 import config.state as state
-from adapters.llm_refiner import refine_markdown, prompt_refine
+from adapters.llm_refiner import prompt_refine
 
 # ──────── External imports ────────
 import camelot
@@ -72,7 +72,7 @@ def extract_markdown(pdf_path: Path) -> str:
     try:
         if os.getenv("OPENAI_API_KEY") and state.LLM_MODE != "off":
             if state.LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
-                md_out = refine_markdown(md_out)
+                md_out = prompt_refine(md_out)
             elif state.LLM_MODE in {"prompt", "auto"}:
                 md_out = prompt_refine(md_out)
     except Exception as exc:
