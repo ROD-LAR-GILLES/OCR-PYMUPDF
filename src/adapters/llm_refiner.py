@@ -11,11 +11,12 @@ Características:
 """
 import os
 import re
-import openai
 from typing import Dict, List
+import openai
 
-# Configuración OpenAI
-openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Configura la clave de API para todas las llamadas
+openai.api_key = os.getenv("OPENAI_API_KEY", "")
 
 # Patrones comunes de errores OCR
 OCR_PATTERNS = {
@@ -55,6 +56,26 @@ def detect_document_structure(text: str) -> Dict[str, List[str]]:
     
     return structure
 
+def refine_markdown(raw_text: str) -> str:
+    """
+    Mejora el texto usando el modelo fine-tuneado de OpenAI.
+    
+    Args:
+        raw_text: Texto OCR sin procesar
+    Returns:
+        str: Texto mejorado en formato Markdown
+    """
+    model_id = os.getenv("OPENAI_FT_MODEL", "gpt-3.5-turbo")
+    response = openai.chat.completions.create(
+        model=model_id,
+        temperature=0.1,
+        messages=[
+            {"role": "system", "content": "You are a Markdown formatter for Spanish legal OCR text. Convert the user content into well-structured Markdown."},
+            {"role": "user", "content": raw_text}
+        ]
+    )
+    return response.choices[0].message.content.strip()
+
 def prompt_refine(raw: str) -> str:
     """
     Mejora el texto OCR usando GPT con un sistema de prompts especializados.
@@ -88,7 +109,7 @@ def prompt_refine(raw: str) -> str:
         f"- Lists: {len(structure['lists'])}"
     )
     
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model=os.getenv("OPENAI_PROMPT_MODEL", "gpt-4"),
         temperature=0.1,  # Reducido para mayor precisión
         messages=[
@@ -96,5 +117,4 @@ def prompt_refine(raw: str) -> str:
             {"role": "user", "content": cleaned_text}
         ]
     )
-    
     return response["choices"][0]["message"]["content"].strip()

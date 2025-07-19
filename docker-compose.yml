@@ -11,3 +11,5 @@ services:
     tty: true
     environment:
       - PYTHONPATH=/app/src
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    command: tail -f /dev/null
