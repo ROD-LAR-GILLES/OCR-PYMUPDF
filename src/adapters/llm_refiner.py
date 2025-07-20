@@ -2,7 +2,7 @@
 import re
 from typing import List, Dict, Any
 import time
-from openai import OpenAI, APIError, RateLimitError
+from domain.ports.llm_provider import LLMProvider
 from config.api_settings import load_api_settings
 from infrastructure.logging_setup import logger
 
@@ -28,111 +28,82 @@ def _detect_document_structure(text: str) -> Dict[str, List[str]]:
 
 
 class LLMRefiner:
-    """Refina texto OCR usando modelos OpenAI."""
+    """Refines OCR text using configurable LLM providers."""
 
-    def __init__(self) -> None:
+    def __init__(self, provider: LLMProvider = None) -> None:
         try:
-            self.api_config = load_api_settings()["openai"]
-            self.client = OpenAI(
-                api_key=self.api_config["api_key"],
-                organization=self.api_config["org_id"]
-            )
-            self.max_retries = 5
-        except Exception as e:
-            logger.error(f"Error al inicializar cliente OpenAI: {e}")
-            self.client = None
-            self.api_config = {}
+            self.api_config = load_api_settings()
             
-    def _safe_chat(self, **kwargs) -> Any:
+            if provider is None:
+                from adapters.providers.openai_provider import OpenAIProvider
+                provider = OpenAIProvider()
+            
+            self.provider = provider
+            self.provider.initialize(self.api_config["openai"])
+        except Exception as e:
+            logger.error(f"Error initializing LLM provider: {e}")
+            self.provider = None
+            
+    def _safe_generate(self, prompt: str, system_prompt: str = None) -> str:
         """
-        Wrapper seguro para llamadas a la API con back-off exponencial.
+        Safe wrapper for LLM completion generation.
         
         Args:
-            **kwargs: Argumentos para chat.completions.create
+            prompt: Text to process
+            system_prompt: Optional system instructions
             
         Returns:
-            La respuesta de la API o levanta una excepción si se agotan los reintentos
+            Generated completion or original text on error
         """
-        for attempt in range(self.max_retries):
-            try:
-                return self.client.chat.completions.create(**kwargs)
-            except RateLimitError:
-                if attempt == self.max_retries - 1:
-                    raise
-                wait = 2 ** attempt  # Back-off exponencial: 1, 2, 4, 8, 16 segundos
-                logger.warning(f"Rate-limit alcanzado, reintentando en {wait}s")
-                time.sleep(wait)
+        try:
+            return self.provider.generate_completion(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                temperature=0.1
+            )
+        except Exception as e:
+            logger.error(f"Error generating completion: {e}")
+            return prompt
 
     # ───────────────────── Fine-tuned model ─────────────────────
     def refine_markdown(self, raw_text: str) -> str:
-        if not self.client:
-            logger.warning("Cliente OpenAI no disponible → texto sin refinar")
+        """Refine OCR text using configured LLM provider."""
+        if not self.provider:
+            logger.warning("LLM provider not available → returning raw text")
             return raw_text
 
-        try:
-            model_id = self.api_config.get("ft_model") or self.api_config["prompt_model"]
-            resp = self._safe_chat(
-                model=model_id,
-                temperature=0.1,
-                messages=[
-                    {"role": "system",
-                     "content": ("You are a Markdown formatter for Spanish legal OCR text. "
-                                 "Convert the user content into well-structured Markdown.")},
-                    {"role": "user", "content": raw_text},
-                ]
-            )
-            return resp.choices[0].message.content.strip()
-        except RateLimitError:
-            logger.warning("Límite de API alcanzado → texto original")
-        except APIError as e:
-            logger.error(f"API OpenAI: {e}")
-        except Exception as e:
-            logger.exception(f"Error inesperado: {e}")
-        return raw_text
+        system_prompt = ("You are a Markdown formatter for Spanish legal OCR text. "
+                        "Convert the user content into well-structured Markdown.")
+        
+        return self._safe_generate(raw_text, system_prompt) or raw_text
 
     # ───────────────────── Prompt-based pipeline ─────────────────────
     def prompt_refine(self, raw: str) -> str:
-        if not self.client:
-            logger.warning("Cliente OpenAI no disponible → texto sin refinar")
+        """Prompt-based refinement pipeline."""
+        if not self.provider:
+            logger.warning("LLM provider not available → returning raw text")
             return raw
 
         try:
             cleaned = _correct_ocr_errors(raw)
             structure = _detect_document_structure(cleaned)
 
+            # Initial document analysis
+            analysis_prompt = ("You are a legal document analysis expert. "
+                           "Analyze the text and return its structure, references, and OCR errors.")
+            analysis = self._safe_generate(cleaned, analysis_prompt)
+
+            # Final refinement with context
             system_prompt = (
-                "Eres un experto en procesamiento avanzado de documentos legales y OCR…\n"
-                f"- Encabezados detectados: {len(structure['headers'])}\n"
-                f"- Secciones numeradas: {len(structure['sections'])}\n"
-                f"- Elementos de lista: {len(structure['lists'])}\n"
+                "You are an advanced legal document and OCR processing expert.\n"
+                f"- Headers detected: {len(structure['headers'])}\n"
+                f"- Numbered sections: {len(structure['sections'])}\n"
+                f"- List items: {len(structure['lists'])}\n\n"
+                f"Previous analysis:\n{analysis}"
             )
+            
+            return self._safe_generate(cleaned, system_prompt) or raw
 
-            analysis = self._safe_chat(
-                model=self.api_config["prompt_model"],
-                temperature=0.1,
-                messages=[
-                    {"role": "system",
-                     "content": ("Eres un experto en análisis de documentos legales. Analiza el texto y "
-                                 "devuelve su estructura, referencias y errores OCR.")},
-                    {"role": "user", "content": cleaned},
-                ]
-            )
-
-            formatted = self._safe_chat(
-                model=self.api_config["prompt_model"],
-                temperature=0.1,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "assistant", "content": analysis.choices[0].message.content},
-                    {"role": "user", "content": cleaned},
-                ],
-            )
-            return formatted.choices[0].message.content.strip()
-
-        except RateLimitError:
-            logger.warning("Límite de API alcanzado → texto original")
-        except APIError as e:
-            logger.error(f"API OpenAI: {e}")
         except Exception as e:
-            logger.exception(f"Error inesperado: {e}")
-        return raw
+            logger.exception(f"Error in refinement pipeline: {e}")
+            return raw
