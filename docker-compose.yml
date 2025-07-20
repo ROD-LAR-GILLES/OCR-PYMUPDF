@@ -8,8 +8,12 @@ services:
       - ./src:/app/src
       - ./data:/app/data
       - ./tests:/app/tests
-      - ./tests/fixtures:/app/tests/fixtures       
+      - ./tests/fixtures:/app/tests/fixtures
+      - fasttext_models:/app/data/models/fasttext
     stdin_open: true
+
+volumes:
+  fasttext_models:
     tty: true
     environment:
       - PYTHONPATH=/app/src
