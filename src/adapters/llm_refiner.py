@@ -9,19 +9,27 @@ Características:
 - Preserva tablas y elementos especiales
 - Mejora la legibilidad del documento
 """
-import os
 import re
-from typing import Dict, List
-from loguru import logger
-from openai import OpenAI, APIError, RateLimitError
+from typing import List, Dict, Any
+from openai import OpenAI
+from openai.types.error import APIError, RateLimitError
 
-# Inicializar el cliente de OpenAI
-# La biblioteca OpenAI v1.x tomará la configuración de las variables de entorno
-try:
-    client = OpenAI() 
-except Exception as e:
-    logger.error(f"Error al inicializar cliente OpenAI: {e}")
-    client = None
+from src.config.api_settings import api_config, load_api_settings
+from src.infrastructure.logging_setup import logger
+
+# Inicializar el cliente de OpenAI con la configuración validada
+class LLMRefiner:
+    def __init__(self):
+        try:
+            self.api_config = load_api_settings()["openai"]
+            self.client = OpenAI(
+                api_key=self.api_config["api_key"],
+                organization=self.api_config["org_id"]
+            )
+        except Exception as e:
+            logger.error(f"Error al inicializar cliente OpenAI: {e}")
+            self.client = None
+            self.api_config = None
 
 # Patrones comunes de errores OCR
 OCR_PATTERNS = {
@@ -61,7 +69,7 @@ def detect_document_structure(text: str) -> Dict[str, List[str]]:
     
     return structure
 
-def refine_markdown(raw_text: str) -> str:
+def refine_markdown(self, raw_text: str) -> str:
     """
     Mejora el texto usando el modelo fine-tuneado de OpenAI.
     
@@ -70,13 +78,14 @@ def refine_markdown(raw_text: str) -> str:
     Returns:
         str: Texto mejorado en formato Markdown o texto original si hay error
     """
-    if not client:
+    if not self.client:
         logger.warning("Cliente OpenAI no disponible - retornando texto sin procesar")
         return raw_text
         
     try:
-        model_id = os.getenv("OPENAI_FT_MODEL", "gpt-3.5-turbo")
-        response = client.chat.completions.create(
+        model_id = self.api_config["ft_model"] or self.api_config["prompt_model"]
+        
+        response = self.client.chat.completions.create(
             model=model_id,
             temperature=0.1,
             messages=[
@@ -95,7 +104,7 @@ def refine_markdown(raw_text: str) -> str:
         logger.exception(f"Error inesperado al refinar texto: {e}")
         return raw_text
 
-def prompt_refine(raw: str) -> str:
+def prompt_refine(self, raw: str) -> str:
     """
     Mejora el texto OCR usando GPT con un sistema de prompts especializados.
     
@@ -104,7 +113,7 @@ def prompt_refine(raw: str) -> str:
     Returns:
         str: Texto mejorado en formato Markdown o texto original si hay error
     """
-    if not client:
+    if not self.client:
         logger.warning("Cliente OpenAI no disponible - retornando texto sin procesar")
         return raw
         
@@ -172,8 +181,8 @@ def prompt_refine(raw: str) -> str:
         # 4. Realizar refinamiento en dos pasos
         
         # Paso 1: Análisis y limpieza semántica
-        analysis_response = client.chat.completions.create(
-            model=os.getenv("OPENAI_PROMPT_MODEL", "gpt-4"),
+        analysis_response = self.client.chat.completions.create(
+            model=self.api_config["prompt_model"],
             temperature=0.1,
             messages=[
                 {"role": "system", "content": 
@@ -190,8 +199,8 @@ def prompt_refine(raw: str) -> str:
         )
         
         # Paso 2: Formateo final con contexto del análisis
-        format_response = client.chat.completions.create(
-            model=os.getenv("OPENAI_PROMPT_MODEL", "gpt-4"),
+        format_response = self.client.chat.completions.create(
+            model=self.api_config["prompt_model"],
             temperature=0.1,
             messages=[
                 {"role": "system", "content": system_prompt},
