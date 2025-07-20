@@ -39,11 +39,20 @@ ENV PYTHONPATH=/app/src
 
 WORKDIR /app
 
+# Crear estructura de directorios necesaria
+RUN mkdir -p /app/data/models/fasttext \
+            /app/data/corrections \
+            /app/pdfs \
+            /app/resultado
+
 COPY --from=builder /install /usr/local
 
 COPY src/ src/
 COPY data/ data/
 COPY pdfs/ pdfs/
 COPY resultado/ resultado/
+
+# Asegurar permisos de escritura
+RUN chmod -R 777 /app/data
 
 CMD ["python", "-m", "src.main"]
