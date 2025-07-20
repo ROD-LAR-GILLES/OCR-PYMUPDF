@@ -10,8 +10,11 @@ import langdetect
 class LanguageDetector:
     def __init__(self):
         self.fasttext_model = None
-        self.model_path = Path(__file__).parent.parent / "data" / "lid.176.ftz"
+        self.model_path = Path("/app/data/models/fasttext/lid.176.ftz")
         try:
+            if not self.model_path.parent.exists():
+                self.model_path.parent.mkdir(parents=True, exist_ok=True)
+                
             if not self.model_path.exists():
                 logger.info("Descargando modelo de FastText...")
                 import urllib.request

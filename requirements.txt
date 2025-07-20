@@ -1,3 +1,7 @@
+# ───── Configuración y Entorno ─────
+python-dotenv>=1.0.0    # Manejo robusto de variables de entorno
+openai>=1.0.0          # SDK oficial de OpenAI
+
 # ───── OCR y Preprocesamiento ─────
 fasttext-wheel>=0.9.2    # Reemplazo más robusto para langdetect
 langdetect==1.0.9       # Mantenido temporalmente para compatibilidad
