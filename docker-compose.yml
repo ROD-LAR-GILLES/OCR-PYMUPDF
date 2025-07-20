@@ -11,9 +11,6 @@ services:
       - ./tests/fixtures:/app/tests/fixtures
       - fasttext_models:/app/data/models/fasttext
     stdin_open: true
-
-volumes:
-  fasttext_models:
     tty: true
     environment:
       - PYTHONPATH=/app/src
@@ -22,6 +19,6 @@ volumes:
       - OPENAI_PROMPT_MODEL
       - OPENAI_FT_MODEL
       - OCR_DPI=300
-      - OCR_LANG=spa
-      - OCR_LOG_LEVEL=INFO
-    command: tail -f /dev/null
+
+volumes:
+  fasttext_models: {}
