@@ -84,7 +84,7 @@ Crear interfaces explícitas en el dominio para cada puerto v
 Separar los casos de uso en archivos individuales v
 Añadir entidades y value objects en el dominio v
 Implementar DTOs para el paso de datos entre capas v
-Estructurar los tests según las capas de la arquitectura
+Estructurar los tests según las capas de la arquitectura v
 La estructura actual es buena, pero se puede reforzar aún más los principios de Clean Architecture mediante:
 
 Mayor aislamiento del dominio
