@@ -6,11 +6,14 @@ import time
 from functools import wraps
 from config.ocr_settings import OCRSettings
 
-def setup_logging():
-    logging.basicConfig(
-        format=OCRSettings.LOG_FORMAT,
-        level=getattr(logging, OCRSettings.LOG_LEVEL)
-    )
+# Configuración global del logger
+logging.basicConfig(
+    format=OCRSettings.LOG_FORMAT,
+    level=getattr(logging, OCRSettings.LOG_LEVEL)
+)
+
+# Logger principal de la aplicación
+logger = logging.getLogger("OCR-PYMUPDF")
 
 def log_execution_time(func):
     @wraps(func)

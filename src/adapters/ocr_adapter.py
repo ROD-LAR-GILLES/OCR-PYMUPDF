@@ -41,7 +41,10 @@ from pytesseract import image_to_string
 # Local
 import config.state as state
 from config.language_detection import detector
-from adapters.llm_refiner import prompt_refine
+from adapters.llm_refiner import LLMRefiner
+
+# Inicializar el refinador LLM
+llm_refiner = LLMRefiner()
 
 
 #
@@ -156,7 +159,7 @@ def perform_ocr_on_page(page: fitz.Page) -> str:
         use_llm = os.getenv("OPENAI_API_KEY") and state.LLM_MODE in {"prompt", "auto", "ft"}
         if use_llm:
             logging.info(f"[LLM] Page-level refinement via OpenAI · mode={state.LLM_MODE}")
-            segmented = prompt_refine(segmented)
+            segmented = llm_refiner.prompt_refine(segmented)
         else:
             logging.debug(
                 f"[LLM] Skipped page-level · mode={state.LLM_MODE} · key={'set' if os.getenv('OPENAI_API_KEY') else 'unset'}"

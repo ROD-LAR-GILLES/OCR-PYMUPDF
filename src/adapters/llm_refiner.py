@@ -11,11 +11,10 @@ Características:
 """
 import re
 from typing import List, Dict, Any
-from openai import OpenAI
-from openai.types.error import APIError, RateLimitError
+from openai import OpenAI, APIError, RateLimitError
 
-from src.config.api_settings import api_config, load_api_settings
-from src.infrastructure.logging_setup import logger
+from config.api_settings import load_api_settings
+from infrastructure.logging_setup import logger
 
 # Inicializar el cliente de OpenAI con la configuración validada
 class LLMRefiner:

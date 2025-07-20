@@ -21,7 +21,10 @@ from typing import List
 import adapters.parallel_ocr as parallel_ocr
 import os
 import config.state as state
-from adapters.llm_refiner import prompt_refine
+from adapters.llm_refiner import LLMRefiner
+
+# Inicializar el refinador LLM
+llm_refiner = LLMRefiner()
 
 # ──────── External imports ────────
 import camelot
@@ -79,10 +82,10 @@ def extract_markdown(pdf_path: Path) -> str:
         if os.getenv("OPENAI_API_KEY") and state.LLM_MODE != "off":
             if state.LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
                 logger.info("Aplicando modelo fine-tuned para refinamiento...")
-                md_out = prompt_refine(md_out)
+                md_out = llm_refiner.prompt_refine(md_out)
             elif state.LLM_MODE in {"prompt", "auto"}:
                 logger.info("Aplicando refinamiento LLM con modelo base...")
-                md_out = prompt_refine(md_out)
+                md_out = llm_refiner.prompt_refine(md_out)
             logger.info("Refinamiento LLM completado exitosamente")
     except Exception as exc:
         logger.warning(f"El refinamiento LLM fue omitido: {exc}")
