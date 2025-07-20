@@ -1,21 +1,36 @@
 """
-Configuración de APIs y credenciales.
-Carga variables de entorno de forma robusta usando python-dotenv.
+API Configuration and Credentials.
+Robust environment variable loading using python-dotenv.
+Supports multiple LLM providers with fallback options.
 """
 from pathlib import Path
 from typing import Optional
 from dotenv import load_dotenv
 import os
 
+DEFAULT_SETTINGS = {
+    "openai": {
+        "api_key": None,  # Required
+        "org_id": None,   # Optional
+        "model_id": "gpt-3.5-turbo",
+        "max_retries": 5
+    },
+    "gemini": {
+        "api_key": None,  # Required
+        "model_id": "gemini-pro",
+        "max_retries": 5
+    }
+}
+
 def load_api_settings() -> dict:
     """
-    Carga y valida la configuración de APIs desde variables de entorno.
-    Busca el archivo .env en el directorio raíz del proyecto.
+    Load and validate API settings from environment variables.
+    Looks for .env file in project root directory.
     
     Returns:
-        dict: Configuración validada de APIs
+        dict: Validated API configuration
     """
-    # Buscar .env en el directorio raíz del proyecto
+    # Look for .env in project root
     project_root = Path(__file__).parent.parent.parent
     env_path = project_root / ".env"
     
