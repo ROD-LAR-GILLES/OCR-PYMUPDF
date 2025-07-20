@@ -77,3 +77,19 @@ Fuentes:
 	•	Documentación oficial y notas de lanzamiento de: OpenCV, Pillow, Camelot, pdfplumber, PyMuPDF, NLTK, spaCy, Scikit-learn, Jinja2, entre otras.
 	•	Estudios comparativos y referencias de rendimiento/precisión: modelo de FastText vs langdetect, eficiencia de SymSpell vs algoritmo tradicional, benchmarks de Polars vs Pandas.
 	•	Recomendaciones de la comunidad (Kaggle, Stack Overflow) sobre librerías alternativas en casos de uso específicos.
+
+Recomendaciones para mejorar:
+
+Crear interfaces explícitas en el dominio para cada puerto
+Separar los casos de uso en archivos individuales
+Añadir entidades y value objects en el dominio
+Implementar DTOs para el paso de datos entre capas
+Estructurar los tests según las capas de la arquitectura
+La estructura actual es buena, pero se puede reforzar aún más los principios de Clean Architecture mediante:
+
+Mayor aislamiento del dominio
+Interfaces más explícitas
+Mejor organización de casos de uso
+DTOs para el paso de datos
+Tests estructurados por capa
+¿Te gustaría que implementemos alguna de estas mejoras en particular?
