@@ -37,10 +37,10 @@ import fitz
 import numpy as np
 import pytesseract
 from PIL import Image
-from langdetect import detect, LangDetectException
 from pytesseract import image_to_string
 # Local
 import config.state as state
+from config.language_detection import detector
 from adapters.llm_refiner import prompt_refine
 
 

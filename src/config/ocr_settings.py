@@ -1,6 +1,21 @@
 """
-Configuración centralizada para el sistema OCR.
+Configuración centralizada para el sistema OCR y LLM.
+
+Clases:
+    OCRSettings: Configuración general del sistema OCR y LLM
 """
+
+# Configuración de modelos OpenAI
+class OpenAIModels:
+    # Modelo principal para análisis profundo y refinamiento final
+    MAIN_MODEL = os.getenv('OPENAI_PROMPT_MODEL', 'gpt-4.1')
+    
+    # Modelo ligero para pre-procesamiento y correcciones simples
+    LIGHT_MODEL = os.getenv('OPENAI_FT_MODEL', 'gpt-4.1-mini')
+    
+    # Configuración de prompts
+    TEMPERATURE = 0.1  # Mantener consistencia y precisión
+    MAX_TOKENS = 4000  # Suficiente para documentos largos
 import os
 from pathlib import Path
 

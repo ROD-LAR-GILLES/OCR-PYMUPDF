@@ -27,9 +27,20 @@ def run_parallel(pdf_path: Path) -> list[str]:
     list[str]
         Texto OCR por página, en orden.
     """
+    from loguru import logger
+    
     pdf_path = str(pdf_path)  # asegurar serializable
     with fitz.open(pdf_path) as doc:
-        indices = list(range(doc.page_count))
+        total_pages = doc.page_count
+        indices = list(range(total_pages))
+        logger.info(f"Iniciando procesamiento OCR paralelo de {total_pages} páginas")
 
+    results = []
     with ProcessPoolExecutor() as pool:
-        return list(pool.map(_ocr_single, [(pdf_path, i) for i in indices]))
+        futures = list(pool.map(_ocr_single, [(pdf_path, i) for i in indices]))
+        for i, text in enumerate(futures, 1):
+            results.append(text)
+            progress = (i / total_pages) * 100
+            logger.info(f"Progreso OCR: {progress:.1f}% ({i}/{total_pages} páginas)")
+    
+    return results

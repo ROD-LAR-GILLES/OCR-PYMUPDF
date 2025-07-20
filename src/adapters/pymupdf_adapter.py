@@ -54,13 +54,17 @@ def extract_markdown(pdf_path: Path) -> str:
     • One section per page.
     • A table appendix, if tables were found.
     """
-    logger.info(f"Processing {pdf_path} …")
+    logger.info(f"Iniciando procesamiento del archivo: {pdf_path}")
     page_parts: List[str] = []
 
+    # Extracción de texto principal
+    logger.info("Fase 1/3: Extracción de texto de páginas")
     texts = parallel_ocr.run_parallel(pdf_path)
 
     for page_num, text in enumerate(texts, start=1):
         page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
+        
+    logger.info("Fase 1/3: Completada extracción de texto")
 
     md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
     tables_md = extract_tables_markdown(pdf_path)
@@ -69,14 +73,21 @@ def extract_markdown(pdf_path: Path) -> str:
 
     # ─── Optional document-level LLM refinement ──────────────────────────
     
+    # Fase final - Refinamiento LLM
+    logger.info("Fase 3/3: Iniciando refinamiento con LLM")
     try:
         if os.getenv("OPENAI_API_KEY") and state.LLM_MODE != "off":
             if state.LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
+                logger.info("Aplicando modelo fine-tuned para refinamiento...")
                 md_out = prompt_refine(md_out)
             elif state.LLM_MODE in {"prompt", "auto"}:
+                logger.info("Aplicando refinamiento LLM con modelo base...")
                 md_out = prompt_refine(md_out)
+            logger.info("Refinamiento LLM completado exitosamente")
     except Exception as exc:
-        logger.warning(f"LLM refinement skipped at document level → {exc}")
+        logger.warning(f"El refinamiento LLM fue omitido: {exc}")
+    
+    logger.success(f"Procesamiento completado para {pdf_path}")
     return md_out
 
 
@@ -102,31 +113,40 @@ def extract_tables_markdown(pdf_path: Path) -> str:
         Concatenated Markdown for all tables (empty if none found).
     """
     md_parts: List[str] = []
+    logger.info("Fase 2/3: Iniciando detección y extracción de tablas")
 
     try:
         with fitz.open(pdf_path) as doc:
+            total_pages = doc.page_count
+            tables_found = 0
+            
             for page_num, page in enumerate(doc, start=1):
+                logger.info(f"Analizando página {page_num}/{total_pages} para tablas...")
                 pix = page.get_pixmap(dpi=_RENDER_DPI, alpha=False)
                 img = Image.open(io.BytesIO(pix.tobytes("png")))
 
                 if not has_visual_table(img):
-                    logger.debug(f"[Page {page_num}] No table structure detected — skipping")
+                    logger.debug(f"[Page {page_num}] No se detectaron estructuras de tabla")
                     continue
 
-                logger.info(f"[Page {page_num}] Table detected visually")
+                logger.info(f"[Page {page_num}] Se detectó estructura de tabla")
+                tables_found += 1
 
                 if ocr_adapter.needs_ocr(page):
-                    logger.info(f"[Page {page_num}] Página escaneada — usando OCR para tablas")
+                    logger.info(f"[Page {page_num}] Página escaneada - aplicando OCR a tablas")
                     try:
                         from adapters.ocr_adapter import detect_table_regions, ocr_table_to_markdown
                         table_regions = detect_table_regions(img)
                         if table_regions:
+                            logger.info(f"[Page {page_num}] Se detectaron {len(table_regions)} regiones de tabla")
                             md_parts.append(f"## Tables (OCR fallback · page {page_num})\n")
                             for idx, region in enumerate(table_regions, start=1):
+                                logger.info(f"[Page {page_num}] Procesando tabla {idx}/{len(table_regions)}")
                                 table_img = img.crop(region)
                                 md = ocr_table_to_markdown(table_img)
                                 if md.strip():
                                     md_parts.append(f"### Table {idx}\n\n{md}\n")
+                                    logger.success(f"[Page {page_num}] Tabla {idx} extraída exitosamente")
                     except Exception as exc:
                         logger.warning(f"[Page {page_num}] OCR fallback error → {exc}")
                     continue

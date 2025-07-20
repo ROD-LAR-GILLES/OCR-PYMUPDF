@@ -3,6 +3,13 @@ FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
+# Instalar dependencias de sistema necesarias para la compilación
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install --prefix=/install -r requirements.txt
@@ -14,7 +21,10 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         tesseract-ocr \
         tesseract-ocr-spa \
+        tesseract-ocr-eng \
         tesseract-ocr-chi-tra \
+        build-essential \
+        python3-dev \
         libglib2.0-0 \
         libsm6 \
         libxext6 \
