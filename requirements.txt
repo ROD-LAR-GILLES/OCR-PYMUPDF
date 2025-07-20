@@ -11,6 +11,8 @@ numpy>=1.24.3
 camelot-py>=0.11.0      # Mantener por su robustez en extracción de tablas
 pdfplumber>=0.10.3      # Para análisis detallado de PDFs
 PyMuPDF>=1.23.0         # Última versión estable con mejoras de rendimiento
+pypdf>=3.16.0           # Versión actualizada sin warnings de ARC4
+cryptography>=42.0.0    # Versión futura que elimina ARC4 deprecado
 
 # ───── NLP y Detección de Errores OCR ─────
 nltk>=3.8.1             # Versión con parches de seguridad
