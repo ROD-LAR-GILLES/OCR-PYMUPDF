@@ -1,0 +1,69 @@
+site_name: OCR-PYMUPDF Documentation
+site_description: Documentation for OCR-PYMUPDF project
+site_author: ROD-LAR-GILLES
+
+repo_name: ROD-LAR-GILLES/OCR-PYMUPDF
+repo_url: https://github.com/ROD-LAR-GILLES/OCR-PYMUPDF
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
+
+nav:
+  - Home: index.md
+  - User Guide:
+    - Installation: user-guide/installation.md
+    - Configuration: user-guide/configuration.md
+    - Usage: user-guide/usage.md
+  - API Reference:
+    - Domain: api/domain.md
+    - Adapters: api/adapters.md
+    - Infrastructure: api/infrastructure.md
+  - Development:
+    - Contributing: development/contributing.md
+    - Architecture: development/architecture.md
+    - Testing: development/testing.md
+  - About:
+    - License: about/license.md
+    - Changelog: about/changelog.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
