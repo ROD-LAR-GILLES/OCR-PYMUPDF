@@ -10,7 +10,8 @@ class ConfigMenu:
     PROVIDERS = {
         "1": ("No LLM Processing", None),
         "2": ("OpenAI GPT", "openai"),
-        "3": ("Google Gemini", "gemini")
+        "3": ("Google Gemini", "gemini"),
+        "4": ("DeepSeek Local", "deepseek")
     }
     
     @classmethod
