@@ -1,1 +1,118 @@
-"""\nOptimizador de memoria para procesamiento de documentos grandes.\n\nImplementa estrategias para reducir el consumo de memoria durante\nel procesamiento de documentos PDF extensos, incluyendo:\n- Procesamiento por lotes de páginas\n- Liberación explícita de memoria\n- Optimización de imágenes\n"""\nimport gc\nimport fitz  # PyMuPDF\nimport logging\nfrom pathlib import Path\nfrom typing import List, Callable, TypeVar, Optional, Iterator\nfrom PIL import Image\n\nT = TypeVar('T')  # Tipo genérico para resultados\n\nclass MemoryOptimizer:\n    """Optimizador de memoria para procesamiento de documentos grandes."""\n    \n    def __init__(self, batch_size: int = 5, logger: Optional[logging.Logger] = None):\n        """\n        Inicializa el optimizador de memoria.\n        \n        Args:\n            batch_size: Número de páginas a procesar por lote\n            logger: Logger opcional para mensajes de diagnóstico\n        """\n        self.batch_size = batch_size\n        self.logger = logger or logging.getLogger(__name__)\n    \n    def process_document_in_batches(\n        self, \n        pdf_path: Path, \n        page_processor: Callable[[fitz.Page], T]\n    ) -> List[T]:\n        """\n        Procesa un documento PDF en lotes para optimizar memoria.\n        \n        Args:\n            pdf_path: Ruta al archivo PDF\n            page_processor: Función que procesa una página y devuelve un resultado\n            \n        Returns:\n            Lista de resultados por página\n        """\n        results = []\n        total_pages = 0\n        \n        # Obtener número total de páginas\n        with fitz.open(pdf_path) as doc:\n            total_pages = doc.page_count\n            self.logger.info(f"Documento con {total_pages} páginas, procesando en lotes de {self.batch_size}")\n        \n        # Procesar por lotes\n        for batch_start in range(0, total_pages, self.batch_size):\n            batch_end = min(batch_start + self.batch_size, total_pages)\n            batch_results = self._process_batch(pdf_path, batch_start, batch_end, page_processor)\n            results.extend(batch_results)\n            \n            # Forzar liberación de memoria\n            self._force_gc()\n            \n            progress = (batch_end / total_pages) * 100\n            self.logger.info(f"Progreso: {progress:.1f}% ({batch_end}/{total_pages} páginas)")\n        \n        return results\n    \n    def _process_batch(\n        self, \n        pdf_path: Path, \n        start_page: int, \n        end_page: int, \n        page_processor: Callable[[fitz.Page], T]\n    ) -> List[T]:\n        """\n        Procesa un lote de páginas.\n        \n        Args:\n            pdf_path: Ruta al archivo PDF\n            start_page: Índice de página inicial (inclusive)\n            end_page: Índice de página final (exclusive)\n            page_processor: Función que procesa una página\n            \n        Returns:\n            Lista de resultados para este lote\n        """\n        batch_results = []\n        \n        with fitz.open(pdf_path) as doc:\n            for page_idx in range(start_page, end_page):\n                page = doc.load_page(page_idx)\n                result = page_processor(page)\n                batch_results.append(result)\n                \n                # Liberar página explícitamente\n                page = None\n        \n        return batch_results\n    \n    def optimize_image(self, image: Image.Image, max_size: int = 1500) -> Image.Image:\n        """\n        Optimiza una imagen para reducir consumo de memoria.\n        \n        Args:\n            image: Imagen a optimizar\n            max_size: Tamaño máximo (ancho o alto) en píxeles\n            \n        Returns:\n            Imagen optimizada\n        """\n        width, height = image.size\n        \n        # Redimensionar si es demasiado grande\n        if width > max_size or height > max_size:\n            if width > height:\n                new_width = max_size\n                new_height = int(height * (max_size / width))\n            else:\n                new_height = max_size\n                new_width = int(width * (max_size / height))\n                \n            image = image.resize((new_width, new_height), Image.LANCZOS)\n            self.logger.debug(f"Imagen redimensionada de {width}x{height} a {new_width}x{new_height}")\n        \n        # Convertir a escala de grises si es una imagen de texto (opcional)\n        # if is_text_image(image):  # Implementar esta función si es necesario\n        #     image = image.convert('L')\n        \n        return image\n    \n    def _force_gc(self):\n        """Fuerza la recolección de basura para liberar memoria."""\n        gc.collect()\n
+"""Optimizador de memoria para procesamiento de documentos grandes.
+
+Implementa estrategias para reducir el consumo de memoria durante
+el procesamiento de documentos PDF extensos, incluyendo:
+- Procesamiento por lotes de páginas
+- Liberación explícita de memoria
+- Optimización de imágenes
+"""
+import gc
+import fitz  # PyMuPDF
+import logging
+from pathlib import Path
+from typing import List, Callable, TypeVar, Optional, Iterator
+from PIL import Image
+
+T = TypeVar('T')  # Tipo genérico para resultados
+
+
+class MemoryOptimizer:
+    """Optimizador de memoria para procesamiento de documentos grandes."""
+    
+    def __init__(self, batch_size: int = 5, logger: Optional[logging.Logger] = None):
+        """Inicializa el optimizador de memoria.
+        
+        Args:
+            batch_size: Número de páginas a procesar por lote
+            logger: Logger opcional para mensajes de diagnóstico
+        """
+        self.batch_size = batch_size
+        self.logger = logger or logging.getLogger(__name__)
+    
+    def process_document_in_batches(self, pdf_path: Path, page_processor: Callable[[fitz.Page], T]) -> List[T]:
+        """Procesa un documento PDF en lotes para optimizar memoria.
+        
+        Args:
+            pdf_path: Ruta al archivo PDF
+            page_processor: Función que procesa una página y devuelve un resultado
+            
+        Returns:
+            Lista de resultados por página
+        """
+        results = []
+        total_pages = 0
+        
+        # Obtener número total de páginas
+        with fitz.open(pdf_path) as doc:
+            total_pages = doc.page_count
+            self.logger.info(f"Documento con {total_pages} páginas, procesando en lotes de {self.batch_size}")
+        
+        # Procesar por lotes
+        for batch_start in range(0, total_pages, self.batch_size):
+            batch_end = min(batch_start + self.batch_size, total_pages)
+            batch_results = self._process_batch(pdf_path, batch_start, batch_end, page_processor)
+            results.extend(batch_results)
+            
+            # Forzar liberación de memoria
+            self._force_gc()
+            
+            progress = (batch_end / total_pages) * 100
+            self.logger.info(f"Progreso: {progress:.1f}% ({batch_end}/{total_pages} páginas)")
+        
+        return results
+    
+    def _process_batch(self, pdf_path: Path, start_page: int, end_page: int, 
+                      page_processor: Callable[[fitz.Page], T]) -> List[T]:
+        """Procesa un lote de páginas.
+        
+        Args:
+            pdf_path: Ruta al archivo PDF
+            start_page: Índice de página inicial (inclusive)
+            end_page: Índice de página final (exclusive)
+            page_processor: Función que procesa una página
+            
+        Returns:
+            Lista de resultados para este lote
+        """
+        batch_results = []
+        
+        with fitz.open(pdf_path) as doc:
+            for page_idx in range(start_page, end_page):
+                page = doc.load_page(page_idx)
+                result = page_processor(page)
+                batch_results.append(result)
+                
+                # Liberar página explícitamente
+                page = None
+        
+        return batch_results
+    
+    def optimize_image(self, image: Image.Image, max_size: int = 1500) -> Image.Image:
+        """Optimiza una imagen para reducir consumo de memoria.
+        
+        Args:
+            image: Imagen a optimizar
+            max_size: Tamaño máximo (ancho o alto) en píxeles
+            
+        Returns:
+            Imagen optimizada
+        """
+        width, height = image.size
+        
+        # Redimensionar si es demasiado grande
+        if width > max_size or height > max_size:
+            if width > height:
+                new_width = max_size
+                new_height = int(height * (max_size / width))
+            else:
+                new_height = max_size
+                new_width = int(width * (max_size / height))
+            
+            image = image.resize((new_width, new_height), Image.LANCZOS)
+            self.logger.debug(f"Imagen redimensionada de {width}x{height} a {new_width}x{new_height}")
+        
+        return image
+    
+    def _force_gc(self) -> None:
+        """Fuerza la recolección de basura para liberar memoria."""
+        gc.collect()
