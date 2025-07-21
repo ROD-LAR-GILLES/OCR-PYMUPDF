@@ -1,1 +1,118 @@
-"""\nSistema de caché para resultados OCR y LLM.\n\nImplementa un sistema de caché persistente y en memoria para\nresultados de OCR y refinamiento LLM, mejorando el rendimiento\ny reduciendo llamadas a APIs externas.\n"""\nimport hashlib\nimport json\nimport os\nfrom functools import lru_cache\nfrom pathlib import Path\nfrom typing import Dict, Optional, Any\nfrom PIL import Image\nimport numpy as np\n\nclass OCRCache:\n    def __init__(self, cache_dir: Optional[Path] = None):\n        """\n        Inicializa el sistema de caché OCR.\n        \n        Args:\n            cache_dir: Directorio para almacenar caché persistente.\n                      Si es None, usa 'data/cache/ocr'.\n        """\n        self.cache_dir = cache_dir or Path('data/cache/ocr')\n        self.cache_dir.mkdir(parents=True, exist_ok=True)\n        self.memory_cache: Dict[str, str] = {}\n    \n    @lru_cache(maxsize=100)\n    def get_image_hash(self, image: Image.Image) -> str:\n        """Genera un hash único para una imagen."""\n        img_array = np.array(image)\n        return hashlib.md5(img_array.tobytes()).hexdigest()\n    \n    def get(self, key: str) -> Optional[str]:\n        """\n        Obtiene un resultado cacheado por su clave.\n        \n        Args:\n            key: Clave única (normalmente hash de imagen)\n            \n        Returns:\n            Contenido cacheado o None si no existe\n        """\n        # Primero buscar en memoria\n        if key in self.memory_cache:\n            return self.memory_cache[key]\n            \n        # Luego buscar en disco\n        cache_file = self.cache_dir / f"{key}.json"\n        if cache_file.exists():\n            try:\n                with open(cache_file, 'r', encoding='utf-8') as f:\n                    data = json.load(f)\n                    self.memory_cache[key] = data['content']  # Actualizar caché en memoria\n                    return data['content']\n            except (json.JSONDecodeError, KeyError, IOError):\n                return None\n                \n        return None\n    \n    def set(self, key: str, value: str) -> None:\n        """\n        Almacena un resultado en la caché.\n        \n        Args:\n            key: Clave única (normalmente hash de imagen)\n            value: Contenido a almacenar\n        """\n        # Guardar en memoria\n        self.memory_cache[key] = value\n        \n        # Guardar en disco\n        cache_file = self.cache_dir / f"{key}.json"\n        data = {\n            'content': value,\n            'timestamp': os.path.getmtime(cache_file) if cache_file.exists() else None\n        }\n        \n        try:\n            with open(cache_file, 'w', encoding='utf-8') as f:\n                json.dump(data, f, ensure_ascii=False)\n        except IOError:\n            pass  # Fallar silenciosamente si no se puede escribir\n    \n    def invalidate(self, key: str) -> None:\n        """\n        Invalida una entrada específica de la caché.\n        \n        Args:\n            key: Clave a invalidar\n        """\n        # Eliminar de memoria\n        if key in self.memory_cache:\n            del self.memory_cache[key]\n            \n        # Eliminar de disco\n        cache_file = self.cache_dir / f"{key}.json"\n        if cache_file.exists():\n            try:\n                cache_file.unlink()\n            except IOError:\n                pass  # Fallar silenciosamente\n    \n    def clear(self) -> None:\n        """Limpia toda la caché (memoria y disco)."""\n        # Limpiar memoria\n        self.memory_cache.clear()\n        self.get_image_hash.cache_clear()\n        \n        # Limpiar disco\n        try:\n            for cache_file in self.cache_dir.glob("*.json"):\n                cache_file.unlink()\n        except (IOError, OSError):\n            pass  # Fallar silenciosamente
+"""
+Sistema de caché para resultados OCR y LLM.
+
+Implementa un sistema de caché persistente y en memoria para
+resultados de OCR y refinamiento LLM, mejorando el rendimiento
+y reduciendo llamadas a APIs externas.
+"""
+import hashlib
+import json
+import os
+from functools import lru_cache
+from pathlib import Path
+from typing import Dict, Optional, Any
+from PIL import Image
+import numpy as np
+
+
+class OCRCache:
+    def __init__(self, cache_dir: Optional[Path] = None):
+        """
+        Inicializa el sistema de caché OCR.
+        
+        Args:
+            cache_dir: Directorio para almacenar caché persistente.
+                      Si es None, usa 'data/cache/ocr'.
+        """
+        self.cache_dir = cache_dir or Path('data/cache/ocr')
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.memory_cache: Dict[str, str] = {}
+    
+    @lru_cache(maxsize=100)
+    def get_image_hash(self, image: Image.Image) -> str:
+        """Genera un hash único para una imagen."""
+        img_array = np.array(image)
+        return hashlib.md5(img_array.tobytes()).hexdigest()
+    
+    def get(self, key: str) -> Optional[str]:
+        """
+        Obtiene un resultado cacheado por su clave.
+        
+        Args:
+            key: Clave única (normalmente hash de imagen)
+            
+        Returns:
+            Contenido cacheado o None si no existe
+        """
+        # Primero buscar en memoria
+        if key in self.memory_cache:
+            return self.memory_cache[key]
+            
+        # Luego buscar en disco
+        cache_file = self.cache_dir / f"{key}.json"
+        if cache_file.exists():
+            try:
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    self.memory_cache[key] = data['content']  # Actualizar caché en memoria
+                    return data['content']
+            except (json.JSONDecodeError, KeyError, IOError):
+                return None
+                
+        return None
+    
+    def set(self, key: str, value: str) -> None:
+        """
+        Almacena un resultado en la caché.
+        
+        Args:
+            key: Clave única (normalmente hash de imagen)
+            value: Contenido a almacenar
+        """
+        # Guardar en memoria
+        self.memory_cache[key] = value
+        
+        # Guardar en disco
+        cache_file = self.cache_dir / f"{key}.json"
+        data = {
+            'content': value,
+            'timestamp': os.path.getmtime(cache_file) if cache_file.exists() else None
+        }
+        
+        try:
+            with open(cache_file, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False)
+        except IOError:
+            pass  # Fallar silenciosamente si no se puede escribir
+    
+    def invalidate(self, key: str) -> None:
+        """
+        Invalida una entrada específica de la caché.
+        
+        Args:
+            key: Clave a invalidar
+        """
+        # Eliminar de memoria
+        if key in self.memory_cache:
+            del self.memory_cache[key]
+            
+        # Eliminar de disco
+        cache_file = self.cache_dir / f"{key}.json"
+        if cache_file.exists():
+            try:
+                cache_file.unlink()
+            except IOError:
+                pass  # Fallar silenciosamente
+    
+    def clear(self) -> None:
+        """Limpia toda la caché (memoria y disco)."""
+        # Limpiar memoria
+        self.memory_cache.clear()
+        self.get_image_hash.cache_clear()
+        
+        # Limpiar disco
+        try:
+            for cache_file in self.cache_dir.glob("*.json"):
+                cache_file.unlink()
+        except (IOError, OSError):
+            pass  # Fallar silenciosamente
