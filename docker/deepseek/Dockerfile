@@ -8,11 +8,13 @@ RUN apt-get update && apt-get install -y \
 
 # Install Python dependencies
 RUN pip install --no-cache-dir \
+    "numpy<2.0.0" \
     fastapi==0.104.1 \
     uvicorn==0.24.0 \
     transformers==4.35.2 \
     accelerate==0.24.1 \
     torch==2.1.0 \
+    bitsandbytes \
     sentencepiece
 
 # Create app directory
