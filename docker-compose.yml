@@ -14,46 +14,7 @@ services:
       - PYTHONPATH=/app/src
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
-    depends_on:
-      deepseek:
-        condition: service_healthy
-    networks:
-      - ocr_network
-
-  # Contenedor para descargar y almacenar el modelo
-  deepseek-model:
-    build:
-      context: .
-      dockerfile: docker/deepseek/model.Dockerfile
-    volumes:
-      - deepseek_models:/models
-
-  # Contenedor para el servidor de inferencia
-  deepseek:
-    build:
-      context: .
-      dockerfile: docker/deepseek/Dockerfile
-    container_name: deepseek-llm
-    volumes:
-      - deepseek_models:/app/models:ro
-    environment:
-      - MODEL_ID=deepseek-ai/deepseek-coder-6.7b-instruct
-      - USE_INT8=false
-      - USE_MMAP=true
-      - DEVICE=mps
-      - USE_FLASH_ATTENTION=true
-      - MAX_BATCH_SIZE=4
-      - NUM_THREADS=8
-    ports:
-      - "8000:8000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    networks:
-      - ocr_network
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
 
 networks:
   ocr_network:
