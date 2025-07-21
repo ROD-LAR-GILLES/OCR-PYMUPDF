@@ -1,16 +1,20 @@
+version: '3.8'
+
 services:
   ocr-pymupdf:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     container_name: ocr-pymupdf
     stdin_open: true
     tty: true
-    command: tail -f /dev/null
+    ports:
+      - "8000:8000"  # Para la documentación MkDocs
     volumes:
+      - .:/app
       - ./pdfs:/app/pdfs
       - ./resultado:/app/resultado
-      - ./src:/app/src
       - ./data:/app/data
-      - ./tests:/app/tests
     environment:
       - PYTHONPATH=/app/src
       # OpenAI
@@ -26,3 +30,7 @@ services:
       - DEEPSEEK_MODEL_ID=${DEEPSEEK_MODEL_ID:-deepseek-chat}
       - DEEPSEEK_MAX_RETRIES=${DEEPSEEK_MAX_RETRIES:-5}
       - DEEPSEEK_TEMPERATURE=${DEEPSEEK_TEMPERATURE:-0.3}
+      # Development
+      - PYTHONBREAKPOINT=ipdb.set_trace
+      - PYTEST_ADDOPTS=--color=yes
+    command: tail -f /dev/null

@@ -6,6 +6,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import List, Tuple
 
+from domain.dtos.document_dtos import DocumentMetadataDTO
+
 class DocumentPort(ABC):
     """Interfaz abstracta para procesamiento de documentos PDF."""
     
@@ -45,5 +47,18 @@ class DocumentPort(ABC):
             
         Returns:
             List[Tuple[int, str]]: Lista de (número_página, tabla_markdown)
+        """
+        pass
+    
+    @abstractmethod
+    def extract_metadata(self, pdf_path: Path) -> DocumentMetadataDTO:
+        """
+        Extrae los metadatos de un documento PDF.
+        
+        Args:
+            pdf_path: Ruta al archivo PDF
+            
+        Returns:
+            DocumentMetadataDTO: Metadatos del documento
         """
         pass

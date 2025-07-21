@@ -8,14 +8,16 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
     python3-dev \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements.txt y asegurar que tiene las dependencias correctas
-COPY requirements.txt .
+# Copiar archivos de requirements
+COPY requirements/ requirements/
 
 # Instalar dependencias de Python en el build stage
 RUN pip install --upgrade pip && \
-    pip install --prefix=/install -r requirements.txt
+    pip install --prefix=/install -r requirements/requirements.txt && \
+    pip install --prefix=/install -r requirements/requirements-dev.txt
 
 # ------------------ runtime stage ------------------
 FROM python:3.11-slim
@@ -28,6 +30,7 @@ RUN apt-get update && \
         tesseract-ocr-chi-tra \
         build-essential \
         python3-dev \
+        git \
         libglib2.0-0 \
         libsm6 \
         libxext6 \
@@ -42,27 +45,31 @@ ENV PYTHONPATH=/app/src
 
 WORKDIR /app
 
-# Crear estructura de directorios necesaria y configurar volúmenes
+# Crear estructura de directorios necesaria
 RUN mkdir -p /app/data/models/fasttext \
             /app/data/corrections \
             /app/pdfs \
-            /app/resultado
+            /app/resultado \
+            /app/docs
 
 COPY --from=builder /install /usr/local
 
-# Copiar el código fuente y otros archivos necesarios
-COPY src/ src/
-COPY data/ data/
-COPY pdfs/ pdfs/
-COPY resultado/ resultado/
-COPY .env .
+# Copiar archivos de configuración y código
+COPY . .
+
+# Configurar pre-commit hooks
+RUN git init && \
+    pre-commit install
 
 # Asegurar permisos de escritura y ownership
-RUN chown -R 1000:1000 /app/data && \
-    chmod -R 777 /app/data
+RUN chown -R 1000:1000 /app && \
+    chmod -R 777 /app
 
 # Configurar volúmenes persistentes
-VOLUME ["/app/data/models/fasttext", "/app/pdfs", "/app/resultado"]
+VOLUME ["/app/data/models/fasttext", "/app/pdfs", "/app/resultado", "/app/docs"]
 
-# Comando por defecto
-CMD ["python", "-m", "src.main"]
+# Exponer puerto para documentación
+EXPOSE 8000
+
+# Comando por defecto para desarrollo
+CMD ["tail", "-f", "/dev/null"]

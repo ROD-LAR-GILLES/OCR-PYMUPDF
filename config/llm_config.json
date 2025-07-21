@@ -1,0 +1,10 @@
+{
+  "provider": "gemini",
+  "settings": {},
+  "providers": {
+    "deepseek": {
+      "name": "DeepSeek API",
+      "api_key": null
+    }
+  }
+}

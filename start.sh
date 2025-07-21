@@ -1,49 +1,34 @@
 #!/bin/bash
 
-# Print banner
-echo "=== OCR-PYMUPDF Container Setup ==="
-echo "This script will set up and run all services in containers"
-echo "No local installation required"
-echo "----------------------------------------"
+# Colores para mensajes
+GREEN="\033[0;32m"
+YELLOW="\033[1;33m"
+NC="\033[0m" # No Color
 
-# Check if Docker is running
-if ! docker info &> /dev/null; then
-    echo "[ERROR] Docker is not running. Please start Docker Desktop first."
+echo -e "${GREEN}Iniciando entorno de desarrollo OCR-PYMUPDF...${NC}\n"
+
+# Verificar si Docker está corriendo
+if ! docker info > /dev/null 2>&1; then
+    echo -e "${YELLOW}Error: Docker no está corriendo. Por favor, inicia Docker primero.${NC}"
     exit 1
+
 fi
 
-# Start services with Docker Compose
-echo "
-[1/4] Building container images..."
-docker-compose build
+# Construir y levantar contenedores
+echo -e "${GREEN}Construyendo y levantando contenedores...${NC}"
+docker-compose up --build -d
 
-echo "
-[2/4] Starting containers..."
-docker-compose up -d
-
-# Wait for DeepSeek service to be ready
-echo "
-[3/4] Waiting for DeepSeek service to initialize..."
-echo "This may take a few minutes on first run while downloading the model..."
-until curl -s http://localhost:8000/docs &> /dev/null; do
-    echo "Waiting for DeepSeek API..."
-    sleep 5
-done
-
-echo "
-[4/4] Setup complete!"
-echo "
-System Information:
-- All services are running in containers
-- No local installation needed
-- Model and dependencies are contained within Docker
-- Your files in ./pdfs will be accessible to the system
-
-Usage:
-1. Place PDF files in the './pdfs' directory
-2. Access the application through: docker-compose exec ocr-pymupdf python -m src.main
-3. To stop all services run: docker-compose down
-
-Containers running:
-"
-docker-compose ps
+# Verificar si el contenedor se levantó correctamente
+if [ $? -eq 0 ]; then
+    echo -e "\n${GREEN}Contenedor iniciado correctamente.${NC}"
+    echo -e "\nComandos disponibles:"
+    echo -e "${YELLOW}1. Ejecutar tests:${NC} docker-compose exec ocr-pymupdf pytest"
+    echo -e "${YELLOW}2. Iniciar documentación:${NC} docker-compose exec ocr-pymupdf mkdocs serve -a 0.0.0.0:8000"
+    echo -e "${YELLOW}3. Actualizar dependencias:${NC} docker-compose exec ocr-pymupdf ./scripts/update_dependencies.sh"
+    echo -e "${YELLOW}4. Ejecutar linters:${NC} docker-compose exec ocr-pymupdf pre-commit run --all-files"
+    echo -e "${YELLOW}5. Entrar al contenedor:${NC} docker-compose exec ocr-pymupdf bash"
+    echo -e "\n${GREEN}Para detener el contenedor:${NC} docker-compose down"
+else
+    echo -e "${YELLOW}Error: No se pudo iniciar el contenedor.${NC}"
+    exit 1
+fi

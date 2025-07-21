@@ -1,7 +1,7 @@
 """DTOs for document-related data transfer between layers."""
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional, Tuple
 
 @dataclass
 class DocumentInputDTO:
@@ -30,9 +30,33 @@ class DocumentOutputDTO:
 class DocumentMetadataDTO:
     """DTO for document metadata."""
     
-    title: Optional[str]
-    author: Optional[str]
-    creation_date: Optional[datetime]
-    modification_date: Optional[datetime]
-    producer: Optional[str]
-    page_count: int
+    title: Optional[str] = None
+    author: Optional[str] = None
+    creation_date: Optional[datetime] = None
+    modification_date: Optional[datetime] = None
+    producer: Optional[str] = None
+    subject: Optional[str] = None
+    creator: Optional[str] = None
+    page_count: int = 0
+
+
+@dataclass
+class DocumentDiffDTO:
+    """DTO para diferencias entre documentos a nivel de página."""
+    page_number: int
+    additions: int = 0
+    deletions: int = 0
+    changes: int = 0
+    diff_text: str = ""
+
+
+@dataclass
+class DocumentComparisonDTO:
+    """DTO para resultados de comparación entre documentos."""
+    original_path: str
+    new_path: str
+    original_pages: int
+    new_pages: int
+    page_differences: List[DocumentDiffDTO] = field(default_factory=list)
+    metadata_changes: Dict[str, Tuple[str, str]] = field(default_factory=dict)
+    report_path: Optional[str] = None

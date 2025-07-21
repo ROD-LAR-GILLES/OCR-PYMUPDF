@@ -78,18 +78,168 @@ Fuentes:
 	•	Estudios comparativos y referencias de rendimiento/precisión: modelo de FastText vs langdetect, eficiencia de SymSpell vs algoritmo tradicional, benchmarks de Polars vs Pandas.
 	•	Recomendaciones de la comunidad (Kaggle, Stack Overflow) sobre librerías alternativas en casos de uso específicos.
 
-Recomendaciones para mejorar:
 
-Crear interfaces explícitas en el dominio para cada puerto v
-Separar los casos de uso en archivos individuales v
-Añadir entidades y value objects en el dominio v
-Implementar DTOs para el paso de datos entre capas v
-Estructurar los tests según las capas de la arquitectura v
-La estructura actual es buena, pero se puede reforzar aún más los principios de Clean Architecture mediante:
 
-Mayor aislamiento del dominio
-Interfaces más explícitas
-Mejor organización de casos de uso
-DTOs para el paso de datos
-Tests estructurados por capa
-¿Te gustaría que implementemos alguna de estas mejoras en particular?
+
+          
+Para identificar áreas de mejora en el proyecto, necesito revisar la estructura actual, el CHANGELOG y otros archivos clave que puedan indicar problemas o áreas de desarrollo pendientes.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/CHANGELOG.md
+          
+Ahora revisaré el README para entender mejor el propósito del proyecto y posibles áreas de mejora mencionadas.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/README.md
+          
+Revisaré el archivo CONTRIBUTING.md para entender las directrices de contribución y posibles áreas de mejora identificadas por los mantenedores.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/CONTRIBUTING.md
+          
+Buscaré issues o TODOs en el código para identificar áreas de mejora conocidas.
+        
+            
+toolName: search_codebase
+            
+status: success
+          
+query: TODO FIXME issue improvement needed
+          
+Revisaré el archivo de issues en GitHub para ver si hay problemas o mejoras pendientes documentadas.
+        
+            
+toolName: search_codebase
+            
+status: success
+          
+query: issue improvement enhancement feature request
+          
+Revisaré el archivo de configuración de OCR para entender mejor las capacidades actuales y posibles mejoras.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/config/ocr_settings.py
+          
+Revisaré el archivo principal para entender el flujo de trabajo actual y posibles áreas de mejora.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/main.py
+          
+Revisaré el archivo de configuración de LLM para entender mejor la integración actual con modelos de lenguaje.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/config/llm_config.py
+          
+Revisaré el archivo de configuración de API para entender mejor la integración con servicios externos.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/config/api_settings.py
+          
+Revisaré el archivo de configuración de Docker para entender mejor el entorno de ejecución actual.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/Dockerfile
+          
+Revisaré el archivo docker-compose.yml para entender mejor la configuración del entorno de desarrollo.
+        
+            
+toolName: view_files
+            
+status: success
+          
+            
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/docker-compose.yml
+          
+# Áreas de mejora para el proyecto OCR-PYMUPDF
+
+Basado en el análisis del código y la estructura del proyecto, estas son las principales áreas que se podrían mejorar:
+
+## 1. Mejoras en la integración de LLMs
+
+- **Ampliar soporte para modelos locales**: Actualmente hay soporte para DeepSeek local, pero se podría expandir a otros modelos locales como Llama, Mistral o Falcon para reducir dependencia de APIs externas.
+- **Implementar streaming de respuestas**: Permitir respuestas en tiempo real desde los LLMs para documentos extensos.
+- **Mejorar prompts específicos**: Desarrollar prompts más especializados para diferentes tipos de documentos legales.
+
+## 2. Optimización del procesamiento de imágenes y OCR
+
+- **Implementar preprocesamiento avanzado**: Mejorar la detección de bordes, eliminación de ruido y corrección de orientación.
+- **Soporte para más idiomas**: Ampliar la configuración de Tesseract para soportar más idiomas además de español, inglés y chino.
+- **Detección automática de idioma**: Implementar detección automática del idioma del documento para seleccionar el modelo OCR adecuado.
+
+## 3. Mejoras en la extracción de tablas
+
+- **Mejorar la precisión de detección**: Refinar los algoritmos para detectar tablas complejas o con formatos no estándar.
+- **Exportación a más formatos**: Añadir soporte para exportar tablas a CSV, Excel o JSON además del formato Markdown.
+- **Preservación de formato**: Mejorar la preservación del formato original de las tablas.
+
+## 4. Interfaz de usuario
+
+- **Desarrollar una interfaz web**: Crear una interfaz web simple para subir documentos y visualizar resultados.
+- **Visualización de progreso**: Implementar indicadores de progreso durante el procesamiento de documentos extensos.
+- **Previsualización de resultados**: Añadir capacidad de previsualizar y editar el resultado antes de guardarlo.
+
+## 5. Infraestructura y rendimiento
+
+- **Optimización de memoria**: Mejorar el manejo de memoria para documentos grandes.
+- **Procesamiento por lotes**: Implementar procesamiento por lotes para múltiples documentos.
+- **Mejoras en el caché**: Refinar el sistema de caché para resultados de OCR y LLM.
+
+## 6. Documentación y pruebas
+
+- **Ampliar documentación de API**: Mejorar la documentación de la API para facilitar la integración.
+- **Aumentar cobertura de pruebas**: Incrementar la cobertura de pruebas unitarias y de integración.
+- **Ejemplos de uso**: Añadir más ejemplos de uso para diferentes escenarios.
+
+## 7. Seguridad y gestión de credenciales
+
+- **Mejorar el manejo de claves API**: Implementar un sistema más seguro para gestionar las claves API.
+- **Validación de entrada**: Reforzar la validación de archivos de entrada para prevenir vulnerabilidades.
+
+## 8. Nuevas características
+
+- **Extracción de entidades**: Implementar reconocimiento de entidades nombradas (NER) para identificar personas, organizaciones, fechas, etc.
+- **Análisis de sentimiento**: Añadir capacidad de análisis de sentimiento para documentos.
+- **Generación de resúmenes**: Implementar generación automática de resúmenes de documentos.
+- **Comparación de documentos**: Añadir funcionalidad para comparar diferentes versiones de documentos.
+
+Estas mejoras podrían implementarse gradualmente siguiendo las convenciones de commit y la estructura de arquitectura hexagonal ya establecidas en el proyecto.

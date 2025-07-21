@@ -3,8 +3,9 @@
 Features:
 1. List PDFs
 2. Convert to Markdown
-3. Configuration
-4. Exit
+3. Compare Documents
+4. Configuration
+5. Exit
 """
 
 import sys
@@ -14,6 +15,7 @@ from pathlib import Path
 from time import sleep
 from loguru import logger
 from domain.use_cases import PDFToMarkdownUseCase
+from domain.use_cases.document_comparison import DocumentComparisonUseCase
 from interfaces.config_menu import ConfigMenu
 from config.llm_config import LLMConfig
 from adapters.pymupdf_adapter import PyMuPDFAdapter
@@ -85,7 +87,7 @@ def list_pdfs() -> list[str]:
     """List available PDFs in the pdfs directory."""
     return [p.name for p in sorted(PDF_DIR.glob("*.pdf"))]
 
-def select_pdf() -> str | None:
+def select_pdf(prompt: str = "\nSelect number: ") -> str | None:
     """Show PDF selection menu."""
     files = list_pdfs()
     if not files:
@@ -97,7 +99,7 @@ def select_pdf() -> str | None:
         print(f"{i}. {pdf}")
     
     try:
-        sel = input("\nSelect number: ").strip()
+        sel = input(prompt).strip()
         if sel.isdigit() and 1 <= int(sel) <= len(files):
             return files[int(sel) - 1]
         print("[ERROR] Invalid selection")
@@ -205,6 +207,53 @@ def _get_mode_display() -> str:
     provider = LLMConfig.get_current_provider()
     return f"[{provider.upper() if provider else 'Modo Clásico'}]"
 
+def _compare_pdfs() -> None:
+    """Compare two PDF documents and generate a report."""
+    logger.info("Iniciando comparación de documentos")
+    try:
+        print("\nSeleccione el documento PDF original:")
+        original_pdf = select_pdf("\nSeleccione documento original: ")
+        if not original_pdf:
+            return
+            
+        print("\nSeleccione el documento PDF nuevo:")
+        new_pdf = select_pdf("\nSeleccione documento nuevo: ")
+        if not new_pdf:
+            return
+            
+        # Inicializar puertos necesarios
+        document_port = PyMuPDFAdapter()
+        storage_port = FileStorage()
+        
+        # Crear y ejecutar caso de uso
+        use_case = DocumentComparisonUseCase(
+            document_port=document_port,
+            storage_port=storage_port
+        )
+        
+        # Generar nombre para el informe
+        original_name = Path(original_pdf).stem
+        new_name = Path(new_pdf).stem
+        output_path = Path(f"output/{original_name}_vs_{new_name}_comparison.md")
+        
+        # Ejecutar comparación
+        print("\nComparando documentos...")
+        result = use_case.execute(
+            original_pdf_path=PDF_DIR / original_pdf,
+            new_pdf_path=PDF_DIR / new_pdf,
+            output_path=output_path
+        )
+        
+        # Mostrar resultados
+        print(f"\n[OK] Informe de comparación generado: {output_path}")
+        print(f"Páginas con diferencias: {len(result.page_differences)}")
+        if result.metadata_changes:
+            print(f"Cambios en metadatos: {len(result.metadata_changes)}")
+            
+    except Exception as e:
+        print(f"[Error] Error al comparar documentos: {e}")
+        logger.exception("Error en la comparación de documentos")
+
 def mostrar_menu() -> None:
     """Display and handle the main menu."""
     while True:
@@ -213,8 +262,9 @@ def mostrar_menu() -> None:
             print("\nOCR-PYMUPDF System")
             print(f"1. Select Processing Mode {_get_mode_display()}")
             print("2. Convert PDF to Markdown")
-            print("3. Exit")
-            choice = input("\nSelect option (1-3): ").strip()
+            print("3. Compare Documents")
+            print("4. Exit")
+            choice = input("\nSelect option (1-4): ").strip()
 
             match choice:
                 case "1":
@@ -223,6 +273,8 @@ def mostrar_menu() -> None:
                     if pdf := select_pdf():
                         _convert_pdf(PDF_DIR / pdf)
                 case "3":
+                    _compare_pdfs()
+                case "4":
                     print("\nGoodbye!")
                     sys.exit(0)
                 case _:

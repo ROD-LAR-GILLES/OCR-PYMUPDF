@@ -18,7 +18,9 @@ from __future__ import annotations
 import io
 from pathlib import Path
 from typing import List, Tuple
+from datetime import datetime
 from domain.ports.document_port import DocumentPort
+from domain.dtos.document_dtos import DocumentMetadataDTO
 import adapters.parallel_ocr as parallel_ocr
 import os
 import config.state as state
@@ -157,6 +159,73 @@ class PyMuPDFAdapter(DocumentPort):
         except Exception as e:
             logger.error(f"Error extracting markdown: {e}")
             raise
+            
+    def extract_metadata(self, pdf_path: Path) -> DocumentMetadataDTO:
+        """
+        Extrae los metadatos de un documento PDF.
+        
+        Args:
+            pdf_path: Ruta al archivo PDF
+            
+        Returns:
+            DocumentMetadataDTO: Metadatos del documento
+        """
+        try:
+            with fitz.open(pdf_path) as doc:
+                metadata = doc.metadata
+                
+                # Convertir fechas si están disponibles
+                creation_date = None
+                modification_date = None
+                
+                if metadata.get("creationDate"):
+                    try:
+                        # PyMuPDF devuelve fechas en formato "D:YYYYMMDDHHmmSS"
+                        date_str = metadata.get("creationDate", "")
+                        if date_str.startswith("D:"):
+                            date_str = date_str[2:]
+                            # Extraer componentes de fecha y hora
+                            year = int(date_str[0:4])
+                            month = int(date_str[4:6])
+                            day = int(date_str[6:8])
+                            hour = int(date_str[8:10]) if len(date_str) > 8 else 0
+                            minute = int(date_str[10:12]) if len(date_str) > 10 else 0
+                            second = int(date_str[12:14]) if len(date_str) > 12 else 0
+                            creation_date = datetime(year, month, day, hour, minute, second)
+                    except (ValueError, IndexError):
+                        logger.warning(f"No se pudo parsear la fecha de creación: {metadata.get('creationDate')}")
+                
+                if metadata.get("modDate"):
+                    try:
+                        date_str = metadata.get("modDate", "")
+                        if date_str.startswith("D:"):
+                            date_str = date_str[2:]
+                            # Extraer componentes de fecha y hora
+                            year = int(date_str[0:4])
+                            month = int(date_str[4:6])
+                            day = int(date_str[6:8])
+                            hour = int(date_str[8:10]) if len(date_str) > 8 else 0
+                            minute = int(date_str[10:12]) if len(date_str) > 10 else 0
+                            second = int(date_str[12:14]) if len(date_str) > 12 else 0
+                            modification_date = datetime(year, month, day, hour, minute, second)
+                    except (ValueError, IndexError):
+                        logger.warning(f"No se pudo parsear la fecha de modificación: {metadata.get('modDate')}")
+                
+                return DocumentMetadataDTO(
+                    title=metadata.get("title"),
+                    author=metadata.get("author"),
+                    subject=metadata.get("subject"),
+                    creator=metadata.get("creator"),
+                    producer=metadata.get("producer"),
+                    creation_date=creation_date,
+                    modification_date=modification_date,
+                    page_count=doc.page_count
+                )
+                
+        except Exception as e:
+            logger.error(f"Error al extraer metadatos del PDF: {e}")
+            # Devolver un DTO con valores predeterminados en caso de error
+            return DocumentMetadataDTO(page_count=0)
 
 
 
