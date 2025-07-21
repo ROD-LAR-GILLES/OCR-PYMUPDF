@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir \
     transformers==4.35.2 \
     accelerate==0.24.1 \
     torch==2.1.0 \
-    bitsandbytes \
+    -i https://test.pypi.org/simple/ bitsandbytes \
     sentencepiece
 
 # Create app directory
