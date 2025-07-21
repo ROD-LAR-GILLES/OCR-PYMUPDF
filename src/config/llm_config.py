@@ -11,7 +11,13 @@ class LLMConfig:
     
     DEFAULT_CONFIG = {
         "provider": None,  # None means no LLM processing
-        "settings": {}
+        "settings": {},
+        "providers": {
+            "deepseek": {
+                "name": "DeepSeek API",
+                "api_key": None
+            }
+        }
     }
     
     @classmethod

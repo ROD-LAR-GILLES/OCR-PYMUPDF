@@ -11,7 +11,7 @@ class ConfigMenu:
         "1": ("No LLM Processing", None),
         "2": ("OpenAI GPT", "openai"),
         "3": ("Google Gemini", "gemini"),
-        "4": ("DeepSeek Local", "deepseek")
+        "4": ("DeepSeek API", "deepseek")
     }
     
     @classmethod

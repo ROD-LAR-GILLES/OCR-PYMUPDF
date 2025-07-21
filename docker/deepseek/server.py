@@ -9,8 +9,8 @@ app = FastAPI(title="DeepSeek Local API")
 
 # Load model and tokenizer
 MODEL_ID = os.getenv("MODEL_ID", "deepseek-ai/deepseek-coder-1.3b-instruct")  # Smaller model
-DEVICE = "cpu"  # Force CPU usage
-USE_INT8 = os.getenv("USE_INT8", "true").lower() == "true"  # Enable int8 quantization for memory efficiency
+USE_INT8 = os.getenv("USE_INT8", "false").lower() == "true"  # Enable int8 quantization for memory efficiency
+USE_MMAP = os.getenv("USE_MMAP", "true").lower() == "true"  # Enable memory mapping
 
 model = None
 tokenizer = None
@@ -20,13 +20,20 @@ async def load_model():
     """Load model and tokenizer on startup."""
     global model, tokenizer
     try:
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
-        model = AutoModelForCausalLM.from_pretrained(
-            MODEL_ID,
-            device_map=None,  # Disable device map for CPU
-            torch_dtype=torch.float32,
-            load_in_8bit=USE_INT8  # Use 8-bit quantization if enabled
-        ).to(DEVICE)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, use_fast=True)
+        model_kwargs = {
+            "device_map": "auto",  # Let accelerate decide
+            "torch_dtype": torch.float32,
+            "use_mmap": USE_MMAP  # Use memory mapping if enabled
+        }
+        
+        if USE_INT8:
+            model_kwargs.update({
+                "torch_dtype": torch.int8,
+                "load_in_8bit": True
+            })
+            
+        model = AutoModelForCausalLM.from_pretrained(MODEL_ID, **model_kwargs)
     except Exception as e:
         print(f"Error loading model: {e}")
         raise
@@ -63,7 +70,7 @@ async def chat_completion(request: Dict[str, Any]) -> Dict[str, Any]:
         prompt += "Assistant: "
         
         # Generate response
-        inputs = tokenizer(prompt, return_tensors="pt").to(DEVICE)
+        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
         outputs = model.generate(
             **inputs,
             max_new_tokens=max_tokens,

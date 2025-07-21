@@ -48,6 +48,8 @@ RUN mkdir -p /app/data/models/fasttext \
 COPY --from=builder /install /usr/local
 
 COPY src/ src/
+
+CMD ["python3", "-m", "interfaces.cli_menu"]
 COPY data/ data/
 COPY pdfs/ pdfs/
 COPY resultado/ resultado/
