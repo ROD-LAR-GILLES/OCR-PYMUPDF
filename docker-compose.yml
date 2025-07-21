@@ -8,6 +8,39 @@ services:
       - ./src:/app/src
       - ./data:/app/data
       - ./tests:/app/tests
+    environment:
+      - PYTHONPATH=/app/src
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - deepseek
+    networks:
+      - ocr_network
+
+  deepseek:
+    build:
+      context: .
+      dockerfile: docker/deepseek/Dockerfile
+    container_name: deepseek-llm
+    volumes:
+      - ./models:/app/models
+    environment:
+      - MODEL_ID=deepseek-ai/deepseek-coder-33b-instruct
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    ports:
+      - "8000:8000"
+    networks:
+      - ocr_network
+
+networks:
+  ocr_network:
+    driver: bridge
       - ./tests/fixtures:/app/tests/fixtures
       - fasttext_models:/app/data/models/fasttext
     stdin_open: true
