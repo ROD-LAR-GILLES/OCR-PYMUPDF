@@ -7,6 +7,10 @@ from infrastructure.logging_setup import logger
 class DeepSeekProvider(LLMProvider):
     """Local DeepSeek implementation of LLM provider."""
     
+    def get_config_key(self) -> str:
+        """Get the configuration key for DeepSeek settings."""
+        return "deepseek"
+    
     def initialize(self, config: Dict[str, Any]) -> None:
         """Initialize DeepSeek client with configuration.
         

@@ -34,18 +34,35 @@ class LLMRefiner(LLMPort):
     """Implementación de LLMPort que refina texto usando diferentes proveedores de LLM."""
 
     def __init__(self, provider: LLMProvider = None) -> None:
-        try:
-            self.api_config = load_api_settings()
-            
-            if provider is None:
-                from adapters.providers.openai_provider import OpenAIProvider
-                provider = OpenAIProvider()
-            
-            self.provider = provider
-            self.provider.initialize(self.api_config["openai"])
-        except Exception as e:
-            logger.error(f"Error initializing LLM provider: {e}")
-            self.provider = None
+        """Initialize LLM refiner with optional provider.
+        
+        Args:
+            provider: Optional LLM provider instance
+        """
+        self.provider = None
+        self.mode = "prompt"  # Por defecto modo prompt
+        
+        if provider is not None:
+            try:
+                self.api_config = load_api_settings()
+                config_key = provider.get_config_key()
+                
+                if config_key in self.api_config:
+                    provider_config = self.api_config[config_key]
+                    logger.debug(f"Config for {config_key}: {provider_config}")
+                    
+                    if not provider_config.get("api_key"):
+                        raise ValueError(f"No API key found for provider: {config_key}")
+                    
+                    logger.debug(f"Initializing {config_key} provider with config")
+                    self.provider = provider
+                    self.provider.initialize(provider_config)
+                    logger.info(f"LLM refiner initialized with {config_key} provider")
+                else:
+                    logger.error(f"No configuration found for provider: {config_key}")
+            except Exception as e:
+                logger.error(f"Error initializing LLM provider: {e}")
+                self.provider = None
             
     def refine_text(self, text: str) -> str:
         """

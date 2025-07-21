@@ -22,10 +22,6 @@ from domain.ports.document_port import DocumentPort
 import adapters.parallel_ocr as parallel_ocr
 import os
 import config.state as state
-from adapters.llm_refiner import LLMRefiner
-
-# Inicializar el refinador LLM
-llm_refiner = LLMRefiner()
 
 # ──────── External imports ────────
 import camelot
@@ -133,51 +129,34 @@ class PyMuPDFAdapter(DocumentPort):
 
     def extract_markdown(self, pdf_path: Path) -> str:
         """
-        Convert an entire PDF to Markdown, applying OCR selectively.
-
-        • If ``needs_ocr(page)`` is True → run OCR on that page.
-        • Else, extract embedded text with PyMuPDF.
-
-        The final Markdown includes:
-        • A top-level title (file stem).
-        • One section per page.
-        • A table appendix, if tables were found.
-        """
-        logger.info(f"Iniciando procesamiento del archivo: {pdf_path}")
-        page_parts: List[str] = []
-
-        # Extracción de texto principal
-        logger.info("Fase 1/3: Extracción de texto de páginas")
-        texts = self.extract_pages(pdf_path)
-
-        for page_num, text in enumerate(texts, start=1):
-            page_parts.append(f"## Page {page_num}\n\n{text.strip()}")
+        Extrae el contenido de un PDF y lo convierte a Markdown.
+        
+        Args:
+            pdf_path: Ruta al archivo PDF
             
-        logger.info("Fase 1/3: Completada extracción de texto")
-
-        md_out = f"# {pdf_path.stem}\n\n" + "\n\n".join(page_parts)
-        tables_md = self._extract_tables_markdown(pdf_path)
-        if tables_md:
-            md_out += "\n\n" + tables_md
-
-        # ─── Optional document-level LLM refinement ──────────────────────────
-        
-        # Fase final - Refinamiento LLM
-        logger.info("Fase 3/3: Iniciando refinamiento con LLM")
+        Returns:
+            str: Contenido en formato Markdown
+        """
         try:
-            if os.getenv("OPENAI_API_KEY") and state.LLM_MODE != "off":
-                if state.LLM_MODE == "ft" and os.getenv("OPENAI_FT_MODEL"):
-                    logger.info("Aplicando modelo fine-tuned para refinamiento...")
-                    md_out = llm_refiner.prompt_refine(md_out)
-                elif state.LLM_MODE in {"prompt", "auto"}:
-                    logger.info("Aplicando refinamiento LLM con modelo base...")
-                    md_out = llm_refiner.prompt_refine(md_out)
-                logger.info("Refinamiento LLM completado exitosamente")
-        except Exception as exc:
-            logger.warning(f"El refinamiento LLM fue omitido: {exc}")
-        
-        logger.success(f"Procesamiento completado para {pdf_path}")
-        return md_out
+            # Procesar el texto por páginas
+            pages = self.extract_pages(pdf_path)
+            if not pages:
+                raise ValueError("No se pudo extraer texto del PDF")
+            
+            # Convertir a Markdown
+            md_out = ""
+            for i, text in enumerate(pages, 1):
+                # Solo agregar encabezado si hay más de una página
+                if len(pages) > 1:
+                    md_out += f"\n## Página {i}\n\n"
+                    
+                md_out += text + "\n\n"
+            
+            return md_out.strip()
+            
+        except Exception as e:
+            logger.error(f"Error extracting markdown: {e}")
+            raise
 
 
 

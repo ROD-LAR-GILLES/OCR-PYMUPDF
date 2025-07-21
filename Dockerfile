@@ -10,7 +10,10 @@ RUN apt-get update && \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Copiar requirements.txt y asegurar que tiene las dependencias correctas
 COPY requirements.txt .
+
+# Instalar dependencias de Python en el build stage
 RUN pip install --upgrade pip && \
     pip install --prefix=/install -r requirements.txt
 
@@ -47,17 +50,19 @@ RUN mkdir -p /app/data/models/fasttext \
 
 COPY --from=builder /install /usr/local
 
+# Copiar el código fuente y otros archivos necesarios
 COPY src/ src/
-
-CMD ["python3", "-m", "interfaces.cli_menu"]
 COPY data/ data/
 COPY pdfs/ pdfs/
 COPY resultado/ resultado/
+COPY .env .
 
 # Asegurar permisos de escritura y ownership
 RUN chown -R 1000:1000 /app/data && \
     chmod -R 777 /app/data
 
-VOLUME ["/app/data/models/fasttext"]
+# Configurar volúmenes persistentes
+VOLUME ["/app/data/models/fasttext", "/app/pdfs", "/app/resultado"]
 
+# Comando por defecto
 CMD ["python", "-m", "src.main"]

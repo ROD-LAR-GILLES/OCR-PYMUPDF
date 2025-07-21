@@ -51,12 +51,21 @@ class LLMConfig:
     
     @classmethod
     def get_current_provider(cls) -> Optional[str]:
-        """Get currently selected LLM provider.
+        """Get current LLM provider name or None if disabled.
         
         Returns:
-            Provider name or None if no LLM processing is selected
+            Provider name or None if LLM processing is disabled
         """
-        return cls.load_config().get("provider")
+        config = cls.load_config()
+        provider = config.get("provider")
+        
+        # Log provider state change
+        if provider:
+            logger.info(f"Using LLM provider: {provider}")
+        else:
+            logger.info("LLM processing is disabled")
+            
+        return provider
     
     @classmethod
     def set_provider(cls, provider: Optional[str], settings: Dict[str, Any] = None) -> None:

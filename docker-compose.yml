@@ -4,6 +4,7 @@ services:
     container_name: ocr-pymupdf
     stdin_open: true
     tty: true
+    command: tail -f /dev/null
     volumes:
       - ./pdfs:/app/pdfs
       - ./resultado:/app/resultado
@@ -12,6 +13,16 @@ services:
       - ./tests:/app/tests
     environment:
       - PYTHONPATH=/app/src
+      # OpenAI
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL_ID=${OPENAI_MODEL_ID:-gpt-3.5-turbo}
+      - OPENAI_MAX_RETRIES=${OPENAI_MAX_RETRIES:-5}
+      # Gemini
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL_ID=${GEMINI_MODEL_ID:-gemini-pro}
+      - GEMINI_MAX_RETRIES=${GEMINI_MAX_RETRIES:-5}
+      # DeepSeek
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - DEEPSEEK_MODEL_ID=${DEEPSEEK_MODEL_ID:-deepseek-chat}
+      - DEEPSEEK_MAX_RETRIES=${DEEPSEEK_MAX_RETRIES:-5}
+      - DEEPSEEK_TEMPERATURE=${DEEPSEEK_TEMPERATURE:-0.3}

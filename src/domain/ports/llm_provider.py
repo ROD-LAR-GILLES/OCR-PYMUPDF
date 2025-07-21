@@ -29,3 +29,12 @@ class LLMProvider(ABC):
             The generated text completion
         """
         pass
+        
+    @abstractmethod
+    def get_config_key(self) -> str:
+        """Get the key to use for configuration lookup.
+        
+        Returns:
+            The configuration key for this provider (e.g. 'openai', 'gemini')
+        """
+        pass

@@ -34,7 +34,7 @@ class PDFToMarkdownUseCase:
     def execute(self, pdf_path: Path) -> Path:
         """
         Convierte un archivo PDF en un archivo Markdown, utilizando extracción inteligente
-        y refinamiento con LLM.
+        y refinamiento con LLM si está configurado.
 
         Args:
             pdf_path: Ruta al archivo PDF de entrada.
@@ -48,11 +48,16 @@ class PDFToMarkdownUseCase:
             LLMError: Si hay problemas con el refinamiento del texto
         """
         # Extraer contenido del PDF
-        raw_markdown = self.document_port.extract_markdown(pdf_path)
+        markdown_content = self.document_port.extract_markdown(pdf_path)
         
-        # Refinar el contenido con LLM
-        refined_markdown = self.llm_port.format_markdown(raw_markdown)
+        # Refinar el contenido con LLM solo si está disponible
+        if self.llm_port is not None:
+            try:
+                markdown_content = self.llm_port.format_markdown(markdown_content)
+            except Exception as e:
+                from infrastructure.logging_setup import logger
+                logger.warning(f"LLM refinement failed, using raw text: {e}")
         
         # Guardar el resultado
-        md_path = self.storage_port.save_markdown(pdf_path.stem, refined_markdown)
+        md_path = self.storage_port.save_markdown(pdf_path.stem, markdown_content)
         return md_path
