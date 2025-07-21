@@ -8,8 +8,9 @@ import torch
 app = FastAPI(title="DeepSeek Local API")
 
 # Load model and tokenizer
-MODEL_ID = os.getenv("MODEL_ID", "deepseek-ai/deepseek-coder-33b-instruct")
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+MODEL_ID = os.getenv("MODEL_ID", "deepseek-ai/deepseek-coder-1.3b-instruct")  # Smaller model
+DEVICE = "cpu"  # Force CPU usage
+USE_INT8 = os.getenv("USE_INT8", "true").lower() == "true"  # Enable int8 quantization for memory efficiency
 
 model = None
 tokenizer = None
@@ -22,9 +23,10 @@ async def load_model():
         tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
         model = AutoModelForCausalLM.from_pretrained(
             MODEL_ID,
-            torch_dtype=torch.float16 if DEVICE == "cuda" else torch.float32,
-            device_map="auto"
-        )
+            device_map=None,  # Disable device map for CPU
+            torch_dtype=torch.float32,
+            load_in_8bit=USE_INT8  # Use 8-bit quantization if enabled
+        ).to(DEVICE)
     except Exception as e:
         print(f"Error loading model: {e}")
         raise

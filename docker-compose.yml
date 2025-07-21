@@ -26,13 +26,9 @@ services:
       - ./models:/app/models
     environment:
       - MODEL_ID=deepseek-ai/deepseek-coder-33b-instruct
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    environment:
+      - MODEL_ID=deepseek-ai/deepseek-coder-1.3b-instruct
+      - USE_INT8=true
     ports:
       - "8000:8000"
     networks:

@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Check for NVIDIA Container Toolkit
-if ! command -v nvidia-smi &> /dev/null; then
-    echo "[WARNING] NVIDIA Container Toolkit not found. GPU acceleration will not be available."
+# Check if Docker is running
+if ! docker info &> /dev/null; then
+    echo "[ERROR] Docker is not running. Please start Docker first."
+    exit 1
 fi
 
 # Start services with Docker Compose

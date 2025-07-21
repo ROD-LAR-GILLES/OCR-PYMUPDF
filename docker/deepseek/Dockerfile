@@ -1,8 +1,9 @@
-FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
+FROM python:3.11-slim
 
 # System dependencies
 RUN apt-get update && apt-get install -y \
     git \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -10,7 +11,9 @@ RUN pip install --no-cache-dir \
     fastapi==0.104.1 \
     uvicorn==0.24.0 \
     transformers==4.35.2 \
-    accelerate==0.24.1
+    accelerate==0.24.1 \
+    torch==2.1.0 \
+    sentencepiece
 
 # Create app directory
 WORKDIR /app
