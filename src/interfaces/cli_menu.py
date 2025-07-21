@@ -16,6 +16,9 @@ from loguru import logger
 from domain.use_cases import PDFToMarkdownUseCase
 from interfaces.config_menu import ConfigMenu
 from config.llm_config import LLMConfig
+from adapters.pymupdf_adapter import PyMuPDFAdapter
+from adapters.llm_refiner import LLMRefiner
+from infrastructure.file_storage import FileStorage
 
 PDF_DIR = Path("pdfs")
 
@@ -29,7 +32,17 @@ def _convert_pdf(pdf_path: Path) -> None:
     """Convert PDF to Markdown using current configuration."""
     logger.info(f"Converting to Markdown: {pdf_path}")
     try:
-        use_case = PDFToMarkdownUseCase()
+        # Initialize adapters and ports
+        document_port = PyMuPDFAdapter()
+        storage_port = FileStorage()
+        llm_port = LLMRefiner()
+        
+        # Create and execute use case with required ports
+        use_case = PDFToMarkdownUseCase(
+            document_port=document_port,
+            storage_port=storage_port,
+            llm_port=llm_port
+        )
         md_path = use_case.execute(pdf_path)
         print(f"[OK] Markdown generated: {md_path}")
     except Exception as e:

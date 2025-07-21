@@ -13,9 +13,15 @@ de archivos.
 """
 import json
 from datetime import datetime
+"""
+Implementación del puerto de almacenamiento usando el sistema de archivos.
+Maneja las operaciones de lectura/escritura de archivos y directorios.
+"""
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from loguru import logger
+from domain.ports.storage_port import StoragePort
+from domain.ports.storage_port import StoragePort
 
 # Directorios de trabajo
 OUTPUT_DIR = Path("resultado")
@@ -27,22 +33,76 @@ CONVERSATIONS_DIR = LOGS_DIR / "conversations"
 Conversation = List[Dict[str, str]]
 
 
-def save_markdown(stem: str, markdown: str) -> Path:
-    """
-    Guarda el contenido Markdown como archivo `.md` en el directorio de salida.
+class FileStorage(StoragePort):
+    """Implementación de StoragePort usando el sistema de archivos."""
 
-    Args:
-        stem (str): Nombre base del archivo sin extensión.
-        markdown (str): Contenido en formato Markdown a escribir.
+    def save_markdown(self, stem: str, markdown: str) -> Path:
+        """
+        Guarda el contenido extraído y convertido en un archivo Markdown.
 
-    Returns:
-        Path: Ruta absoluta del archivo `.md` generado.
-    """
-    OUTPUT_DIR.mkdir(exist_ok=True)
-    md_path = OUTPUT_DIR / f"{stem}.md"
-    md_path.write_text(markdown, encoding="utf-8")
-    logger.info(f"Markdown guardado en {md_path}")
-    return md_path
+        Args:
+            stem: Nombre base del archivo (sin extensión)
+            markdown: Contenido en formato Markdown
+
+        Returns:
+            Path: Ruta al archivo guardado
+        """
+        self.ensure_directory(OUTPUT_DIR)
+        output_path = OUTPUT_DIR / f"{stem}.md"
+        output_path.write_text(markdown, encoding="utf-8")
+        logger.info(f"Archivo Markdown guardado: {output_path}")
+        return output_path
+
+    def read_file(self, file_path: Path) -> str:
+        """
+        Lee el contenido de un archivo.
+        
+        Args:
+            file_path: Ruta al archivo
+            
+        Returns:
+            str: Contenido del archivo
+        """
+        try:
+            return file_path.read_text(encoding="utf-8")
+        except Exception as e:
+            logger.error(f"Error al leer archivo {file_path}: {e}")
+            raise
+
+    def ensure_directory(self, directory: Path) -> None:
+        """
+        Asegura que un directorio existe.
+        
+        Args:
+            directory: Ruta al directorio
+        """
+        try:
+            directory.mkdir(parents=True, exist_ok=True)
+            logger.debug(f"Directorio asegurado: {directory}")
+        except Exception as e:
+            logger.error(f"Error al crear directorio {directory}: {e}")
+            raise
+
+    def read_file(self, file_path: Path) -> str:
+        """
+        Lee el contenido de un archivo.
+        
+        Args:
+            file_path: Ruta al archivo
+            
+        Returns:
+            str: Contenido del archivo
+        """
+        return file_path.read_text(encoding="utf-8")
+    
+    def ensure_directory(self, directory: Path) -> None:
+        """
+        Asegura que un directorio existe.
+        
+        Args:
+            directory: Ruta al directorio
+        """
+        directory.mkdir(parents=True, exist_ok=True)
 
 def log_api_interaction(
     model: str,

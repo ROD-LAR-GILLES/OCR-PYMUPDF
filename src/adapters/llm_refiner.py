@@ -1,7 +1,10 @@
-# ─── src/adapters/llm_refiner.py ───
+"""
+Adaptador para refinamiento de texto usando LLMs.
+"""
 import re
-from typing import List, Dict, Any
 import time
+from typing import List, Dict, Any
+from domain.ports.llm_port import LLMPort
 from domain.ports.llm_provider import LLMProvider
 from config.api_settings import load_api_settings
 from infrastructure.logging_setup import logger
@@ -27,8 +30,8 @@ def _detect_document_structure(text: str) -> Dict[str, List[str]]:
     return structure
 
 
-class LLMRefiner:
-    """Refines OCR text using configurable LLM providers."""
+class LLMRefiner(LLMPort):
+    """Implementación de LLMPort que refina texto usando diferentes proveedores de LLM."""
 
     def __init__(self, provider: LLMProvider = None) -> None:
         try:
@@ -44,6 +47,73 @@ class LLMRefiner:
             logger.error(f"Error initializing LLM provider: {e}")
             self.provider = None
             
+    def refine_text(self, text: str) -> str:
+        """
+        Refina y mejora un texto usando LLM.
+        
+        Args:
+            text: Texto a refinar
+            
+        Returns:
+            str: Texto refinado
+        """
+        if not self.provider:
+            logger.warning("LLM provider no disponible, retornando texto sin refinar")
+            return text
+            
+        try:
+            refined = self._safe_generate(text, "Refina y mejora este texto manteniendo su estructura.")
+            return refined if refined else text
+        except Exception as e:
+            logger.error(f"Error refinando texto: {e}")
+            return text
+
+    def detect_structure(self, text: str) -> dict:
+        """
+        Detecta la estructura del documento en el texto.
+        
+        Args:
+            text: Texto a analizar
+            
+        Returns:
+            dict: Estructura detectada (secciones, listas, etc)
+        """
+        structure = _detect_document_structure(text)
+        
+        if self.provider:
+            try:
+                prompt = "Analiza la estructura de este documento y extrae sus partes principales:"
+                llm_structure = self._safe_generate(text, prompt)
+                if llm_structure:
+                    # TODO: Parsear respuesta del LLM y actualizar structure
+                    pass
+            except Exception as e:
+                logger.error(f"Error detectando estructura con LLM: {e}")
+                
+        return structure
+
+    def format_markdown(self, text: str) -> str:
+        """
+        Formatea texto como Markdown usando LLM.
+        
+        Args:
+            text: Texto a formatear
+            
+        Returns:
+            str: Texto formateado en Markdown
+        """
+        if not self.provider:
+            logger.warning("LLM provider no disponible, retornando texto sin formatear")
+            return text
+            
+        try:
+            prompt = "Formatea este texto como Markdown, manteniendo su estructura y contenido:"
+            formatted = self._safe_generate(text, prompt)
+            return formatted if formatted else text
+        except Exception as e:
+            logger.error(f"Error formateando texto: {e}")
+            return text
+
     def _safe_generate(self, prompt: str, system_prompt: str = None) -> str:
         """
         Safe wrapper for LLM completion generation.
