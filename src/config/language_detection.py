@@ -12,17 +12,11 @@ class LanguageDetector:
         self.fasttext_model = None
         self.model_path = Path("/app/data/models/fasttext/lid.176.ftz")
         try:
-            if not self.model_path.parent.exists():
-                self.model_path.parent.mkdir(parents=True, exist_ok=True)
-                
-            if not self.model_path.exists():
-                logger.info("Descargando modelo de FastText...")
-                import urllib.request
-                urllib.request.urlretrieve(
-                    "https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz",
-                    self.model_path
-                )
-            self.fasttext_model = fasttext.load_model(str(self.model_path))
+            # Solo intentar cargar el modelo si existe
+            if self.model_path.exists():
+                self.fasttext_model = fasttext.load_model(str(self.model_path))
+            else:
+                logger.warning("Modelo FastText no encontrado, usando langdetect como respaldo")
         except Exception as e:
             logger.warning(f"No se pudo cargar FastText, usando langdetect como respaldo: {e}")
     

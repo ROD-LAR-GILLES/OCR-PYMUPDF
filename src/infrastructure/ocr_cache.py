@@ -25,15 +25,19 @@ class OCRCache:
                       Si es None, usa 'data/cache/ocr'.
         """
         self.cache_dir = cache_dir or Path('data/cache/ocr')
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.memory_cache: Dict[str, str] = {}
-    
+
+    def _ensure_cache_dir(self) -> None:
+        """Asegura que el directorio de caché existe."""
+        if not self.cache_dir.exists():
+            self.cache_dir.mkdir(parents=True, exist_ok=True)
+
     @lru_cache(maxsize=100)
     def get_image_hash(self, image: Image.Image) -> str:
         """Genera un hash único para una imagen."""
         img_array = np.array(image)
         return hashlib.md5(img_array.tobytes()).hexdigest()
-    
+
     def get(self, key: str) -> Optional[str]:
         """
         Obtiene un resultado cacheado por su clave.
@@ -48,19 +52,20 @@ class OCRCache:
         if key in self.memory_cache:
             return self.memory_cache[key]
             
-        # Luego buscar en disco
-        cache_file = self.cache_dir / f"{key}.json"
-        if cache_file.exists():
-            try:
-                with open(cache_file, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
-                    self.memory_cache[key] = data['content']  # Actualizar caché en memoria
-                    return data['content']
-            except (json.JSONDecodeError, KeyError, IOError):
-                return None
+        # Luego buscar en disco si el directorio existe
+        if self.cache_dir.exists():
+            cache_file = self.cache_dir / f"{key}.json"
+            if cache_file.exists():
+                try:
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        self.memory_cache[key] = data['content']  # Actualizar caché en memoria
+                        return data['content']
+                except (json.JSONDecodeError, KeyError, IOError):
+                    return None
                 
         return None
-    
+
     def set(self, key: str, value: str) -> None:
         """
         Almacena un resultado en la caché.
@@ -71,6 +76,9 @@ class OCRCache:
         """
         # Guardar en memoria
         self.memory_cache[key] = value
+        
+        # Asegurar que existe el directorio antes de guardar en disco
+        self._ensure_cache_dir()
         
         # Guardar en disco
         cache_file = self.cache_dir / f"{key}.json"
