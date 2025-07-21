@@ -29,6 +29,11 @@ docker-compose.override.yml
 *.bak
 *.old
 
+# Archivos de modelos y caché
+models/
+.cache/
+docker/deepseek/
+
 # Archivos de resultados o datos procesados
 resultado/
 pdfs/

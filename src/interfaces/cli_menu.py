@@ -8,6 +8,7 @@ Features:
 """
 
 import sys
+import os
 import signal
 from pathlib import Path
 from time import sleep
@@ -59,20 +60,58 @@ def select_pdf() -> str | None:
         print("[ERROR] Invalid selection")
         return None
 
+def select_processing_mode() -> None:
+    """Select between traditional or LLM-enhanced processing."""
+    print("\nProcessing Mode Selection")
+    print("1. Traditional (No LLM)")
+    print("2. LLM-Enhanced")
+    print("3. Back")
+    
+    choice = input("\nSelect mode (1-3): ").strip()
+    if choice == "2":
+        select_llm_provider()
+    elif choice != "1":
+        return
+        
+def select_llm_provider() -> None:
+    """Select and validate LLM provider."""
+    config = LLMConfig.load_config()
+    providers = {
+        "1": ("OpenAI GPT", "openai", "OPENAI_API_KEY"),
+        "2": ("Google Gemini", "gemini", "GEMINI_API_KEY"),
+        "3": ("DeepSeek", "deepseek", "DEEPSEEK_API_KEY")
+    }
+    
+    print("\nAvailable LLM Providers:")
+    for key, (name, _, _) in providers.items():
+        print(f"{key}. {name}")
+    print("4. Back")
+    
+    choice = input("\nSelect provider (1-4): ").strip()
+    if choice in providers and choice != "4":
+        name, provider, key_env = providers[choice]
+        if os.getenv(key_env):
+            print(f"\nActivating {name}...")
+            LLMConfig.set_provider(provider)
+        else:
+            print(f"\n[ERROR] {name} API key not found. Please check your configuration.")
+    
 def mostrar_menu() -> None:
     """Display and handle the main menu."""
     while True:
         try:
             _show_llm_status()
             print("\nOCR-PYMUPDF System")
-            print("1. List PDFs")
-            print("2. Convert PDF to Markdown")
-            print("3. Configuration")
+            print("1. Select Processing Mode")
+            print("2. List PDFs")
+            print("3. Convert PDF to Markdown")
             print("4. Exit")
             choice = input("\nSelect option (1-4): ").strip()
 
             match choice:
                 case "1":
+                    select_processing_mode()
+                case "2":
                     files = list_pdfs()
                     if files:
                         print("\nFound PDFs:")
@@ -80,12 +119,9 @@ def mostrar_menu() -> None:
                             print(f" - {pdf}")
                     else:
                         print("[INFO] No PDFs found in ./pdfs directory")
-                case "2":
+                case "3":
                     if pdf := select_pdf():
                         _convert_pdf(PDF_DIR / pdf)
-                case "3":
-                    config_menu = ConfigMenu()
-                    config_menu.mostrar()
                 case "4":
                     print("\nGoodbye!")
                     sys.exit(0)
