@@ -25,10 +25,13 @@ services:
     volumes:
       - ./models:/app/models
     environment:
-      - MODEL_ID=deepseek-ai/deepseek-coder-33b-instruct
-    environment:
-      - MODEL_ID=deepseek-ai/deepseek-coder-1.3b-instruct
+      - MODEL_ID=deepseek-ai/deepseek-coder-6.7b-instruct
       - USE_INT8=true
+      - USE_MMAP=true
+      - DEVICE=mps
+      - USE_FLASH_ATTENTION=true
+      - MAX_BATCH_SIZE=4
+      - NUM_THREADS=8
     ports:
       - "8000:8000"
     networks:
@@ -37,17 +40,6 @@ services:
 networks:
   ocr_network:
     driver: bridge
-      - ./tests/fixtures:/app/tests/fixtures
-      - fasttext_models:/app/data/models/fasttext
-    stdin_open: true
-    tty: true
-    environment:
-      - PYTHONPATH=/app/src
-      - OPENAI_API_KEY
-      - OPENAI_ORG_ID
-      - OPENAI_PROMPT_MODEL
-      - OPENAI_FT_MODEL
-      - OCR_DPI=300
 
 volumes:
   fasttext_models: {}

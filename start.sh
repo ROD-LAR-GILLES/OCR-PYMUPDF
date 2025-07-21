@@ -26,12 +26,12 @@ echo "
 [3/4] Waiting for DeepSeek service to initialize..."
 echo "This may take a few minutes on first run while downloading the model..."
 until curl -s http://localhost:8000/docs &> /dev/null; do
-    echo "⏳ Waiting for DeepSeek API..."
+    echo "Waiting for DeepSeek API..."
     sleep 5
 done
 
 echo "
-[4/4] Setup complete! ✨"
+[4/4] Setup complete!"
 echo "
 System Information:
 - All services are running in containers
