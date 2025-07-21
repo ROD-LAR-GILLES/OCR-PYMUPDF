@@ -1,1 +1,228 @@
-"""\nCaso de uso para comparar diferentes versiones de documentos PDF.\n\nPermite identificar diferencias entre dos versiones de un mismo documento,\nmostrando cambios en texto, estructura y contenido.\n"""\nfrom pathlib import Path\nfrom typing import Dict, List, Optional, Tuple\nimport difflib\nimport re\n\nfrom domain.ports.document_port import DocumentPort\nfrom domain.ports.storage_port import StoragePort\nfrom domain.dtos.document_dtos import DocumentComparisonDTO, DocumentDiffDTO\n\nclass DocumentComparisonUseCase:\n    """Caso de uso para comparar diferentes versiones de documentos."""\n    \n    def __init__(\n        self,\n        document_port: DocumentPort,\n        storage_port: StoragePort\n    ):\n        """\n        Inicializa el caso de uso.\n        \n        Args:\n            document_port: Puerto para operaciones con documentos\n            storage_port: Puerto para almacenamiento de resultados\n        """\n        self.document_port = document_port\n        self.storage_port = storage_port\n    \n    def execute(\n        self,\n        original_pdf_path: Path,\n        new_pdf_path: Path,\n        output_path: Optional[Path] = None\n    ) -> DocumentComparisonDTO:\n        """\n        Compara dos versiones de un documento PDF.\n        \n        Args:\n            original_pdf_path: Ruta al PDF original\n            new_pdf_path: Ruta al PDF nuevo\n            output_path: Ruta opcional para guardar el informe de diferencias\n            \n        Returns:\n            DTO con resultados de la comparación\n        """\n        # Extraer contenido de ambos documentos\n        original_pages = self.document_port.extract_pages(original_pdf_path)\n        new_pages = self.document_port.extract_pages(new_pdf_path)\n        \n        # Extraer metadatos\n        original_metadata = self.document_port.extract_metadata(original_pdf_path)\n        new_metadata = self.document_port.extract_metadata(new_pdf_path)\n        \n        # Comparar contenido página por página\n        page_diffs = self._compare_pages(original_pages, new_pages)\n        \n        # Generar informe de diferencias\n        comparison_result = DocumentComparisonDTO(\n            original_path=str(original_pdf_path),\n            new_path=str(new_pdf_path),\n            original_pages=len(original_pages),\n            new_pages=len(new_pages),\n            page_differences=page_diffs,\n            metadata_changes=self._compare_metadata(original_metadata, new_metadata)\n        )\n        \n        # Guardar informe si se especificó una ruta\n        if output_path:\n            markdown_report = self._generate_markdown_report(comparison_result)\n            self.storage_port.save_markdown(markdown_report, output_path)\n            comparison_result.report_path = str(output_path)\n        \n        return comparison_result\n    \n    def _compare_pages(\n        self,\n        original_pages: List[str],\n        new_pages: List[str]\n    ) -> List[DocumentDiffDTO]:\n        """\n        Compara el contenido de las páginas entre dos versiones.\n        \n        Args:\n            original_pages: Lista de contenido de páginas originales\n            new_pages: Lista de contenido de páginas nuevas\n            \n        Returns:\n            Lista de diferencias por página\n        """\n        result = []\n        \n        # Determinar el número de páginas a comparar\n        max_pages = max(len(original_pages), len(new_pages))\n        \n        for i in range(max_pages):\n            # Manejar caso donde una versión tiene más páginas que la otra\n            original_content = original_pages[i] if i < len(original_pages) else ""\n            new_content = new_pages[i] if i < len(new_pages) else ""\n            \n            # Si ambos contenidos son idénticos, no hay diferencias\n            if original_content == new_content:\n                continue\n                \n            # Calcular diferencias usando difflib\n            diff = list(difflib.ndiff(\n                self._normalize_text(original_content).splitlines(),\n                self._normalize_text(new_content).splitlines()\n            ))\n            \n            # Contar cambios\n            additions = len([line for line in diff if line.startswith('+ ')])\n            deletions = len([line for line in diff if line.startswith('- ')])\n            changes = len([line for line in diff if line.startswith('? ')])\n            \n            # Crear DTO de diferencias para esta página\n            page_diff = DocumentDiffDTO(\n                page_number=i + 1,  # 1-indexed para usuarios\n                additions=additions,\n                deletions=deletions,\n                changes=changes,\n                diff_text="\n".join(diff) if (additions + deletions + changes) > 0 else ""\n            )\n            \n            result.append(page_diff)\n        \n        return result\n    \n    def _compare_metadata(\n        self,\n        original_metadata,\n        new_metadata\n    ) -> Dict[str, Tuple[str, str]]:\n        """\n        Compara los metadatos entre dos versiones.\n        \n        Args:\n            original_metadata: Metadatos del documento original\n            new_metadata: Metadatos del documento nuevo\n            \n        Returns:\n            Diccionario con cambios en metadatos\n        """\n        changes = {}\n        \n        # Comparar atributos comunes\n        for attr in ['title', 'author', 'producer']:\n            original_value = getattr(original_metadata, attr, None)\n            new_value = getattr(new_metadata, attr, None)\n            \n            if original_value != new_value:\n                changes[attr] = (str(original_value), str(new_value))\n        \n        # Comparar fechas\n        for attr in ['creation_date', 'modification_date']:\n            original_date = getattr(original_metadata, attr, None)\n            new_date = getattr(new_metadata, attr, None)\n            \n            if original_date != new_date:\n                original_str = original_date.isoformat() if original_date else "None"\n                new_str = new_date.isoformat() if new_date else "None"\n                changes[attr] = (original_str, new_str)\n        \n        return changes\n    \n    def _normalize_text(self, text: str) -> str:\n        """\n        Normaliza el texto para comparación más precisa.\n        \n        Args:\n            text: Texto a normalizar\n            \n        Returns:\n            Texto normalizado\n        """\n        # Eliminar espacios en blanco múltiples\n        text = re.sub(r'\s+', ' ', text)\n        \n        # Eliminar espacios al inicio y final de líneas\n        text = re.sub(r'^\s+|\s+$', '', text, flags=re.MULTILINE)\n        \n        return text.strip()\n    \n    def _generate_markdown_report(self, comparison: DocumentComparisonDTO) -> str:\n        """\n        Genera un informe en formato Markdown con los resultados de la comparación.\n        \n        Args:\n            comparison: Resultados de la comparación\n            \n        Returns:\n            Informe en formato Markdown\n        """\n        lines = []\n        \n        # Encabezado\n        lines.append(f"# Informe de Comparación de Documentos\n")\n        lines.append(f"## Resumen\n")\n        lines.append(f"- **Documento Original**: {comparison.original_path}")\n        lines.append(f"- **Documento Nuevo**: {comparison.new_path}")\n        lines.append(f"- **Páginas Original**: {comparison.original_pages}")\n        lines.append(f"- **Páginas Nuevo**: {comparison.new_pages}")\n        lines.append(f"- **Páginas con Diferencias**: {len(comparison.page_differences)}\n")\n        \n        # Cambios en metadatos\n        if comparison.metadata_changes:\n            lines.append(f"## Cambios en Metadatos\n")\n            lines.append("| Campo | Valor Original | Valor Nuevo |")\n            lines.append("| ----- | -------------- | ----------- |")\n            \n            for field, (original, new) in comparison.metadata_changes.items():\n                lines.append(f"| {field} | {original} | {new} |")\n            \n            lines.append("\n")\n        \n        # Diferencias por página\n        if comparison.page_differences:\n            lines.append(f"## Diferencias por Página\n")\n            \n            for diff in comparison.page_differences:\n                lines.append(f"### Página {diff.page_number}\n")\n                lines.append(f"- **Adiciones**: {diff.additions}")\n                lines.append(f"- **Eliminaciones**: {diff.deletions}")\n                lines.append(f"- **Cambios**: {diff.changes}\n")\n                \n                if diff.diff_text:\n                    lines.append("```diff")\n                    lines.append(diff.diff_text)\n                    lines.append("```\n")\n        \n        return "\n".join(lines)\n
+"""Caso de uso para comparar diferentes versiones de documentos PDF.
+
+Permite identificar diferencias entre dos versiones de un mismo documento,
+mostrando cambios en texto, estructura y contenido.
+"""
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+import difflib
+import re
+
+from domain.ports.document_port import DocumentPort
+from domain.ports.storage_port import StoragePort
+from domain.dtos.document_dtos import DocumentComparisonDTO, DocumentDiffDTO
+
+class DocumentComparisonUseCase:
+    """Caso de uso para comparar diferentes versiones de documentos."""
+    
+    def __init__(
+        self,
+        document_port: DocumentPort,
+        storage_port: StoragePort
+    ) -> None:
+        """Inicializa el caso de uso.
+
+        Args:
+            document_port: Puerto para operaciones con documentos
+            storage_port: Puerto para almacenamiento de resultados
+        """
+        self.document_port = document_port
+        self.storage_port = storage_port
+    
+    def execute(
+        self,
+        original_pdf_path: Path,
+        new_pdf_path: Path,
+        output_path: Optional[Path] = None
+    ) -> DocumentComparisonDTO:
+        """Compara dos versiones de un documento PDF.
+
+        Args:
+            original_pdf_path: Ruta al PDF original
+            new_pdf_path: Ruta al PDF nuevo
+            output_path: Ruta opcional para guardar el informe de diferencias
+
+        Returns:
+            DTO con resultados de la comparación
+        """
+        # Extraer contenido de ambos documentos
+        original_pages = self.document_port.extract_pages(original_pdf_path)
+        new_pages = self.document_port.extract_pages(new_pdf_path)
+
+        # Extraer metadatos
+        original_metadata = self.document_port.extract_metadata(original_pdf_path)
+        new_metadata = self.document_port.extract_metadata(new_pdf_path)
+
+        # Comparar contenido página por página
+        page_diffs = self._compare_pages(original_pages, new_pages)
+
+        # Generar informe de diferencias
+        comparison_result = DocumentComparisonDTO(
+            original_path=str(original_pdf_path),
+            new_path=str(new_pdf_path),
+            original_pages=len(original_pages),
+            new_pages=len(new_pages),
+            page_differences=page_diffs,
+            metadata_changes=self._compare_metadata(original_metadata, new_metadata)
+        )
+
+        # Guardar informe si se especificó una ruta
+        if output_path:
+            markdown_report = self._generate_markdown_report(comparison_result)
+            self.storage_port.save_markdown(markdown_report, output_path)
+            comparison_result.report_path = str(output_path)
+
+        return comparison_result
+
+    def _compare_pages(
+        self,
+        original_pages: List[str],
+        new_pages: List[str]
+    ) -> List[DocumentDiffDTO]:
+        """Compara el contenido de las páginas entre dos versiones.
+
+        Args:
+            original_pages: Lista de contenido de páginas originales
+            new_pages: Lista de contenido de páginas nuevas
+
+        Returns:
+            Lista de diferencias por página
+        """
+        result = []
+
+        # Determinar el número de páginas a comparar
+        max_pages = max(len(original_pages), len(new_pages))
+
+        for i in range(max_pages):
+            # Manejar caso donde una versión tiene más páginas que la otra
+            original_content = original_pages[i] if i < len(original_pages) else ""
+            new_content = new_pages[i] if i < len(new_pages) else ""
+
+            # Si ambos contenidos son idénticos, no hay diferencias
+            if original_content == new_content:
+                continue
+
+            # Calcular diferencias usando difflib
+            diff = list(difflib.ndiff(
+                self._normalize_text(original_content).splitlines(),
+                self._normalize_text(new_content).splitlines()
+            ))
+
+            # Contar cambios
+            additions = len([line for line in diff if line.startswith('+ ')])
+            deletions = len([line for line in diff if line.startswith('- ')])
+            changes = len([line for line in diff if line.startswith('? ')])
+
+            # Crear DTO de diferencias para esta página
+            page_diff = DocumentDiffDTO(
+                page_number=i + 1,  # 1-indexed para usuarios
+                additions=additions,
+                deletions=deletions,
+                changes=changes,
+                diff_text="\n".join(diff) if (additions + deletions + changes) > 0 else ""
+            )
+
+            result.append(page_diff)
+
+        return result
+
+    def _compare_metadata(
+        self,
+        original_metadata,
+        new_metadata
+    ) -> Dict[str, Tuple[str, str]]:
+        """Compara los metadatos entre dos versiones.
+
+        Args:
+            original_metadata: Metadatos del documento original
+            new_metadata: Metadatos del documento nuevo
+
+        Returns:
+            Diccionario con cambios en metadatos
+        """
+        changes = {}
+
+        # Comparar atributos comunes
+        for attr in ['title', 'author', 'producer']:
+            original_value = getattr(original_metadata, attr, None)
+            new_value = getattr(new_metadata, attr, None)
+
+            if original_value != new_value:
+                changes[attr] = (str(original_value), str(new_value))
+
+        # Comparar fechas
+        for attr in ['creation_date', 'modification_date']:
+            original_date = getattr(original_metadata, attr, None)
+            new_date = getattr(new_metadata, attr, None)
+
+            if original_date != new_date:
+                original_str = original_date.isoformat() if original_date else "None"
+                new_str = new_date.isoformat() if new_date else "None"
+                changes[attr] = (original_str, new_str)
+
+        return changes
+
+    def _normalize_text(self, text: str) -> str:
+        """Normaliza el texto para comparación más precisa.
+
+        Args:
+            text: Texto a normalizar
+
+        Returns:
+            Texto normalizado
+        """
+        # Eliminar espacios en blanco múltiples
+        text = re.sub(r'\s+', ' ', text)
+
+        # Eliminar espacios al inicio y final de líneas
+        text = re.sub(r'^\s+|\s+$', '', text, flags=re.MULTILINE)
+
+        return text.strip()
+
+    def _generate_markdown_report(self, comparison: DocumentComparisonDTO) -> str:
+        """Genera un informe en formato Markdown con los resultados de la comparación.
+
+        Args:
+            comparison: Resultados de la comparación
+
+        Returns:
+            Informe en formato Markdown
+        """
+        lines = []
+
+        # Encabezado
+        lines.append("# Informe de Comparación de Documentos\n")
+        lines.append("## Resumen\n")
+        lines.append(f"- **Documento Original**: {comparison.original_path}")
+        lines.append(f"- **Documento Nuevo**: {comparison.new_path}")
+        lines.append(f"- **Páginas Original**: {comparison.original_pages}")
+        lines.append(f"- **Páginas Nuevo**: {comparison.new_pages}")
+        lines.append(f"- **Páginas con Diferencias**: {len(comparison.page_differences)}\n")
+
+        # Cambios en metadatos
+        if comparison.metadata_changes:
+            lines.append("## Cambios en Metadatos\n")
+            lines.append("| Campo | Valor Original | Valor Nuevo |")
+            lines.append("| ----- | -------------- | ----------- |")
+
+            for field, (original, new) in comparison.metadata_changes.items():
+                lines.append(f"| {field} | {original} | {new} |")
+
+            lines.append("\n")
+
+        # Diferencias por página
+        if comparison.page_differences:
+            lines.append("## Diferencias por Página\n")
+
+            for diff in comparison.page_differences:
+                lines.append(f"### Página {diff.page_number}\n")
+                lines.append(f"- **Adiciones**: {diff.additions}")
+                lines.append(f"- **Eliminaciones**: {diff.deletions}")
+                lines.append(f"- **Cambios**: {diff.changes}\n")
+
+                if diff.diff_text:
+                    lines.append("```diff")
+                    lines.append(diff.diff_text)
+                    lines.append("```\n")
+
+        return "\n".join(lines)
