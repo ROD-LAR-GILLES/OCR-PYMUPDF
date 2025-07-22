@@ -45,7 +45,7 @@ run_local() {
     check_env_file
     create_directories
     echo -e "${GREEN}Iniciando API en modo local...${NC}"
-    python bin/run_api.py
+    python tools/bin/run_api.py
 }
 
 # Ejecutar la API con Docker

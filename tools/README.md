@@ -54,6 +54,15 @@ Este directorio contiene herramientas unificadas para la gestión del proyecto O
   - `legal_dictionary_manager.py --list`: Listar todos los términos
   - `legal_dictionary_manager.py --update`: Actualizar y reorganizar el diccionario
 
+### Herramientas de API
+
+- `bin/run_api.py`: Script Python para iniciar la API REST
+- `bin/run_api_local.sh`: Script para ejecutar la API localmente
+
+### Herramientas de Desarrollo
+
+- `bin/start.sh`: Script para iniciar el entorno de desarrollo con Docker
+
 ## Uso
 
 Todos los scripts están diseñados para ser ejecutados desde la raíz del proyecto. Por ejemplo:

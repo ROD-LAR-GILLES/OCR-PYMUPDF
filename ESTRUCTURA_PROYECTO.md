@@ -12,7 +12,7 @@ Este documento describe la organización del proyecto OCR-PYMUPDF, que sigue una
 │   ├── pre-commit/       # Configuración de hooks de pre-commit
 │   ├── pytest/           # Configuración de pruebas
 │   └── tox/              # Configuración de entornos de prueba
-├── bin/                  # Scripts ejecutables y de inicio
+
 ├── config/               # Configuraciones globales de la aplicación
 ├── data/                 # Datos y recursos
 │   ├── config/           # Archivos de configuración de datos
@@ -87,6 +87,9 @@ Los scripts se han organizado en dos categorías principales:
   - `project.sh`: Gestión del proyecto (reorganización, limpieza)
 - `tools/bin/`: Ejecutables y scripts Python
   - `legal_dictionary_manager.py`: Gestor del diccionario de términos legales
+  - `run_api.py`: Script para iniciar la API REST
+  - `run_api_local.sh`: Script para ejecutar la API localmente
+  - `start.sh`: Script para iniciar el entorno de desarrollo
 
 ## Datos
 
