@@ -7,10 +7,10 @@ import sys
 from pathlib import Path
 
 # Añadir el directorio src al path para importar módulos
-src_path = Path(__file__).parent / "src"
+src_path = Path(__file__).parents[2] / "src"
 sys.path.insert(0, str(src_path))
 
-from infrastructure.http.api_server import start_server
+from adapters.inbound.http.api_server import start_server
 
 if __name__ == "__main__":
     # Obtener host y puerto de las variables de entorno o usar valores por defecto

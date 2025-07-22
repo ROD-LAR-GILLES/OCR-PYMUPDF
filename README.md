@@ -48,6 +48,8 @@ El contenedor Docker incluye:
 - Volúmenes para pdfs y resultados
 
 ## Uso
+
+### Mediante código
 ```python
 from src.domain.use_cases.pdf_to_markdown import PDFToMarkdownUseCase
 from src.adapters.pymupdf_adapter import PyMuPDFAdapter
@@ -64,6 +66,28 @@ use_case = PDFToMarkdownUseCase(pdf_adapter, ocr_adapter)
 result = use_case.execute("documento.pdf")
 ```
 
+### Mediante interfaz web
+
+El proyecto incluye una interfaz web para facilitar el uso sin necesidad de programación:
+
+```bash
+# Configurar permisos de ejecución
+chmod +x tools/scripts/setup_web.sh
+./tools/scripts/setup_web.sh
+
+# Construir el frontend
+./tools/scripts/build_frontend.sh
+
+# Iniciar la aplicación web
+./tools/bin/run_web_local.sh
+```
+
+La interfaz web estará disponible en `http://localhost:8080` y permite:
+- Subir documentos PDF
+- Configurar opciones de procesamiento
+- Visualizar resultados en formato Markdown
+- Gestionar documentos procesados
+
 ## Configuración
 El proyecto utiliza archivos `.env` para la configuración. Variables principales:
 - `OCR_LANGUAGE`: Idioma para OCR (default: "spa")
@@ -76,7 +100,9 @@ El proyecto sigue una arquitectura hexagonal (ports & adapters):
 - `domain`: Lógica de negocio y entidades
 - `adapters`: Implementaciones de puertos
 - `infrastructure`: Servicios técnicos
-- `interfaces`: CLI y puntos de entrada
+- `interfaces`: CLI, web y otros puntos de entrada
+  - `cli`: Interfaz de línea de comandos
+  - `web`: Interfaz web con React y FastAPI
 - `config`: Configuración del sistema
 
 ## API

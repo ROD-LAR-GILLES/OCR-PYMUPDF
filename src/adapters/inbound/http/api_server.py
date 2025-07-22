@@ -24,7 +24,7 @@ def start_server(host="0.0.0.0", port=8000):
     """
     # Iniciar el servidor
     uvicorn.run(
-        "infrastructure.http.api:app",
+        "adapters.inbound.http.api:app",  # En Docker, PYTHONPATH=/app/src, por lo que no necesitamos 'src.'
         host=host,
         port=port,
         reload=True, 

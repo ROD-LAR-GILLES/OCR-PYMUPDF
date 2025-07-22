@@ -45,7 +45,7 @@ run_local() {
     check_env_file
     create_directories
     echo -e "${GREEN}Iniciando API en modo local...${NC}"
-    python tools/bin/run_api.py
+    python3 tools/bin/run_api.py
 }
 
 # Ejecutar la API con Docker
@@ -53,7 +53,7 @@ run_docker() {
     check_env_file
     create_directories
     echo -e "${GREEN}Iniciando API con Docker...${NC}"
-    docker-compose -f docker-compose.api.yml up --build -d
+    docker compose -f docker-compose.api.yml up --build -d
     echo -e "${GREEN}API REST de OCR-PYMUPDF iniciada en http://localhost:8000${NC}"
     echo -e "${GREEN}Documentación disponible en http://localhost:8000/docs${NC}"
 }

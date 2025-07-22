@@ -71,6 +71,11 @@ async def root():
     """Endpoint raíz para verificar que la API está funcionando."""
     return {"message": "OCR-PYMUPDF API está funcionando"}
 
+@app.get("/api/health")
+async def health_check():
+    """Endpoint para verificar el estado de salud de la API."""
+    return {"status": "ok"}
+
 
 @app.get("/api/documents/", response_model=List[DocumentStatus])
 async def list_documents(

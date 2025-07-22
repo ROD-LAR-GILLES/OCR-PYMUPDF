@@ -9,7 +9,8 @@ services:
     stdin_open: true
     tty: true
     ports:
-      - "8000:8000"  # Para la documentación MkDocs
+      - "8000:8000"  # API REST
+      - "8080:8080"  # Interfaz web
     volumes:
       - .:/app
       - ./pdfs:/app/pdfs
@@ -28,6 +29,9 @@ services:
       # DeepSeek
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - DEEPSEEK_MODEL_ID=${DEEPSEEK_MODEL_ID:-deepseek-chat}
+      # Web Interface
+      - WEB_HOST=${WEB_HOST:-0.0.0.0}
+      - WEB_PORT=${WEB_PORT:-8080}
       - DEEPSEEK_MAX_RETRIES=${DEEPSEEK_MAX_RETRIES:-5}
       - DEEPSEEK_TEMPERATURE=${DEEPSEEK_TEMPERATURE:-0.3}
       # Development
