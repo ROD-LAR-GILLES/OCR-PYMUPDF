@@ -1,0 +1,7 @@
+# ───── API Dependencies ─────
+fastapi>=0.110.0        # Framework web para APIs
+uvicorn>=0.27.1         # Servidor ASGI para FastAPI
+python-multipart>=0.0.9 # Para manejo de formularios y archivos
+jwt>=1.3.1              # Para autenticación JWT
+pydantic>=2.6.1         # Para validación de datos
+starlette>=0.36.3       # Base para FastAPI

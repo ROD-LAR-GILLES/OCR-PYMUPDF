@@ -1,245 +1,216 @@
-Actualización de Dependencias y Alternativas Modernas
-
-Últimas Versiones Estables de las Dependencias
-
-A continuación se listan las librerías presentes en el requirements.txt junto con sus versiones actuales en ese archivo y la última versión estable disponible (a julio de 2025), indicando mejoras o consideraciones relevantes en cada caso:
-
-OCR y Preprocesamiento de Imágenes
-	•	langdetect – Versión actual: 1.0.9; Última versión: 1.0.9 (no ha habido nuevas versiones desde 2021). Continúa siendo estable para detección de idioma básica, aunque limitada a 55 idiomas.
-Alternativa: FastText (ver más abajo) ofrece detección de 176 idiomas con mayor precisión.
-	•	opencv-python (OpenCV) – Versión actual: 4.8.1.78; Última versión: 4.12.0.88 (julio 2025). Se recomienda actualizar, ya que las versiones 4.10+ incorporan mejoras y parches de seguridad importantes (por ejemplo, OpenCV 4.8.1 incluyó un parche para la vulnerabilidad de WebP CVE-2023-4863). No se esperan rupturas mayores de compatibilidad al seguir en la serie 4.x.
-	•	Pillow – Versión actual: 9.5.0; Última versión: 11.3.0 (1 de julio de 2025). Entre Pillow 10.x y 11.x se introdujeron mejoras de rendimiento y correcciones de seguridad (p.ej., Pillow 11.3.0 corrige un desbordamiento de buffer presente en 11.2.x). La migración de la serie 9.x a 11.x no debería afectar la API básica, pero ten en cuenta que a partir de Pillow >9.5.0 ya no se proveen wheels para 32 bits.
-	•	pytesseract – Versión actual: 0.3.10; Última versión: 0.3.13 (agosto 2024). Las actualizaciones posteriores a 0.3.10 son menores (0.3.11–0.3.13) e incluyen pequeñas mejoras y soporte para versiones más nuevas de Tesseract OCR. La API permanece esencialmente igual, por lo que actualizar no debería romper compatibilidad.
-	•	unidecode – Versión actual: 1.3.8; Última versión: 1.4.0 (24 de abril de 2025). Esta librería sigue ofreciendo transliteración ASCII de texto Unicode. La actualización a 1.4.0 incluye correcciones menores y amplía la cobertura de caracteres transliterables. Nota: Unidecode tiene licencia GPL; si esto es un problema, existe la alternativa text-unidecode con licencia más permisiva (ver tabla comparativa).
-	•	numpy – Versión actual: 1.24.3; Última versión: 2.3.1 (21 de junio de 2025). NumPy dio un salto de versión mayor a 2.x a mediados de 2024, principalmente para remover definitivamente funcionalidades obsoletas (por ejemplo, tipos alias como np.int ya no existen en NumPy 2.0). La serie 2.x requiere Python ≥3.8. Es altamente recomendable actualizar para obtener las mejoras de rendimiento y compatibilidad; solo asegúrate de reemplazar en tu código cualquier uso de atributos de tipo deprecados (p.ej. usar int o numpy.int32 en lugar de numpy.int).
-
-Parsing de PDF
-	•	camelot-py – Versión actual: 0.11.0; Última versión: 1.0.0 (30 de diciembre de 2024). La versión 1.0.0 de Camelot es un lanzamiento importante que requiere Python ≥3.9. Incluye correcciones de larga data y consolidación de la API. Si migras, revisa las notas de cambio, pero la funcionalidad principal (extracción de tablas de PDFs) se mantiene con la misma interfaz.
-	•	pdfplumber – Versión actual: 0.10.3; Última versión: 0.11.7 (12 de junio de 2025). Las versiones 0.11.x introducen mejoras en la extracción de texto y tablas, manteniendo compatibilidad con Python 3.8+. Actualizar traerá correcciones de bugs (por ejemplo, versiones ≤0.10 tenían algunos problemas con la posición de texto rotado, que fueron solucionados en la serie 0.11). No se esperan breakages al actualizar dentro de la API de 0.x.
-	•	PyMuPDF (pymupdf) – Versión actual: 1.21.1; Última versión: 1.26.3 (2 de julio de 2025). Las nuevas versiones de PyMuPDF traen mejoras en el binding de MuPDF, añadiendo soporte para Python 3.12+ y funcionalidades como OCR integrado opcional (si se instala Tesseract). Nota: A partir de PyMuPDF 1.22+ se requiere Python ≥3.9. Al actualizar, lee el changelog, pero la API de alto nivel (fitz/pymupdf) se mantiene estable.
-
-NLP y Detección de Errores OCR
-	•	nltk – Versión actual: 3.8.1; Última versión: 3.9.1 (publicada el 18 de agosto de 2024). NLTK 3.9.x incluye mejoras menores y parches de seguridad: por ejemplo, NLTK 3.8.1 ya había resuelto una vulnerabilidad RCE asociada al downloader de datos, y la serie 3.9 continúa abordando issues. La actualización debería ser directa, ya que NLTK raramente introduce cambios rompientes en la serie 3.x.
-	•	pyspellchecker – Versión actual: 0.7.0; Última versión: 0.8.3 (19 de mayo de 2025). Las versiones 0.7.x a 0.8.x de Python Spellchecker añadieron diccionarios y mejoraron rendimiento. Por ejemplo, 0.7.2+ redujo falsos positivos y 0.8.x aceleró la carga de corpus. La API (spell = SpellChecker(...)) permanece igual, así que actualizar a 0.8.3 no debería causar problemas. Sin embargo, considera que existen otros enfoques más rápidos para spell-checking (ver tabla de alternativas).
-	•	spacy – Versión actual: 3.7.4; Última versión: 3.8.7 (mayo 2025). spaCy 3.8 introdujo soporte a Python 3.12 y mejoras en pipelines de transformadores. La migración de 3.7 a 3.8 es segura en términos de compatibilidad (los modelos entrenados con 3.x siguen funcionando en 3.8). Se recomienda actualizar para aprovechar correcciones y posibles ligeras mejoras de rendimiento en el training de modelos. (Nota: No existe aún spaCy 4.0; la rama 3.x sigue siendo la vigente.)
-
-Machine Learning
-	•	matplotlib – Versión actual: 3.9.0; Última versión: 3.10.3 (13 de agosto de 2024). Matplotlib 3.10 introdujo nuevas funcionalidades de anotación y correcciones de layout. Dado que ya estás en 3.9.0 (que salió en mayo 2024), el salto a 3.10.x será menor y principalmente obtendrás arreglos de bugs. No hay cambios incompatibles reportados entre 3.9 y 3.10 (solo se elevaron dependencias mínimas, e.g. Python ≥3.9). Se espera que en el transcurso de 2025 aparezca Matplotlib 3.11, pero al momento 3.10.3 es la versión más reciente estable.
-
-Integración con LLMs
-	•	openai (SDK de OpenAI) – Versión actual especificada: ≥1.0.0; Última versión: 1.x (el SDK OpenAI se ha movido a la rama 1.x estable; v1.3+ disponible en 2025). Si bien tu requirements no fija una versión exacta, asegúrate de usar la más reciente. Importante: La actualización a cualquier versión >=1.0.0 del SDK implica cambios significativos en la API. Por ejemplo, ya no se utiliza openai.Completion y toda la funcionalidad de completions se migra a openai.ChatCompletion y métodos más recientes. Revisa la guía de migración oficial si aún no lo has hecho, para adaptar tu código a la nueva interfaz (manejo de llamadas, paginación de resultados, etc.). Mantener este SDK actualizado es crítico por rapidez de desarrollo: integra las últimas características de la API de OpenAI y corrige problemas (la versión 1.2 y 1.3 corrigieron cómo se manejan files y fine-tunes, por ejemplo).
-	•	scikit-learn – Versión actual: 1.5.0; Última versión: 1.7.1 (febrero 2025). Scikit-learn tuvo lanzamientos frecuentes: 1.5.0 (mayo 2024), luego 1.6.0 y 1.7.0 en el transcurso de 2024. La versión 1.7.x incorpora un nuevo estimator de clustering con mejoras, optimizaciones en árboles de decisión y varias deprecaciones de parámetros antiguos. La migración 1.5 → 1.7 no debería romper código existente en la mayoría de los casos (Scikit-learn mantiene compatibilidad retroactiva en la serie 1.x, solo lanzando advertencias de deprecación). Eso sí, revisa las release notes – por ejemplo, en 1.6 se deprecó el uso de n_jobs=None en algunas funciones en favor de n_jobs=-1. Actualizar te mantendrá al día con parches de estabilidad y mejoras de performance en algoritmos.
-
-Logging y Utilidades
-	•	loguru – Versión actual: 0.7.3; Última versión: 0.7.3 (diciembre 2024). No ha salido una versión 0.8; de hecho, la 0.7.3 es la última e incluye pequeñas correcciones (arregla incompatibilidades con Cython, por ejemplo). Si en tu entorno tienes 0.7.3, ya cuentas con la versión más robusta de esta librería de logging. Continúa siendo una opción válida y thread-safe para simplificar el registro de logs.
-	•	tabulate – Versión actual: 0.9.0; Última versión: 0.9.0 (6 de octubre de 2022). No hay versiones nuevas posteriores. Esta librería es estable para imprimir tablas en texto/Markdown. Puedes seguir usándola tal cual; si necesitas funcionalidades adicionales (colorear tablas, formatos avanzados), se suelen incorporar mediante otras herramientas (p.ej. pandas puede formatear DataFrames como tablas Markdown, o la librería rich para tablas en terminal).
-	•	python-dotenv – Versión actual: 1.0.0; Última versión: 1.1.1 (junio 2025, última estable; 1.1.0 salió en marzo 2025). La actualización a 1.1.x trae soporte a Python 3.13 y mejoras en el comando dotenv run, sin cambios de uso en la carga de archivos .env. Es decir, continuarás usando load_dotenv() igual que antes. Actualizar es recomendable pero no urgente (1.0.0 ya era bastante estable); sí asegúrate de mantener esta librería al día por eventuales fixes de seguridad en manejo de variables de entorno.
-	•	markdown2 – Versión actual: 2.4.10; Última versión: 2.5.3 (24 de enero de 2025). Desde la 2.5.0 en adelante, markdown2 añadió mejoras en extensiones (soporte de sintaxis LaTeX, etc.) y compatibilidad con Python 3.13. La actualización no requiere cambios en cómo llamas a markdown2.markdown(...). Ten en cuenta que existen implementaciones alternativas de Markdown en Python más comunes (ver tabla comparativa), pero markdown2 sigue siendo una opción rápida y completa.
-	•	Jinja2 – Versión actual: 3.1.3; Última versión: 3.1.6 (5 de marzo de 2025, security release). Jinja2 3.1.6 y la anterior 3.1.5 solucionan vulnerabilidades de sandbox y templating seguro (p. ej., evitar bypass de filtros como attr en entornos sandbox). Se recomienda mucho actualizar Jinja2, ya que tu versión 3.1.3 es vulnerable a esos problemas (CVE-2023 relacionados con sandboxing). La API de Jinja2 no cambió: las actualizaciones son drop-in replacements sin romper compatibilidad, por lo que puedes pasar de 3.1.3 a 3.1.6 sin ajustes en tu código de plantillas.
-
-Testing
-	•	fasttext-wheel – Versión actual: 0.9.2; Última versión: 0.9.2 (no hay versión más nueva; este paquete proporciona wheels precompilados de fastText 0.9.2, lanzado originalmente en 2019 por Facebook). En términos de robustez y seguridad, fastText sigue siendo útil para clasificación de texto rápida, pero ya no recibe actualizaciones. Mantenerlo en 0.9.2 está bien (no hay alternativa oficial más reciente). Sin embargo, considera que fastText usa código nativo; asegúrate de tener los wheels adecuados para tu plataforma o podrías enfrentar errores de instalación. Abajo discutimos alternativas más modernas que podrían sustituirlo en ciertos casos.
-	•	pandas – Versión actual: 2.2.2; Última versión: 2.3.1 (junio 2024). En el último año, Pandas introdujo mejoras en compatibilidad con NumPy 2.0 y numerosas optimizaciones. Dado que ya estás en la serie 2.x, actualizar a 2.3.x o 2.4 (cuando salga) debería darte beneficios de rendimiento y arreglos de bugs sin cambios rompientes. La API de alto nivel (DataFrame, Series, etc.) se mantiene constante; solamente fíjate en deprecaciones señaladas en el changelog (por ejemplo, en Pandas 2.2 se marcaron métodos viejos para remover en el futuro). Un punto importante: Pandas 2.2.2 fue la primera versión compatible con NumPy 2.x, por lo que si actualizas NumPy, es recomendable tener Pandas ≥2.2.2 (lo cual ya cumples). Puedes actualizar con confianza a 2.3.1 para que todo funcione bien con las versiones más nuevas de dependencias científicas.
-	•	pytest – Versión actual: 7.2.0; Última versión: 8.4.1 (17 de junio de 2025). Pytest ha avanzado a la serie 8.x en 2025, incorporando nuevas funcionalidades y soporte para Python 3.12/3.13. La migración de 7.2 a 8.x debería ser mayormente transparente, pero consulta las notas de versión 8.0: se eliminaron finalmente algunas funciones obsoletas en 7.x. Por ejemplo, pytest.skip(reason) sin usar la marca puede generar advertencias en 8.x. No obstante, la mayoría de tests seguirán ejecutándose igual. Actualizar Pytest te dará mejoras de rendimiento en el recolector de pruebas y nuevas capacidades (como las fixtures dinámicas agregadas en 8.x). Si decides mantenerte en 7.2.0 por estabilidad, ten en cuenta que ya es una versión algo antigua; la rama 7.x llegó hasta 7.4 en 2024 con correcciones menores. Dado que la prioridad es “que todo funcione bien”, podrías primero actualizar a Pytest 7.4 (último de esa serie) y luego dar el salto a 8.x, verificando que tus suites de pruebas pasen sin problemas.
-
-Alternativas Modernas para Librerías Seleccionadas
-
-Además de actualizar a las últimas versiones, vale la pena evaluar si algunas librerías podrían reemplazarse por alternativas más modernas, robustas o eficientes. En la siguiente tabla se resumen alternativas a ciertas dependencias de tu lista, junto con comparaciones breves:
-
-Librería Actual	Alternativa Moderna	Comparativa / Notas
-langdetect (detección de idioma basada en perfiles estáticos)	fastText LID (fasttext con modelo lid.176) – modelo de identificación de idioma de Facebook; langid.py – algoritmo basado en Bayes multinomial	FastText soporta 176 idiomas con alta precisión (≈98% en promedio), superando a langdetect (55 idiomas, ~92% de precisión). Requiere cargar un modelo de ~126MB en memoria, pero luego es muy veloz (procesa ~100k textos/segundo). Por otro lado, langid (97 idiomas) es 100% Python y más rápido que langdetect pero menos preciso que fastText. Si necesitas mayor cobertura y exactitud, fastText es la elección robusta; si prefieres evitar modelos grandes, langid.py ofrece un balance.
-pytesseract (OCR mediante Tesseract)	EasyOCR – framework OCR basado en deep learning (PyTorch); OCRmyPDF – herramienta especializada en OCR para PDFs escaneados	EasyOCR puede reconocer texto en +80 idiomas usando redes neuronales, a menudo con mejor desempeño en imágenes complejas (curvas, fuentes variadas) comparado con Tesseract. No requiere instalar Tesseract por separado, pero sí pesa más (modelos neuronales) y puede ser más lento en CPU. OCRmyPDF, por su parte, automatiza Tesseract para PDFs completos (detecta páginas escaneadas, limpia la imagen, aplica OCR y embebe el texto en el PDF). No reemplaza a pytesseract en tu código Python línea a línea, pero es ideal si tu flujo es procesar PDF enteros de forma robusta (incluye rotación, eliminación de ruido, etc.). En resumen: EasyOCR es una alternativa “más precisa” a pytesseract para OCR en imágenes, mientras que OCRmyPDF es más bien una solución integrada para documentos PDF.
-Camelot-py (extracción de tablas en PDF, puro Python)	tabula-py – wrapper de la herramienta Java Tabula; pdfminer.six – librería de bajo nivel para análisis de PDF	Tabula es un proyecto veterano para extraer tablas de PDFs. tabula-py permite usar Tabula desde Python. En algunos PDFs donde Camelot falla en detectar bordes o estructuras, Tabula puede tener mejor suerte, y viceversa. Camelot es puro Python (basado en ghostscript y OpenCV) y se integra bien, mientras Tabula requiere tener Java instalado. Si Camelot no te da los resultados deseados, probar Tabula podría mejorar robustez. Por otro lado, pdfminer.six es una librería de nivel bajo que extrae texto y la estructura (posiciones, líneas) de PDFs. No extrae tablas por sí sola, pero puedes construir tu propio extractor usando la info que provee. En resumen, Camelot sigue siendo de lo más moderno en Python puro; Tabula es la alternativa clásica con buenos resultados; y pdfminer.six sirve si necesitas control total (al precio de mayor trabajo manual).
-pdfplumber (lectura general de PDF, con utilidades de tablas)	PyPDF2 / PyPDFium / pikepdf (manejo de PDF), pandas + tabula/ghostscript	pdfplumber ya es de las librerías más completas en Python para extraer contenido de PDFs. Alternativas directas hay pocas: PyPDF2 (y su sucesor pypdf) se enfoca en manipular PDFs (dividir, unir, extraer metadatos) más que en extraer texto con precisión; pikepdf usa QPDF para manipulación a bajo nivel. Si tu objetivo es la extracción de texto estructurado, pdfplumber es adecuado. Otra opción es combinar pandas con la salida de Tabula o Camelot (por ejemplo, usar camelot.read_pdf(...).df para obtener DataFrames directamente). En conclusión, pdfplumber es bastante robusto; podrías complementarlo, más que reemplazarlo, con otras herramientas: usar PyMuPDF para obtener texto crudo más rápido, y pdfplumber para zonas que requieran detalle posicional.
-NLTK (plataforma NLP tradicional)	spaCy – librería NLP moderna optimizada en Cython; Stanza (StanfordNLP) – modelos neuronales de Stanford; Transformers/HuggingFace – modelos de lenguaje pre-entrenados	NLTK provee muchas utilidades (tokenizers, corpus, etc.) pero en 2025 se considera algo desactualizada para tareas avanzadas. spaCy ya está en tu stack; podrías migrar más tareas de NLTK hacia spaCy, que es mucho más rápida en procesamiento de texto y tiene modelos pre-entrenados eficientes (POS tagging, NER, etc.). Stanza es otra alternativa enfocada en exactitud, con modelos neuronales de alta calidad (soporta muchos idiomas, a cambio de ser más pesada). Finalmente, para tareas como clasificación de texto o embeddings, la biblioteca de HuggingFace (Transformers) te permite usar modelos de última generación (BERT, GPT, etc.). Por ejemplo, en lugar del clasificador Naive Bayes de NLTK, podrías usar un pipeline de Transformers para text-classification y obtener resultados más precisos aprovechando modelos pre-entrenados de BERT. En resumen: mantener NLTK para utilidades simples está bien, pero spaCy y herramientas de Deep Learning ofrecen soluciones más modernas y robustas en la mayoría de casos NLP hoy día.
-pyspellchecker (corrector ortográfico basado en Norvig)	symspellpy (SymSpell) – corrector ortográfico ultra rápido; jamspell – corrector basado en modelo de lenguaje; HunSpell (vía pyhunspell o enchant) – diccionario tradicional	La librería pyspellchecker implementa el algoritmo de Norvig generando permutaciones de palabras, lo cual puede ser lento en grandes textos. SymSpell emplea el algoritmo Symmetric Delete, logrando mucho mayor velocidad y menor consumo de memoria que el enfoque tradicional. Por ejemplo, SymSpell precalcula eliminaciones de caracteres y puede verificar millones de palabras en milisegundos. Si el rendimiento es crítico, symspellpy es una excelente alternativa (aunque su enfoque puede dar menos sugerencias contextuales). JamSpell usa un modelo estadístico entrenado, ofreciendo sugerencias más contextuales y a menudo con mejor precisión gramatical, a cambio de requerir un modelo pre-entrenado y más CPU. Finalmente, para ciertas aplicaciones, integrar un diccionario HunSpell (el usado en LibreOffice/Firefox) mediante python-enchant te da corrección ortográfica clásica con soporte multilenguaje, aunque no corregirá errores de contexto. En suma, si necesitas robustez y velocidad, SymSpell es muy recomendable (cargado con un buen diccionario); para calidad contextual, JamSpell o incluso APIs con modelos neuronales (como LanguageTool o Bing Spell Check) podrían superar a pyspellchecker.
-spaCy (ecosistema NLP industrial)	Flair – biblioteca de Zalando enfocada en NLP transfer-learning; Trankit – pipeline NLP neuronal; Spark NLP – librería NLP optimizada para clusters	spaCy ya es una de las herramientas más modernas. Sus principales alternativas son otras bibliotecas de nivel avanzado: Flair permite aprovechar embeddings contextuales (transformers) de forma sencilla para NER, clasificación, etc., obteniendo a veces mayor precisión a costa de más uso computacional. Spark NLP es útil si manejas big data o quieres integrar NLP en flujos Spark, ofreciendo alta escalabilidad y una amplia variedad de modelos preentrenados (incluyendo de atención médica, etc.). En términos de “robustez”, spaCy sigue siendo excelente por su equilibrio entre velocidad y precisión. Solo considerarías otras alternativas si requieres features no presentes en spaCy (por ejemplo, modelos específicos disponibles en Flair, o procesamiento distribuido con Spark NLP). Para la mayoría de proyectos, spaCy es la opción más equilibrada – las demás son mencionadas por completitud.
-matplotlib (graficación 2D tradicional)	Plotly – biblioteca de gráficos interactivos; Bokeh – gráficos interactivos en navegador; Seaborn – API de alto nivel sobre Matplotlib; Altair – gráficos declarativos	Matplotlib es el estándar en visualización, pero librerías más recientes ofrecen enfoques distintos: Plotly (y su variante ligera plotly express) permite crear gráficos interactivos (zoom, hover) fácilmente, útiles para paneles web y análisis exploratorio; Bokeh también genera gráficos interactivos en HTML sin necesidad de JS manual. Si buscas meramente mejorar la estética y simplicidad al crear ciertos gráficos estadísticos, Seaborn puede ser una buena adición – se construye sobre Matplotlib pero con estilos más pulidos y funciones de alto nivel (p. ej. sns.histplot). Altair, por otro lado, aprovecha una sintaxis declarativa (basada en Vega/Vega-Lite) para crear gráficos complejos con poco código, aunque para datasets muy grandes puede ser menos eficiente. En resumen, Matplotlib sigue siendo robusto y necesario para control fino; pero para una experiencia de gráficos modernos e interactivos, Plotly es una alternativa destacada (de hecho es “robusta” en el sentido de que evita mucho boilerplate y produce gráficos listos para web). Muchas aplicaciones combinan ambas: Matplotlib/Seaborn para reportes estáticos, Plotly/Bokeh para dashboards interactivos.
-openai (SDK) (acceso a modelos de OpenAI)	LangChain – marco para LLM orchestration; LlamaIndex (GPT Index) – facilitador de búsqueda sobre datos con LLMs; Transformers (HuggingFace) – clientes para modelos open-source	La librería oficial openai es la forma más segura de llamar a la API de OpenAI. No existe un “SDK alternativo” oficialmente soportado (y usar clientes no oficiales podría ser riesgoso en cuanto a robustez y cambios futuros). Sin embargo, dependiendo de tu caso de uso, podrías mejorar la robustez de la integración con herramientas adicionales: por ejemplo, LangChain no reemplaza al SDK pero lo complementa, proporcionando abstracciones de alto nivel para gestionar prompts, cadenas de llamadas a LLMs, memory, etc. – útil si tu aplicación LLM es compleja. Si tu preocupación es no depender de la API externa por seguridad o costos, la alternativa es optar por modelos open-source (como GPT-2/3/NeoX, LLaMA 2, etc.) e integrarlos con HuggingFace Transformers. En ese caso, la “librería alternativa” sería el paquete transformers de HuggingFace, que te permite cargar modelos locales y usarlos con una API unificada. Resumiendo: Para el SDK de OpenAI en sí, no hay reemplazo directo recomendado (mantente en la versión oficial y actualizada). Pero si consideras otras opciones por robustez/autonomía, mira hacia frameworks como LangChain (orquestación) o Transformers (modelos locales) dependiendo de si quieres seguir usando servicios OpenAI o no.
-scikit-learn (ML tradicional)	LightGBM / XGBoost / CatBoost – librerías especializadas en gradient boosting; PyTorch / TensorFlow – frameworks de Deep Learning; H2O AutoML / auto-sklearn – herramientas de AutoML	Scikit-learn sigue siendo el pilar robusto para ML “clásico” (regresiones, SVM, árboles, clustering, etc.). No hay un reemplazo único que supere a scikit-learn en scope, pero sí librerías enfocadas en ciertas áreas: por ejemplo, LightGBM/XGBoost son extremadamente potentes y eficientes para problemas de modelo de árboles (a menudo logran mejor rendimiento y velocidad que RandomForest/GBM de sklearn). Si en tu proyecto haces boosting extensivo, podrías usar esas librerías en lugar del GradientBoostingClassifier de sklearn, obteniendo entrenamiento más rápido y a veces mayor exactitud. Para capacidades de Deep Learning, scikit-learn se queda corto – ahí deberías integrar PyTorch o TensorFlow. Dado que ya incluyes OpenAI API, quizá consideres eventualmente entrenar redes propias; PyTorch es el más popular hoy para investigación y desarrollo por su facilidad de uso. Por último, en el terreno de AutoML, existen paquetes como auto-sklearn (construido sobre scikit-learn) o H2O Driverless AI que intentan probar múltiples modelos y optimizar hiperparámetros automáticamente. Estos pueden ser útiles si buscas “robustez” en el sentido de obtener el mejor modelo sin intervención manual. En conclusión, scikit-learn debe mantenerse actualizado porque seguirá siendo el backbone de muchos algoritmos; se complementa con librerías especializadas (no tanto reemplazo sino especialización). Usa LightGBM/XGBoost para boosting, PyTorch para redes neuronales, pero no elimines scikit-learn: sigue siendo necesario para preprocesamiento, pipelines y algoritmos donde brilla por simplicidad y fiabilidad.
-loguru (logging sencillo)	structlog – logging estructurado flexible; ** estándar logging + formatters** – la librería estándar con mejoras de configuración; rich – para logging con salida coloreada y enriquecida	Loguru es una mejora directa sobre logging de Python, facilitando la configuración y uso. Como alternativa, structlog permite formatear logs como JSON u otras estructuras, integrándose bien en sistemas distribuidos (apto para logs enriquecidos que luego consume Elasticsearch, por ejemplo). Si tu prioridad es la robustez en producción (p. ej. estructurar logs para monitorización), structlog podría ser una opción, aunque tiene una curva de aprendizaje algo mayor. Por otro lado, la librería estándar logging con buen uso (filtros, handlers) sigue siendo viable; Loguru esencialmente la simplifica, por lo que no hay desventaja en seguir con Loguru si te funciona. Mencionar rich.logging: la librería rich ofrece un RichHandler para el módulo logging que imprime hermosos logs en la terminal (colores, timestamp resaltado, etc.). Puede convivir con Loguru o reemplazarlo si buscas salidas más visuales. En suma, Loguru ya es considerado una alternativa moderna en sí al logging tradicional – puedes mantenerla. Cambiarla solo tendría sentido si necesitas formatos estructurados JSON (structlog) o integración con un ecosistema específico.
-tabulate (tablas en texto)	PrettyTable – otra lib para imprimir tablas; pandas.DataFrame – para representar tablas y exportar a texto/HTML; rich – para tablas en consola con formato avanzado	tabulate es ligera y cumple bien con formateo básico. PrettyTable ofrece funcionalidad similar (puedes añadir filas y luego imprimir, con opciones de estilo ASCII, CSV, HTML, etc.). No hay una “mejor” en términos robustez, más bien es preferencia de API. Si ya usas Pandas, muchas veces crear un DataFrame y usar df.to_markdown() o df.to_html() puede suplir la necesidad de tabulate cuando quieres exportar datos tabulares con formato. Finalmente, la librería rich nuevamente destaca si la salida es a terminal interactiva: su clase Table permite color, bordes, alineación avanzada, y no requiere mucho código. En entornos no interactivos (ej. generar un informe Markdown), tabulate o PrettyTable son sencillas y suficientes. No hay urgencia de cambiar: tabulate es estable y seguir utilizándola está perfectamente bien.
-python-dotenv (gestión de .env)	python-decouple – lectura de config .env con casting de tipos; Dynaconf – configuración unificada (env, settings) con soporte para múltiples entornos; Pydantic/BaseSettings – manejo de config basado en modelos de datos	La función de python-dotenv es simple pero crucial: cargar variables de entorno desde archivos. Continúa siendo la opción más popular para proyectos Python no basados en Django. Alternativas: python-decouple hace algo similar, con una API para obtener variables con tipos (e.g. config('DEBUG', default=False, cast=bool)). En ciertos proyectos, puede integrarse de forma más cómoda. Dynaconf va más allá, permitiendo combinar configuraciones de múltiples fuentes (env, archivos .toml/.yaml, etc.) y manejar distintos entornos (desarrollo/producción) fácilmente – es más “robusta” en el sentido de abarcar sistemas de configuración más complejos, aunque quizá innecesaria para proyectos pequeños. Si trabajas con dataclasses o modelos Pydantic, una opción moderna es usar Pydantic’s BaseSettings, donde defines un modelo y este automáticamente toma valores de .env o envvars, con validación de tipos incluida. Esto reduce errores de configuración al iniciar aplicaciones. En resumen, python-dotenv está bien y es muy seguro continuar con ella. Puedes explorar decouple por pequeñas mejoras sintácticas, o Pydantic si valoras la validación de configuración; pero el cambio no es obligatorio a menos que busques esas características adicionales.
-markdown2 (parser Markdown rápido)	Python-Markdown (markdown en pip) – implementación oficial de Markdown en Python; mistune – parser Markdown altamente eficiente en Cython; MkDocs / Sphinx – soluciones completas si generas documentación	markdown2 es apreciado por su velocidad y soporte completo de sintaxis. La alternativa más común es Python-Markdown (a veces llamada solo markdown), que es la implementación mantenida por la comunidad original. Python-Markdown es extensible (permite plugins, como tablas, highlight de código, etc.) y bastante robusta; muchos proyectos (incluyendo Django, MkDocs) la utilizan por confiabilidad. mistune es otra alternativa enfocada en rendimiento, escrita en gran parte en C y Cython; suele ser incluso más rápida que markdown2 y es compatible con Markdown estándar (también extensible con plugins, por ejemplo para MathJax). Si tu prioridad es la velocidad absoluta, mistune podría ser la elección (especialmente para procesar muchos documentos continuamente). Sin embargo, para la mayoría de casos Markdown, la diferencia entre estas librerías no es muy grande en funcionalidad básica. Puedes mantener markdown2 si te ha funcionado – es considerada rápida y completa según el estándar de John Gruber. Solo consideraría cambiarla si necesitas una extensión soportada oficialmente solo por otra biblioteca, o integración con un sistema mayor: por ejemplo, MkDocs o Sphinx traen sus propios procesadores (basados en Python-Markdown) optimizados para generar sitios de documentación enteros. En resumen, markdown2 sigue siendo robusta; Python-Markdown es la alternativa “oficial” con comunidad activa; mistune la opción para exprimir cada milisegundo de parseo en entornos de alto rendimiento.
-Jinja2 (motores de plantillas)	Mako – motor de plantillas tipo Django (sintaxis Python incrustada); Chameleon – motor ultra-rápido compatible con ZPT; JinjaLite – nueva variante ligera de Jinja para entornos limitados	Jinja2 es el motor de plantillas dominante en el ecosistema Python (usado por Flask, FastAPI, etc.), por lo que no hay realmente un reemplazo “mejor” en general. Alternativas existen pero suelen responder a nichos: Mako tiene una sintaxis diferente (similar a la de Django Templates o PSP) y en ciertos casos de plantillas muy complejas puede ser ligeramente más eficiente, pero a costa de mezclar más lógica en las plantillas. Chameleon es interesante por ser extremadamente rápido (compila las plantillas a bytecode optimizado) y seguro, pero utiliza una sintaxis XML/ZPT menos familiar. Recientemente, el equipo de Pallets introdujo JinjaLite enfocado a aplicaciones como Sandbox de navegadores o entornos donde no se puede tener todo Jinja2 – es compatible en sintaxis pero con funcionalidad reducida. Para la mayoría de proyectos, seguir con Jinja2 es la decisión correcta: es robusto, mantenido (acabamos de ver parches de seguridad) y ampliamente soportado. Solo opta por otra librería si tienes un caso especial (por ejemplo, ya usas Mako en un proyecto legacy, o necesitas el máximo rendimiento de Chameleon en un app server HTML-heavy). En cuanto a seguridad, Jinja2 3.1.6 está parchado y es seguro siempre que uses el Sandbox en caso necesario.
-
-Como se observa, en muchos casos la recomendación es mantener la librería actual actualizada, pues siguen siendo relevantes en 2025 (por ejemplo, scikit-learn para ML “clásico”, Jinja2 para plantillas, etc.). Las alternativas señaladas pueden ser útiles si tienes requisitos específicos de desempeño, alcance o seguridad que las librerías originales no satisfacen. Por ejemplo, fastText ha demostrado ser superior a langdetect en detección de idiomas por su cobertura y exactitud, por lo que podría valer la pena incorporarlo si esa funcionalidad es crítica en tu aplicación. Otro ejemplo: Polars (escrito en Rust) puede procesar datos tabulares 10 a 100 veces más rápido que Pandas en ciertas operaciones comunes, aprovechando todos los núcleos de CPU, lo cual sería una ganancia enorme de robustez y velocidad si manejas datasets muy grandes – no reemplazaría completamente a pandas en todas las situaciones, pero podrías usarlo en componentes de tu sistema donde el rendimiento sea cuello de botella.
-
-En resumen, lo más aconsejable es:
-	1.	Actualizar todas las dependencias a sus versiones estables más recientes, tal como se listó en la primera sección. Esto garantizará mayor robustez y seguridad (muchas correcciones de vulnerabilidades se obtienen así “gratis” con solo actualizar, e.g. OpenCV, Pillow, Jinja2). Antes de desplegar en producción, prueba bien la aplicación con las nuevas versiones – pero dado que hemos verificado que no hay cambios rompientes significativos en estos saltos, “todo debería funcionar bien” tras la actualización. 💡 Tip: Aprovecha para ajustar el archivo requirements.txt usando rangos compatibles (p. ej. opencv-python>=4.12,<4.13) si deseas más flexibilidad, aunque fijar versiones exactas de producción sigue siendo una buena práctica de seguridad.
-	2.	Evaluar caso por caso las alternativas sugeridas en la tabla según las necesidades de tu proyecto. No es obligatorio reemplazar nada si la librería actual cumple su cometido. Pero mantenerse informado de alternativas modernas es útil: podrías descubrir mejoras significativas en rendimiento (SymSpell vs Spellchecker, Polars vs Pandas), en capacidades (FastText vs langdetect), o en mantenibilidad a largo plazo (por ejemplo, quizás migres de fasttext-wheel a usar modelos HuggingFace si prefieres un ecosistema más activo). Si decides adoptar alguna alternativa, hazlo incrementalmente: por ejemplo, podrías introducir Polars para nuevas partes del código analítico, manteniendo Pandas donde ya todo funciona, e ir comparando resultados.
-	3.	Auditoría de seguridad (opcional por ahora): Aunque tu prioridad inmediata es actualizar y que todo funcione, es bueno mencionar que ya con las actualizaciones propuestas estarás mitigando varias vulnerabilidades conocidas (como las de Pillow y Jinja2). Un paso adicional sería emplear una herramienta de dependency scanning (como Snyk, Dependabot o Safety) para verificar que ninguna de las versiones nuevas tenga alertas de seguridad abiertas. Por ejemplo, según Snyk no hay vulnerabilidades conocidas en loguru 0.7.3 ni en las últimas versiones de Unidecode, etc. Tras actualizar, puedes ejecutar safety check o revisar los changelogs de cada paquete en busca de notas de seguridad. Dado que ya hemos abordado las principales (webp en OpenCV, RCE en NLTK, sandbox en Jinja2, buffer overflow en Pillow, etc.), tu stack debería quedar bastante seguro y robusto con las versiones sugeridas. No obstante, incorporar una revisión de seguridad en tu flujo (por ejemplo, fijar versiones mínimas que cubren vulnerabilidades conocidas) ayudará a mantener todo funcionando bien a futuro sin sobresaltos.
-
-En conclusión, aplicando estas actualizaciones mantendrás tu proyecto “lo más actual, robusto y seguro” posible, tal como buscas. ✨ Cada librería estará en su versión óptima, y cuentas con un panorama de posibles reemplazos si llegas a necesitarlos. Recuerda probar cuidadosamente la aplicación tras los cambios, y aprovechar las mejoras de cada nueva versión en tu código. ¡Buena suerte con la modernización de tu stack! 🚀
-
-Fuentes:
-	•	PyPI – Especificaciones de versiones más recientes de cada paquete, changelogs y fechas de lanzamiento.
-	•	Documentación oficial y notas de lanzamiento de: OpenCV, Pillow, Camelot, pdfplumber, PyMuPDF, NLTK, spaCy, Scikit-learn, Jinja2, entre otras.
-	•	Estudios comparativos y referencias de rendimiento/precisión: modelo de FastText vs langdetect, eficiencia de SymSpell vs algoritmo tradicional, benchmarks de Polars vs Pandas.
-	•	Recomendaciones de la comunidad (Kaggle, Stack Overflow) sobre librerías alternativas en casos de uso específicos.
-
-
-
-
-          
-Para identificar áreas de mejora en el proyecto, necesito revisar la estructura actual, el CHANGELOG y otros archivos clave que puedan indicar problemas o áreas de desarrollo pendientes.
+Ahora necesito examinar el archivo llm_refiner.py para entender cómo se maneja el 
+refinamiento de texto con LLM, con el fin de implementar el sistema RAG.
         
-            
 toolName: view_files
             
 status: success
           
             
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/CHANGELOG.md
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/adapters/llm_refiner.py
           
-Ahora revisaré el README para entender mejor el propósito del proyecto y posibles áreas de mejora mencionadas.
+Ahora necesito examinar los proveedores de LLM para entender cómo se manejan las diferentes APIs.
         
             
 toolName: view_files
             
 status: success
+                   
+filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/adapters/providers/openai_provider.py
           
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/README.md
-          
-Revisaré el archivo CONTRIBUTING.md para entender las directrices de contribución y posibles áreas de mejora identificadas por los mantenedores.
-        
-            
-toolName: view_files
-            
-status: success
-          
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/CONTRIBUTING.md
-          
-Buscaré issues o TODOs en el código para identificar áreas de mejora conocidas.
-        
-            
-toolName: search_codebase
-            
-status: success
-          
-query: TODO FIXME issue improvement needed
-          
-Revisaré el archivo de issues en GitHub para ver si hay problemas o mejoras pendientes documentadas.
-        
-            
-toolName: search_codebase
-            
-status: success
-          
-query: issue improvement enhancement feature request
-          
-Revisaré el archivo de configuración de OCR para entender mejor las capacidades actuales y posibles mejoras.
-        
-            
-toolName: view_files
-            
-status: success
-          
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/config/ocr_settings.py
-          
-Revisaré el archivo principal para entender el flujo de trabajo actual y posibles áreas de mejora.
-        
-            
-toolName: view_files
-            
-status: success
-          
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/main.py
-          
-Revisaré el archivo de configuración de LLM para entender mejor la integración actual con modelos de lenguaje.
-        
-            
-toolName: view_files
-            
-status: success
-          
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/config/llm_config.py
-          
-Revisaré el archivo de configuración de API para entender mejor la integración con servicios externos.
-        
-            
-toolName: view_files
-            
-status: success
-          
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/src/config/api_settings.py
-          
-Revisaré el archivo de configuración de Docker para entender mejor el entorno de ejecución actual.
-        
-            
-toolName: view_files
-            
-status: success
-          
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/Dockerfile
-          
-Revisaré el archivo docker-compose.yml para entender mejor la configuración del entorno de desarrollo.
-        
-            
-toolName: view_files
-            
-status: success
-          
-            
-filePath: /Users/ro/Proyectos-OCR/OCR-PYMUPDF/docker-compose.yml
-          
-# Áreas de mejora para el proyecto OCR-PYMUPDF
+# Análisis de las Alternativas para Escalar el Proyecto OCR-PYMUPDF
 
-Basado en el análisis del código y la estructura del proyecto, estas son las principales áreas que se podrían mejorar:
+Basado en el análisis del código base, puedo ofrecer recomendaciones detalladas para las tres alternativas 
+que has propuesto para escalar el proyecto. Vamos a analizar cada una, su viabilidad y los pasos necesarios para implementarlas.
 
-## 1. Mejoras en la integración de LLMs
+## 1. Interfaz Gráfica para Subir PDFs
 
-- **Ampliar soporte para modelos locales**: Actualmente hay soporte para DeepSeek local, pero se podría expandir a otros modelos locales como Llama, Mistral o Falcon para reducir dependencia de APIs externas.
-- **Implementar streaming de respuestas**: Permitir respuestas en tiempo real desde los LLMs para documentos extensos.
-- **Mejorar prompts específicos**: Desarrollar prompts más especializados para diferentes tipos de documentos legales.
+### Análisis de Viabilidad
+El proyecto ya tiene una arquitectura hexagonal bien definida con puertos y adaptadores que separan claramente 
+la lógica de negocio de la infraestructura. Esto facilita la adición de una nueva interfaz sin modificar el núcleo de 
+la aplicación.
 
-## 2. Optimización del procesamiento de imágenes y OCR
+### Implementación Recomendada
 
-- **Implementar preprocesamiento avanzado**: Mejorar la detección de bordes, eliminación de ruido y corrección de orientación.
-- **Soporte para más idiomas**: Ampliar la configuración de Tesseract para soportar más idiomas además de español, inglés y chino.
-- **Detección automática de idioma**: Implementar detección automática del idioma del documento para seleccionar el modelo OCR adecuado.
+**Backend API con FastAPI:**
+- FastAPI es compatible con las dependencias actuales y ofrece un rendimiento excelente para operaciones asíncronas.
+- Permitiría crear endpoints para subir archivos, consultar estado y descargar resultados.
 
-## 3. Mejoras en la extracción de tablas
+**Frontend con React:**
+- Interfaz moderna con drag & drop para subir PDFs.
+- Visualización del progreso de procesamiento.
+- Previsualización y descarga de resultados en Markdown.
 
-- **Mejorar la precisión de detección**: Refinar los algoritmos para detectar tablas complejas o con formatos no estándar.
-- **Exportación a más formatos**: Añadir soporte para exportar tablas a CSV, Excel o JSON además del formato Markdown.
-- **Preservación de formato**: Mejorar la preservación del formato original de las tablas.
+### Cambios Necesarios
 
-## 4. Interfaz de usuario
+1. **Crear nueva estructura de directorios:**
+   ```
+   src/
+     interfaces/
+       web/
+         api/
+           routes/
+             pdf_routes.py
+             user_routes.py
+           app.py
+         frontend/
+           public/
+           src/
+             components/
+             pages/
+             App.jsx
+   ```
 
-- **Desarrollar una interfaz web**: Crear una interfaz web simple para subir documentos y visualizar resultados.
-- **Visualización de progreso**: Implementar indicadores de progreso durante el procesamiento de documentos extensos.
-- **Previsualización de resultados**: Añadir capacidad de previsualizar y editar el resultado antes de guardarlo.
+2. **Modificar la arquitectura para soportar CLI y API web:**
+   - Crear un nuevo puerto para la interfaz web en `domain/ports/web_port.py`
+   - Implementar un adaptador para FastAPI en `adapters/fastapi_adapter.py`
 
-## 5. Infraestructura y rendimiento
+3. **Nuevas dependencias:**
+   - Backend: `fastapi`, `uvicorn`, `python-multipart`
+   - Frontend: `react`, `axios`, `react-dropzone`
 
-- **Optimización de memoria**: Mejorar el manejo de memoria para documentos grandes.
-- **Procesamiento por lotes**: Implementar procesamiento por lotes para múltiples documentos.
-- **Mejoras en el caché**: Refinar el sistema de caché para resultados de OCR y LLM.
+## 2. Corrección Interactiva de Palabras Borrosas
 
-## 6. Documentación y pruebas
+### Análisis de Viabilidad
+El proyecto ya cuenta con un sistema de OCR robusto (`ocr_adapter.py`) 
+y un mecanismo de corrección manual (`corrections.csv`). 
+La implementación de una interfaz interactiva para correcciones es factible.
 
-- **Ampliar documentación de API**: Mejorar la documentación de la API para facilitar la integración.
-- **Aumentar cobertura de pruebas**: Incrementar la cobertura de pruebas unitarias y de integración.
-- **Ejemplos de uso**: Añadir más ejemplos de uso para diferentes escenarios.
+### Implementación Recomendada
 
-## 7. Seguridad y gestión de credenciales
+1. **Extender el sistema OCR actual:**
+   - Modificar `ocr_adapter.py` para identificar palabras con baja confianza.
+   - Crear un nuevo caso de uso `InteractiveOCRCorrectionUseCase` en `domain/use_cases/`.
 
-- **Mejorar el manejo de claves API**: Implementar un sistema más seguro para gestionar las claves API.
-- **Validación de entrada**: Reforzar la validación de archivos de entrada para prevenir vulnerabilidades.
+2. **Interfaz de corrección:**
+   - Añadir una vista en el frontend para mostrar palabras problemáticas.
+   - Implementar un sistema de sugerencias basado en diccionarios y contexto.
+   - Permitir al usuario confirmar o corregir palabras marcadas.
 
-## 8. Nuevas características
+3. **Retroalimentación al sistema:**
+   - Guardar correcciones en `corrections.csv` para mejorar futuras conversiones.
+   - Implementar un sistema de aprendizaje para reducir errores recurrentes.
 
-- **Extracción de entidades**: Implementar reconocimiento de entidades nombradas (NER) para identificar personas, organizaciones, fechas, etc.
-- **Análisis de sentimiento**: Añadir capacidad de análisis de sentimiento para documentos.
-- **Generación de resúmenes**: Implementar generación automática de resúmenes de documentos.
-- **Comparación de documentos**: Añadir funcionalidad para comparar diferentes versiones de documentos.
+### Cambios Necesarios
 
-Estas mejoras podrían implementarse gradualmente siguiendo las convenciones de commit y la estructura de arquitectura hexagonal ya establecidas en el proyecto.
+1. **Modificar `ocr_adapter.py` para exponer confianza de OCR:**
+   - Añadir un parámetro para devolver palabras con baja confianza.
+   - Crear DTOs para representar palabras problemáticas.
+
+2. **Crear endpoints específicos:**
+   - `/api/documents/{id}/corrections` para obtener palabras problemáticas.
+   - `/api/corrections` para enviar correcciones.
+
+## 3. Sistema RAG para Chatear con Documentos
+
+### Análisis de Viabilidad
+El proyecto ya tiene integración con varios proveedores de LLM (OpenAI, Gemini, DeepSeek) a través de `llm_refiner.py` 
+y los adaptadores en `adapters/providers/`. Implementar un sistema RAG requeriría añadir vectorización y búsqueda semántica.
+
+### Implementación Recomendada
+
+1. **Vectorización de documentos:**
+   - Implementar un nuevo adaptador `VectorizationAdapter` que utilice embeddings.
+   - Crear un almacén de vectores usando FAISS o Chroma DB.
+
+2. **Sistema de consulta RAG:**
+   - Crear un nuevo caso de uso `DocumentChatUseCase`.
+   - Implementar la lógica de recuperación y generación aumentada.
+
+3. **Interfaz de chat:**
+   - Añadir una vista de chat en el frontend.
+   - Implementar historial de conversaciones y contexto.
+
+### Cambios Necesarios
+
+1. **Nuevas dependencias:**
+   - `sentence-transformers` para embeddings.
+   - `faiss-cpu` o `chromadb` para almacenamiento de vectores.
+
+2. **Nuevos componentes:**
+   ```
+   src/
+     domain/
+       ports/
+         vector_store_port.py
+     adapters/
+       vectorization/
+         sentence_transformer_adapter.py
+         faiss_adapter.py
+     domain/
+       use_cases/
+         document_chat.py
+   ```
+
+## Recomendación Final
+
+Basado en el análisis del código y la arquitectura actual, recomendaría implementar las alternativas en este orden:
+
+1. **Interfaz Gráfica para Subir PDFs**: Proporciona valor inmediato y establece la base para las otras funcionalidades.
+
+2. **Sistema RAG para Chatear con Documentos**: 
+Aprovecha la integración existente con LLMs y añade una funcionalidad de alto valor.
+
+3. **Corrección Interactiva de Palabras**: Complementa las otras funcionalidades mejorando la calidad del OCR.
+
+Esta secuencia maximiza el valor entregado mientras construye incrementalmente sobre la base existente, 
+manteniendo la arquitectura hexagonal y los principios de diseño del proyecto.
+   
+# Recomendación para implementar las nuevas funcionalidades
+
+Basado en el análisis del código existente y la arquitectura del proyecto OCR-PYMUPDF, 
+te recomiendo comenzar con la implementación en el siguiente orden:
+
+## 1. Interfaz gráfica para subir PDFs
+
+Esta es la mejor opción para comenzar porque:
+
+- Proporciona valor inmediato a los usuarios finales
+- Es relativamente independiente del código OCR existente
+- Establece la base para las otras funcionalidades
+
+**Pasos de implementación:**
+
+1. Crear una API REST con FastAPI en `src/infrastructure/http/`
+2. Implementar endpoints básicos para subir PDFs y obtener resultados
+3. Desarrollar un frontend sencillo con React
+4. Integrar la funcionalidad OCR existente con la nueva API
+
+## 2. Sistema RAG para chatear con documentos
+
+Esta sería la segunda prioridad porque:
+
+- Aprovecha el trabajo ya realizado con los LLMs en el proyecto
+- Añade una funcionalidad de alto valor que diferencia tu solución
+- Puede implementarse de forma incremental
+
+**Pasos de implementación:**
+
+1. Añadir funcionalidad para vectorizar documentos procesados
+2. Implementar un almacén de vectores (como Chroma o FAISS)
+3. Crear un nuevo caso de uso para consultas RAG en `src/domain/use_cases/`
+4. Extender la API y el frontend para incluir la interfaz de chat
+
+## 3. Corrección interactiva de palabras borrosas
+
+Esta funcionalidad debería implementarse al final porque:
+
+- Requiere cambios más profundos en el núcleo del sistema OCR
+- Necesita una interfaz de usuario más compleja
+- Se beneficia de tener ya implementada la interfaz gráfica
+
+**Pasos de implementación:**
+
+1. Modificar el adaptador OCR para identificar palabras de baja confianza
+2. Crear un sistema de almacenamiento para palabras corregidas
+3. Implementar la interfaz de corrección en el frontend
+4. Desarrollar el mecanismo de retroalimentación al sistema
+
+## Consideraciones generales
+
+- Mantén la arquitectura hexagonal existente
+- Sigue utilizando los patrones de diseño ya establecidos
+- Implementa pruebas unitarias y de integración para cada nueva funcionalidad
+- Documenta los cambios en la API y la interfaz de usuario
+
+Este enfoque te permitirá construir incrementalmente sobre la base existente, 
+entregando valor en cada etapa y minimizando los riesgos de desarrollo.
