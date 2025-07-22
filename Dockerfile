@@ -50,7 +50,9 @@ RUN mkdir -p /app/data/models/fasttext \
             /app/data/corrections \
             /app/pdfs \
             /app/resultado \
-            /app/docs
+            /app/docs \
+            /app/uploads \
+            /app/metadata
 
 COPY --from=builder /install /usr/local
 
@@ -68,8 +70,11 @@ RUN chown -R 1000:1000 /app && \
 # Configurar volúmenes persistentes
 VOLUME ["/app/data/models/fasttext", "/app/pdfs", "/app/resultado", "/app/docs"]
 
-# Exponer puerto para documentación
+# Exponer puerto para API y documentación
 EXPOSE 8000
 
 # Comando por defecto para desarrollo
 CMD ["tail", "-f", "/dev/null"]
+
+# Comando alternativo para ejecutar la API
+# Para usar este comando: docker run --name ocr-api -p 8000:8000 ocr-pymupdf python run_api.py

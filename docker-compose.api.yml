@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  ocr-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ocr-pymupdf-api
+    container_name: ocr-pymupdf-api
+    command: python run_api.py
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./pdfs:/app/pdfs
+      - ./resultado:/app/resultado
+      - ./uploads:/app/uploads
+      - ./metadata:/app/metadata
+      - ./data:/app/data
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
