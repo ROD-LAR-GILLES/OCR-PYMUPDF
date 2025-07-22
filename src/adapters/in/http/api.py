@@ -14,17 +14,17 @@ import time
 from typing import List, Optional, Dict, Any
 
 # Importaciones del dominio
-from domain.use_cases.pdf_to_markdown import PDFToMarkdownUseCase
+from application.use_cases.pdf_to_markdown import PDFToMarkdownUseCase
 from domain.dtos.document_dtos import DocumentInputDTO
 
 # Importaciones de adaptadores
-from adapters.pymupdf_adapter import PyMuPDFAdapter
-from adapters.llm_refiner import LLMRefiner
+from adapters.out.ocr.pymupdf_adapter import PyMuPDFAdapter
+from adapters.out.llm.llm_refiner import LLMRefiner
 
 # Importaciones de infraestructura
-from infrastructure.file_storage import FileStorage
-from infrastructure.http.document_service import DocumentService
-from infrastructure.http.models import (
+from adapters.out.storage.file_storage import FileStorage
+from adapters.inbound.http.document_service import DocumentService
+from adapters.inbound.http.models import (
     DocumentCreate, 
     DocumentResponse, 
     DocumentStatus,

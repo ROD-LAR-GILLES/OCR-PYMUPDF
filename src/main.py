@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from loguru import logger
 import sys
 
 # Importar el menú CLI
 def importar_menu():
-    from adapters.in.cli.cli_menu import mostrar_menu
+    from adapters.inbound.cli.cli_menu import mostrar_menu
     return mostrar_menu
 
 def main() -> None:

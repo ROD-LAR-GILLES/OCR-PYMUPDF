@@ -22,7 +22,7 @@ def main():
     
     # Iniciar el servidor
     uvicorn.run(
-        "infrastructure.http.api:app",
+        "adapters.in.http.api:app",
         host=host,
         port=port,
         reload=True,  # Habilitar recarga automática en desarrollo

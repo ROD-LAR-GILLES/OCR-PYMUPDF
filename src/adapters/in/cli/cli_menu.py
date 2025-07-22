@@ -14,13 +14,13 @@ import signal
 from pathlib import Path
 from time import sleep
 from loguru import logger
-from domain.use_cases import PDFToMarkdownUseCase
-from domain.use_cases.document_comparison import DocumentComparisonUseCase
-from interfaces.config_menu import ConfigMenu
+from application.use_cases.pdf_to_markdown import PDFToMarkdownUseCase
+from application.use_cases.document_comparison import DocumentComparisonUseCase
+from adapters.inbound.cli.config_menu import ConfigMenu
 from config.llm_config import LLMConfig
-from adapters.pymupdf_adapter import PyMuPDFAdapter
-from adapters.llm_refiner import LLMRefiner
-from infrastructure.file_storage import FileStorage
+from adapters.out.ocr.pymupdf_adapter import PyMuPDFAdapter
+from adapters.out.llm.llm_refiner import LLMRefiner
+from adapters.out.storage.file_storage import FileStorage
 
 PDF_DIR = Path("pdfs")
 

@@ -27,7 +27,7 @@ def start_server(host="0.0.0.0", port=8000):
         "infrastructure.http.api:app",
         host=host,
         port=port,
-        reload=True,  # Habilitar recarga automática en desarrollo
+        reload=True, 
         log_level="info"
     )
 
