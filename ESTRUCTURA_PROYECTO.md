@@ -23,7 +23,7 @@ Este documento describe la organización del proyecto OCR-PYMUPDF, que sigue una
 │   ├── developer/        # Documentación para desarrolladores
 │   └── user/             # Documentación para usuarios
 ├── requirements/         # Archivos de dependencias
-├── scripts/              # Scripts de utilidad
+├── scripts/              # Scripts de utilidad (legacy)
 │   ├── data/             # Scripts para gestión de datos
 │   ├── deployment/       # Scripts de despliegue
 │   └── maintenance/      # Scripts de mantenimiento
@@ -32,6 +32,9 @@ Este documento describe la organización del proyecto OCR-PYMUPDF, que sigue una
 │   ├── domain/           # Dominio (entidades, casos de uso, puertos)
 │   ├── infrastructure/   # Infraestructura (componentes técnicos)
 │   └── interfaces/       # Interfaces (CLI, API, etc.)
+├── tools/                # Herramientas unificadas
+│   ├── bin/              # Ejecutables y scripts Python
+│   └── scripts/          # Scripts de shell unificados
 └── tests/                # Pruebas
     ├── adapters/         # Pruebas de adaptadores
     ├── domain/           # Pruebas de dominio
@@ -65,13 +68,25 @@ La documentación se ha estructurado para diferentes audiencias:
 - `docs/developer/`: Documentación para desarrolladores (arquitectura, contribución)
 - `docs/user/`: Documentación para usuarios finales
 
-## Scripts
+## Scripts y Herramientas
 
-Los scripts se han organizado por categorías:
+Los scripts se han organizado en dos categorías principales:
+
+### Scripts Legacy (en proceso de migración)
 
 - `scripts/data/`: Scripts para gestión de datos (diccionarios, etc.)
 - `scripts/deployment/`: Scripts para despliegue (Docker, etc.)
 - `scripts/maintenance/`: Scripts de mantenimiento (actualización de dependencias, limpieza, etc.)
+
+### Herramientas Unificadas
+
+- `tools/scripts/`: Scripts de shell unificados para tareas comunes
+  - `api.sh`: Gestión de la API REST (local/Docker)
+  - `deps.sh`: Gestión de dependencias
+  - `dev.sh`: Gestión del entorno de desarrollo
+  - `project.sh`: Gestión del proyecto (reorganización, limpieza)
+- `tools/bin/`: Ejecutables y scripts Python
+  - `legal_dictionary_manager.py`: Gestor del diccionario de términos legales
 
 ## Datos
 
