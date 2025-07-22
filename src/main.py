@@ -1,33 +1,28 @@
 from loguru import logger
-from interfaces.cli_menu import mostrar_menu
 import sys
 
+# Importar el menú CLI
+def importar_menu():
+    from adapters.in.cli.cli_menu import mostrar_menu
+    return mostrar_menu
+
 def main() -> None:
-    """
-    Punto de entrada de la aplicación OCR-PYMUPDF.
-    
-    Configura el sistema de logging para:
-    - Eliminar el handler por defecto de Loguru
-    - Añadir handler para escribir en ocr.json en formato JSON
-    - Rotar archivo cada 10 MB
-    
-    Invoca el menú interactivo CLI.
-    """
-    # Configuración logging 
+    """Punto de entrada de la aplicacion OCR-PYMUPDF."""
+    # Configuracion logging 
     logger.remove()
     
-    # Procesar argumentos de línea de comando
+    # Procesar argumentos de linea de comando
     args = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
     log_level = "DEBUG" if "--log-level=DEBUG" in sys.argv else "INFO"
     
-    # Añadir handler para consola
+    # Anadir handler para consola
     logger.add(
         sys.stderr,
         level=log_level,
         format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
     )
     
-    # Añadir handler para archivo
+    # Anadir handler para archivo
     logger.add(
         "ocr.json",
         serialize=True,
@@ -37,12 +32,12 @@ def main() -> None:
     
     logger.debug(f"Log level set to: {log_level}")
     
-    # ─── Modo no interactivo ───
+    # Modo no interactivo
     if args:
         from pathlib import Path
-        from domain.use_cases import PDFToMarkdownUseCase
-        from adapters.pymupdf_adapter import PyMuPDFAdapter
-        from infrastructure.file_storage import FileStorage
+        from application.use_cases.pdf_to_markdown import PDFToMarkdownUseCase
+        from adapters.out.ocr.pymupdf_adapter import PyMuPDFAdapter
+        from adapters.out.storage.file_storage import FileStorage
 
         pdf_arg = Path(args[0])
         if not pdf_arg.exists():
@@ -58,20 +53,22 @@ def main() -> None:
             use_case = PDFToMarkdownUseCase(
                 document_port=document_port,
                 storage_port=storage_port,
-                llm_port=None  # Modo sin LLM para la línea de comandos
+                llm_port=None  # Modo sin LLM para la linea de comandos
             )
             md_path = use_case.execute(pdf_arg)
             print(f"[OK] Markdown generado: {md_path}")
         except Exception as exc:
             logger.exception(exc)
-            print("[ERROR] Falló la conversión a Markdown.")
-        return  # Salir sin mostrar menú
+            print("[ERROR] Fallo la conversion a Markdown.")
+        return  # Salir sin mostrar menu
         
     try:
+        # Importar el menú de forma dinámica para evitar problemas de importación circular
+        mostrar_menu = importar_menu()
         mostrar_menu()
     except Exception as exc:
         logger.exception(exc)
-        print("[ERROR] Ocurrió un problema. Revisa ocr.json")
+        print("[ERROR] Ocurrio un problema. Revisa ocr.json")
 
 
 if __name__ == "__main__":
