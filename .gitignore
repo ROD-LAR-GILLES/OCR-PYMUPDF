@@ -1,45 +1,171 @@
-# Archivos de configuración del entorno
+# ============================================================================
+# GITIGNORE PARA PROYECTO MONOREPO: OCR-PYMUPDF (Python + Node.js + Docker)
+# ============================================================================
+
+# ────────────────────────────────────────────────────────────────────────────
+# ARCHIVOS DE CONFIGURACIÓN Y SECRETOS
+# ────────────────────────────────────────────────────────────────────────────
 .env
 *.env
+.env.local
+.env.production
+.env.development
+.env.test
+config/secrets.json
+*.key
+*.pem
+*.p12
+*.pfx
 
-# Archivos de caché de Python
+# ────────────────────────────────────────────────────────────────────────────
+# PYTHON - Archivos de caché y compilados
+# ────────────────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
-# Archivos de logs
+# ────────────────────────────────────────────────────────────────────────────
+# NODE.JS - Dependencias y archivos generados
+# ────────────────────────────────────────────────────────────────────────────
+# Dependencias de Node.js (CRÍTICO: nunca versionar)
+node_modules/
+frontend/node_modules/
+*/node_modules/
+
+# Archivos de lock alternativos
+yarn.lock
+pnpm-lock.yaml
+
+# Archivos de caché de npm/yarn
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Archivos de build del frontend
+frontend/dist/
+frontend/build/
+*/dist/
+*/build/
+
+# ────────────────────────────────────────────────────────────────────────────
+# LOGS Y ARCHIVOS TEMPORALES
+# ────────────────────────────────────────────────────────────────────────────
 *.log
 logs/
-
-# Archivos de configuración de IDE
-.vscode/
-.idea/
-
-# Archivos de sistema
-.DS_Store
-Thumbs.db
-
-# Archivos generados por Docker
-docker-compose.override.yml
-*.pid
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
 # Archivos temporales
 *.tmp
 *.swp
 *.bak
 *.old
+*~
+.#*
 
-# Archivos de modelos y caché
+# ────────────────────────────────────────────────────────────────────────────
+# ARCHIVOS DE SISTEMA Y IDE
+# ────────────────────────────────────────────────────────────────────────────
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ────────────────────────────────────────────────────────────────────────────
+# DOCKER - Archivos generados y configuraciones locales
+# ────────────────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+docker-compose.local.yml
+*.pid
+.dockerignore.local
+
+# ────────────────────────────────────────────────────────────────────────────
+# MODELOS Y CACHÉ DE IA/ML
+# ────────────────────────────────────────────────────────────────────────────
 models/
 .cache/
 docker/deepseek/
+*.model
+*.pkl
+*.joblib
+.transformers_cache/
+.huggingface/
 
-# Archivos de resultados o datos procesados
+# ────────────────────────────────────────────────────────────────────────────
+# ARCHIVOS DE DATOS Y RESULTADOS (específicos del proyecto)
+# ────────────────────────────────────────────────────────────────────────────
+# Resultados de procesamiento
 resultado/
-pdfs/
+results/
+output/
 
-# Archivos de dependencias locales
-*.egg-info/
-dist/
-build/RULES.md
+# Archivos de entrada (PDFs de prueba)
+pdfs/
+uploads/
+data/input/
+
+# Metadatos generados
+metadata/
+*.metadata
+
+# ────────────────────────────────────────────────────────────────────────────
+# TESTING Y COVERAGE
+# ────────────────────────────────────────────────────────────────────────────
+.coverage
+.nyc_output
+coverage/
+*.cover
+*.py,cover
+.hypothesis/
+
+# ────────────────────────────────────────────────────────────────────────────
+# ARCHIVOS ESPECÍFICOS DEL PROYECTO (temporal)
+# ────────────────────────────────────────────────────────────────────────────
+RULES.md
 investigacion.txt
