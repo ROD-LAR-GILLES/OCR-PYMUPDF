@@ -22,7 +22,7 @@ Este documento describe la organización del proyecto OCR-PYMUPDF, que sigue una
 │   ├── api/              # Documentación de la API
 │   ├── developer/        # Documentación para desarrolladores
 │   └── user/             # Documentación para usuarios
-├── requirements/         # Archivos de dependencias
+
 ├── scripts/              # Scripts de utilidad (legacy)
 │   ├── data/             # Scripts para gestión de datos
 │   ├── deployment/       # Scripts de despliegue

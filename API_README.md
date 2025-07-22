@@ -42,7 +42,6 @@ OPENAI_API_KEY=tu_clave_api_aqui
 ```bash
 # Instalar dependencias
 pip install -r requirements.txt
-pip install -r requirements/api-requirements.txt
 ```
 
 ## Ejecución

@@ -11,13 +11,12 @@ RUN apt-get update && \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar archivos de requirements
-COPY requirements/ requirements/
+# Copiar archivo de requirements
+COPY requirements.txt requirements.txt
 
 # Instalar dependencias de Python en el build stage
 RUN pip install --upgrade pip && \
-    pip install --prefix=/install -r requirements/requirements.txt && \
-    pip install --prefix=/install -r requirements/requirements-dev.txt
+    pip install --prefix=/install -r requirements.txt
 
 # ------------------ runtime stage ------------------
 FROM python:3.11-slim
