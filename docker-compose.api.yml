@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: ocr-pymupdf-api
     container_name: ocr-pymupdf-api
-    command: python run_api.py
+    command: python tools/bin/run_api.py
     ports:
       - "8000:8000"
     volumes:

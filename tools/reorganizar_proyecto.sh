@@ -95,7 +95,7 @@ echo "Se recomienda ejecutar las pruebas y verificar que la aplicación se inici
 echo ""
 echo "Comandos sugeridos para verificar:"
 echo "- python -m pytest  # Ejecutar pruebas"
-echo "- bash bin/start.sh  # Iniciar la aplicación"
+echo "- bash tools/bin/start.sh  # Iniciar la aplicación"
 echo ""
 
 read -p "¿Ha verificado que todo funciona correctamente? (s/n): " respuesta

@@ -77,4 +77,4 @@ EXPOSE 8000
 CMD ["tail", "-f", "/dev/null"]
 
 # Comando alternativo para ejecutar la API
-# Para usar este comando: docker run --name ocr-api -p 8000:8000 ocr-pymupdf python run_api.py
+# Para usar este comando: docker run --name ocr-api -p 8000:8000 ocr-pymupdf python tools/bin/run_api.py

@@ -49,7 +49,7 @@ pip install -r requirements/api-requirements.txt
 
 ```bash
 # Método 1: Usando el script run_api.py
-python run_api.py
+python tools/bin/run_api.py
 
 # Método 2: Usando uvicorn directamente
 uvicorn src.infrastructure.http.api:app --host 0.0.0.0 --port 8000 --reload
