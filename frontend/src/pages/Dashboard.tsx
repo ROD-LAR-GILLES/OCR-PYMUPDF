@@ -7,7 +7,8 @@ import {
   Alert,
   Skeleton,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Button
 } from '@mui/material'
 
 import StatsCards from '../components/dashboard/StatsCards'
@@ -24,9 +25,10 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => {
     const checkApiStatus = async () => {
+      setLoading(true)
       try {
-        await getApiStatus()
-        setApiConnected(true)
+        const isConnected = await getApiStatus()
+        setApiConnected(isConnected)
         setLoading(false)
       } catch (error) {
         console.error('Error al conectar con la API:', error)
@@ -36,7 +38,22 @@ const Dashboard = (): JSX.Element => {
     }
 
     checkApiStatus()
-  }, [])
+
+    // Configurar un intervalo para verificar la conexión periódicamente si está desconectado
+    let intervalId: number | undefined
+    
+    if (apiConnected === false) {
+      intervalId = window.setInterval(() => {
+        checkApiStatus()
+      }, 30000) // Verificar cada 30 segundos
+    }
+
+    return () => {
+      if (intervalId) {
+        window.clearInterval(intervalId)
+      }
+    }
+  }, [apiConnected])
 
   if (loading) {
     return (
@@ -67,8 +84,21 @@ const Dashboard = (): JSX.Element => {
   if (apiConnected === false) {
     return (
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Alert severity="error" sx={{ mb: 3 }}>
-          No se pudo conectar con el servidor. Por favor, verifica que el servidor esté en funcionamiento.
+        <Alert severity="error" sx={{ mb: 3, p: 3, borderRadius: 2 }}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Error de conexión
+          </Typography>
+          <Typography variant="body1" paragraph>
+            No se pudo conectar con el servidor API. Por favor, verifica que el servidor esté en ejecución e intenta nuevamente.
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => window.location.reload()}
+            sx={{ mt: 1 }}
+          >
+            Reintentar conexión
+          </Button>
         </Alert>
       </Container>
     )
@@ -105,6 +135,13 @@ const Dashboard = (): JSX.Element => {
           <RecentActivity />
         </Grid>
       </Grid>
+
+      {/* Mensaje de conexión exitosa */}
+      {apiConnected && (
+        <Alert severity="success" sx={{ mt: 3, borderRadius: 2 }} onClose={() => {}}>          
+          Conectado al servidor API correctamente
+        </Alert>
+      )}
     </Container>
   )
 }

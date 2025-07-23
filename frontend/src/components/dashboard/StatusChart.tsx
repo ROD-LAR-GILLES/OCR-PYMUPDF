@@ -4,7 +4,8 @@ import {
   Typography, 
   Box, 
   CircularProgress,
-  useTheme
+  useTheme,
+  Button
 } from '@mui/material'
 import { getDocuments } from '../../services/apiService'
 import { Document } from '../../types'
@@ -25,8 +26,13 @@ const StatusChart = (): JSX.Element => {
     loading: true
   })
 
+  const [fetchError, setFetchError] = useState<string | null>(null)
+
   useEffect(() => {
     const fetchData = async () => {
+      setChartData(prev => ({ ...prev, loading: true }))
+      setFetchError(null)
+      
       try {
         const documents = await getDocuments()
         
@@ -44,10 +50,20 @@ const StatusChart = (): JSX.Element => {
       } catch (error) {
         console.error('Error al obtener datos para el gráfico:', error)
         setChartData(prev => ({ ...prev, loading: false }))
+        setFetchError('No se pudieron cargar los datos del gráfico')
       }
     }
     
     fetchData()
+    
+    // Actualizar datos cada minuto
+    const intervalId = window.setInterval(() => {
+      fetchData()
+    }, 60000)
+    
+    return () => {
+      window.clearInterval(intervalId)
+    }
   }, [])
 
   // Calcular el total para los porcentajes
@@ -88,6 +104,42 @@ const StatusChart = (): JSX.Element => {
       {chartData.loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1 }}>
           <CircularProgress />
+        </Box>
+      ) : fetchError ? (
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flexGrow: 1 }}>
+          <Typography variant="body1" color="error" gutterBottom>
+            {fetchError}
+          </Typography>
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            size="small"
+            onClick={() => {
+              setChartData(prev => ({ ...prev, loading: true }))
+              setFetchError(null)
+              getDocuments()
+                .then(documents => {
+                  const completed = documents.filter(doc => doc.status === 'completed').length
+                  const processing = documents.filter(doc => doc.status === 'processing').length
+                  const error = documents.filter(doc => doc.status === 'error').length
+                  
+                  setChartData({
+                    completed,
+                    processing,
+                    error,
+                    loading: false
+                  })
+                })
+                .catch(err => {
+                  console.error('Error al reintentar:', err)
+                  setChartData(prev => ({ ...prev, loading: false }))
+                  setFetchError('No se pudieron cargar los datos del gráfico')
+                })
+            }}
+            sx={{ mt: 2 }}
+          >
+            Reintentar
+          </Button>
         </Box>
       ) : total === 0 ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1 }}>

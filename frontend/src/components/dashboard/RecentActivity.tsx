@@ -24,8 +24,13 @@ const RecentActivity = (): JSX.Element => {
   const [recentDocs, setRecentDocs] = useState<Document[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
+  const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
     const fetchRecentDocuments = async () => {
+      setLoading(true)
+      setError(null)
+      
       try {
         const documents = await getDocuments()
         // Ordenar por fecha de creación (más recientes primero) y tomar los primeros 5
@@ -40,10 +45,20 @@ const RecentActivity = (): JSX.Element => {
       } catch (error) {
         console.error('Error al obtener documentos recientes:', error)
         setLoading(false)
+        setError('No se pudieron cargar los documentos recientes')
       }
     }
     
     fetchRecentDocuments()
+    
+    // Actualizar datos cada 2 minutos
+    const intervalId = window.setInterval(() => {
+      fetchRecentDocuments()
+    }, 120000)
+    
+    return () => {
+      window.clearInterval(intervalId)
+    }
   }, [])
 
   // Función para formatear la fecha
@@ -130,6 +145,40 @@ const RecentActivity = (): JSX.Element => {
             </Box>
           ))}
         </List>
+      ) : error ? (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexGrow: 1, p: 3 }}>
+          <Typography variant="body1" color="error" gutterBottom>
+            {error}
+          </Typography>
+          <Button 
+            variant="outlined" 
+            color="primary" 
+            size="small"
+            onClick={() => {
+              setLoading(true)
+              setError(null)
+              getDocuments()
+                .then(documents => {
+                  const recentDocuments = documents
+                    .sort((a: Document, b: Document) => {
+                      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                    })
+                    .slice(0, 5)
+                  
+                  setRecentDocs(recentDocuments)
+                  setLoading(false)
+                })
+                .catch(err => {
+                  console.error('Error al reintentar:', err)
+                  setLoading(false)
+                  setError('No se pudieron cargar los documentos recientes')
+                })
+            }}
+            sx={{ mt: 2 }}
+          >
+            Reintentar
+          </Button>
+        </Box>
       ) : recentDocs.length === 0 ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1 }}>
           <Typography variant="body1" color="text.secondary">

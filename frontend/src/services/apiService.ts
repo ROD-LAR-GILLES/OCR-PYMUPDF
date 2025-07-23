@@ -18,10 +18,24 @@ export const checkApiHealth = async (): Promise<ApiResponse<{ status: string }>>
 // Verificar conexión con la API
 export const getApiStatus = async (): Promise<boolean> => {
   try {
-    await api.get('/health')
-    return true
+    const response = await api.get('/health', { timeout: 5000 }) // Timeout de 5 segundos
+    if (response.status === 200) {
+      console.log('Conexión API establecida correctamente')
+      return true
+    }
+    return false
   } catch (error) {
     console.error('Error al verificar estado de la API:', error)
+    // Registrar información más detallada sobre el error
+    if (axios.isAxiosError(error)) {
+      if (error.code === 'ECONNABORTED') {
+        console.error('Timeout al conectar con la API')
+      } else if (!error.response) {
+        console.error('No se pudo establecer conexión con el servidor API')
+      } else {
+        console.error(`Error de API: ${error.response.status} - ${error.response.statusText}`)
+      }
+    }
     return false
   }
 }

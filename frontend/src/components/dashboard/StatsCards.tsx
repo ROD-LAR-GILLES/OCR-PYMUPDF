@@ -6,7 +6,8 @@ import {
   Box, 
   CircularProgress,
   Skeleton,
-  Tooltip
+  Tooltip,
+  Button
 } from '@mui/material'
 import DescriptionIcon from '@mui/icons-material/Description'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
@@ -32,8 +33,13 @@ const StatsCards = (): JSX.Element => {
     loading: true
   })
 
+  const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
     const fetchStats = async () => {
+      setStats(prev => ({ ...prev, loading: true }))
+      setError(null)
+      
       try {
         const documents = await getDocuments()
         
@@ -52,10 +58,20 @@ const StatsCards = (): JSX.Element => {
       } catch (error) {
         console.error('Error al obtener estadísticas:', error)
         setStats(prev => ({ ...prev, loading: false }))
+        setError('No se pudieron cargar las estadísticas. Intente nuevamente más tarde.')
       }
     }
     
     fetchStats()
+    
+    // Configurar un intervalo para actualizar las estadísticas cada 60 segundos
+    const intervalId = window.setInterval(() => {
+      fetchStats()
+    }, 60000)
+    
+    return () => {
+      window.clearInterval(intervalId)
+    }
   }, [])
 
   const statCards = [
@@ -87,22 +103,71 @@ const StatsCards = (): JSX.Element => {
 
   return (
     <Grid container spacing={3}>
-      {statCards.map((card, index) => (
-        <Grid item xs={12} sm={6} md={3} key={index}>
+      {error ? (
+        <Grid item xs={12}>
           <Paper
             elevation={2}
             sx={{
               p: 3,
               display: 'flex',
               flexDirection: 'column',
-              height: 140,
-              borderTop: `4px solid ${card.color}`,
               borderRadius: 2,
-              transition: 'transform 0.3s, box-shadow 0.3s',
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: 3
-              }
+              borderLeft: '4px solid #f44336'
+            }}
+          >
+            <Typography color="error" variant="subtitle1">
+              {error}
+            </Typography>
+            <Button 
+              variant="outlined" 
+              color="primary" 
+              size="small"
+              onClick={() => {
+                setStats(prev => ({ ...prev, loading: true }))
+                setError(null)
+                getDocuments()
+                  .then(documents => {
+                    const completed = documents.filter(doc => doc.status === 'completed').length
+                    const processing = documents.filter(doc => doc.status === 'processing').length
+                    const error = documents.filter(doc => doc.status === 'error').length
+                    
+                    setStats({
+                      total: documents.length,
+                      completed,
+                      processing,
+                      error,
+                      loading: false
+                    })
+                  })
+                  .catch(err => {
+                    console.error('Error al reintentar:', err)
+                    setStats(prev => ({ ...prev, loading: false }))
+                    setError('No se pudieron cargar las estadísticas. Intente nuevamente más tarde.')
+                  })
+              }}
+              sx={{ mt: 2, alignSelf: 'flex-start' }}
+            >
+              Reintentar
+            </Button>
+          </Paper>
+        </Grid>
+      ) : (
+        statCards.map((card, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <Paper
+              elevation={2}
+              sx={{
+                p: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                height: 140,
+                borderTop: `4px solid ${card.color}`,
+                borderRadius: 2,
+                transition: 'transform 0.3s, box-shadow 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: 3
+                }
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
