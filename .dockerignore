@@ -1,0 +1,50 @@
+# Archivos y directorios a ignorar durante la construcción de la imagen Docker
+
+# Directorios de datos
+pdfs/
+resultado/
+uploads/
+metadata/
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Archivos de caché y compilación
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Archivos de configuración local
+.env
+
+# Directorios de desarrollo
+.git/
+.github/
+.vscode/
+.idea/
+
+# Archivos de logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.swp
+*~
+
+# Archivos de documentación
+docs/
+
+# Archivos de pruebas
+tests/
+
+# Archivos específicos de frontend que no son necesarios para la imagen de API
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/.vscode/
+frontend/.idea/
