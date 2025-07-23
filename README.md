@@ -39,8 +39,6 @@ docker compose up -d --build
 # Acceder a la documentación API: http://localhost:8000/docs
 ```
 
-Para más detalles sobre la ejecución con Docker, consulte el archivo [DOCKER_README.md](DOCKER_README.md).
-
 Los contenedores Docker incluyen:
 - Todas las dependencias preinstaladas
 - Tesseract OCR configurado
@@ -92,41 +90,307 @@ El proyecto utiliza archivos `.env` para la configuración. Variables principale
 - `ENABLE_LLM`: Activar refinamiento con LLM (true/false)
 - `CACHE_ENABLED`: Activar caché de OCR (true/false)
 
+## Ejecución con Docker
+
+### Requisitos previos
+
+- Docker instalado en su sistema
+- Docker Compose instalado en su sistema
+
+### Configuración
+
+1. Asegúrese de tener un archivo `.env` en la raíz del proyecto. Si no existe, cópielo desde `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+2. Edite el archivo `.env` para configurar sus claves de API y otras configuraciones según sea necesario.
+
+### Ejecución
+
+Para iniciar todos los servicios (API y Frontend):
+
+```bash
+docker compose up -d --build
+```
+
+Esto construirá las imágenes si es necesario y ejecutará los contenedores en segundo plano.
+
+### Acceso a los servicios
+
+- **Frontend**: http://localhost:8080
+- **API REST**: http://localhost:8000
+- **Documentación API**: http://localhost:8000/docs
+
+### Detener los servicios
+
+Para detener todos los servicios:
+
+```bash
+docker compose down
+```
+
+### Visualizar logs
+
+Para ver los logs de todos los servicios:
+
+```bash
+docker compose logs -f
+```
+
+Para ver los logs de un servicio específico:
+
+```bash
+docker compose logs -f ocr-api
+```
+
+o
+
+```bash
+docker compose logs -f ocr-frontend
+```
+
+### Volúmenes persistentes
+
+Los siguientes directorios se montan como volúmenes para persistencia de datos:
+
+- `./pdfs`: Archivos PDF procesados
+- `./resultado`: Resultados del procesamiento
+- `./uploads`: Archivos subidos temporalmente
+- `./metadata`: Metadatos de los documentos
+- `./tools/data`: Datos de configuración y modelos
+
+## API REST
+
+Esta API REST permite subir archivos PDF, procesarlos utilizando el motor OCR-PYMUPDF y descargar los resultados en formato Markdown.
+
+### Características
+
+- Subida de archivos PDF
+- Procesamiento asíncrono de documentos
+- Consulta de estado de procesamiento
+- Descarga de resultados en formato Markdown
+- Listado de documentos procesados
+- Eliminación de documentos
+
+### Endpoints
+
+#### Subir un documento PDF
+
+```
+POST /api/documents/
+```
+
+Parámetros del formulario:
+- `file`: Archivo PDF a procesar
+- `use_llm` (opcional): Indica si se debe usar LLM para refinamiento (true/false)
+- `extract_tables` (opcional): Indica si se deben extraer tablas (true/false)
+
+Respuesta:
+```json
+{
+  "id": "documento_id",
+  "filename": "documento.pdf",
+  "status": "processing",
+  "created_at": "2023-06-15T10:30:00Z"
+}
+```
+
+#### Obtener estado de un documento
+
+```
+GET /api/documents/{doc_id}/status
+```
+
+Respuesta:
+```json
+{
+  "id": "documento_id",
+  "filename": "documento.pdf",
+  "status": "completed",
+  "progress": 100,
+  "created_at": "2023-06-15T10:30:00Z",
+  "completed_at": "2023-06-15T10:35:00Z"
+}
+```
+
+#### Descargar resultado de un documento
+
+```
+GET /api/documents/{doc_id}/download
+```
+
+Respuesta: Archivo Markdown con el contenido extraído
+
+#### Listar documentos
+
+```
+GET /api/documents/?skip=0&limit=10
+```
+
+Respuesta:
+```json
+{
+  "total": 25,
+  "items": [
+    {
+      "id": "documento_id_1",
+      "filename": "documento1.pdf",
+      "status": "completed",
+      "created_at": "2023-06-15T10:30:00Z"
+    },
+    {
+      "id": "documento_id_2",
+      "filename": "documento2.pdf",
+      "status": "processing",
+      "created_at": "2023-06-15T11:30:00Z"
+    }
+  ]
+}
+```
+
+#### Eliminar un documento
+
+```
+DELETE /api/documents/{doc_id}
+```
+
+Respuesta:
+```json
+{
+  "message": "Documento eliminado correctamente"
+}
+```
+
 ## Arquitectura
+
 El proyecto sigue una arquitectura hexagonal (ports & adapters):
-- `domain`: Lógica de negocio y entidades
-- `adapters`: Implementaciones de puertos
-- `infrastructure`: Servicios técnicos
-- `interfaces`: CLI, web y otros puntos de entrada
-  - `cli`: Interfaz de línea de comandos
-  - `web`: Interfaz web con React y FastAPI
-- `config`: Configuración del sistema
 
-## API
-### Casos de Uso Principales
-- `PDFToMarkdownUseCase`: Convierte PDFs a Markdown
-- `TableExtractionUseCase`: Extrae tablas de documentos
-- `TextRefinementUseCase`: Refina texto mediante LLMs
+### Domain Module
 
-### Puertos
-- `OCRPort`: Interfaz para servicios OCR
-- `PDFPort`: Interfaz para manejo de PDFs
-- `StoragePort`: Interfaz para almacenamiento
-- `LLMPort`: Interfaz para servicios LLM
+Módulo central que contiene la lógica de negocio, entidades, objetos de valor y puertos de la aplicación.
 
-## Contribuciones
-1. Fork del repositorio
-2. Crear rama feature (`git checkout -b feature/nombre`)
-3. Commit cambios (`git commit -am 'Añadir característica'`)
-4. Push a la rama (`git push origin feature/nombre`)
-5. Crear Pull Request
+#### Estructura
+```
+domain/
+├── entities/
+│   ├── document.py
+│   └── __init__.py
+├── dtos/
+│   ├── content_dtos.py
+│   ├── coordinates_dto.py
+│   ├── document_dtos.py
+│   ├── llm_dtos.py
+│   ├── ocr_dtos.py
+│   └── __init__.py
+├── value_objects/
+│   ├── document_metadata.py
+│   ├── page.py
+│   ├── table.py
+│   ├── text_block.py
+│   ├── text_coordinates.py
+│   └── __init__.py
+├── ports/
+│   ├── llm_port.py
+│   ├── ocr_port.py
+│   ├── pdf_port.py
+│   ├── storage_port.py
+│   └── __init__.py
+├── use_cases/
+│   ├── pdf_to_markdown.py
+│   └── __init__.py
+└── exceptions.py
+```
 
-## Licencia
-MIT License - Ver archivo `LICENSE` para más detalles.
+### Adapters Module
 
-## Créditos
-- PyMuPDF
-- Tesseract OCR
-- OpenAI GPT
-- Camelot-py
-- NLTK/spaCy
+Este módulo contiene las implementaciones concretas de los puertos definidos en el dominio, siguiendo el patrón de arquitectura hexagonal.
+
+#### Estructura
+```
+adapters/
+├── llm_refiner.py
+├── ocr_adapter.py
+├── parallel_ocr.py
+├── pymupdf_adapter.py
+├── table_detector.py
+└── __init__.py
+```
+
+### Infrastructure Module
+
+Módulo que proporciona implementaciones técnicas y servicios de infraestructura para la aplicación.
+
+#### Estructura
+```
+infrastructure/
+├── file_storage.py
+├── logging_setup.py
+├── ocr_cache.py
+└── __init__.py
+```
+
+### Interfaces Module
+
+Módulo que proporciona interfaces de usuario y puntos de entrada para la aplicación.
+
+#### Estructura
+```
+interfaces/
+├── cli_menu.py
+└── __init__.py
+```
+
+### Configuration Module
+
+Módulo que centraliza la configuración del sistema y gestión de variables de entorno.
+
+#### Estructura
+```
+config/
+├── ocr_settings.py
+├── state.py
+└── __init__.py
+```
+
+## Contribución
+
+Seguimos la convención de [Conventional Commits](https://www.conventionalcommits.org/) para los mensajes de commit:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer]
+```
+
+### Types
+- `feat`: Nueva funcionalidad
+- `fix`: Corrección de bug
+- `docs`: Cambios en documentación
+- `style`: Cambios de estilo de código (formato, punto y coma, etc.)
+- `refactor`: Refactorización de código
+- `test`: Añadir o actualizar tests
+- `chore`: Tareas de mantenimiento, actualizaciones de dependencias
+- `ci`: Cambios relacionados con CI/CD
+- `perf`: Mejoras de rendimiento
+
+### Scopes
+- `deps`: Dependencias
+- `core`: Funcionalidad central
+- `ocr`: Cambios relacionados con OCR
+- `pdf`: Procesamiento de PDF
+- `nlp`: Procesamiento de Lenguaje Natural
+- `ml`: Machine Learning
+- `ui`: Interfaz de Usuario
+- `test`: Relacionado con pruebas
+
+### Ejemplos
+```
+feat(ocr): añadir nuevo filtro de preprocesamiento de imágenes
+fix(pdf): corregir cálculo de rotación de página
+chore(deps): actualizar dependencias del proyecto
+docs: actualizar instrucciones de instalación
+```
