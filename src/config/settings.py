@@ -18,10 +18,10 @@ class Settings(BaseSettings):
     OCR_LOG_LEVEL: str = "INFO"
     
     # Rutas
-    DATA_DIR: Path = Path("data")
+    DATA_DIR: Path = Path("tools/data")
     CORRECTIONS_PATH: Path = DATA_DIR / "corrections.csv"
-    WORDS_PATH: Path = DATA_DIR / "legal_words.txt"
-    PATTERNS_PATH: Path = DATA_DIR / "legal_patterns.txt"
+    WORDS_PATH: Path = DATA_DIR / "dictionaries/legal_words.txt"
+    PATTERNS_PATH: Path = DATA_DIR / "dictionaries/legal_patterns.txt"
     
     # Procesamiento de imagen
     CLAHE_CLIP_LIMIT: float = 3.0

@@ -208,8 +208,8 @@ def main():
     try:
         # Obtener la ruta del directorio raíz del proyecto
         script_dir = Path(__file__).resolve().parent
-        project_root = script_dir.parent.parent  # Subir dos niveles desde tools/scripts
-        dictionary_path = project_root / "data" / "dictionaries" / "legal_words.txt"
+        project_root = script_dir.parent  # Subir un nivel desde scripts
+        dictionary_path = project_root / "dictionaries" / "legal_words.txt"
         
         logger.info(f"Iniciando procesamiento del diccionario: {dictionary_path}")
         manager = LegalDictionaryManager(dictionary_path)

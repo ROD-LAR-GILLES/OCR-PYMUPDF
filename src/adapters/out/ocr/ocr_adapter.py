@@ -52,7 +52,7 @@ llm_refiner = LLMRefiner()
 DPI                         = 300
 TESSERACT_CONFIG            = f"--psm 6 --oem 1 -c user_defined_dpi={DPI}"
 OCR_LANG                    = "spa"
-CORRECTIONS_PATH            = Path("data/corrections.csv")
+CORRECTIONS_PATH            = Path("tools/data/corrections/corrections.csv")
 logging.basicConfig(format   ="%(levelname)s: %(message)s", level=logging.INFO)
 
 # ──────────────────────────── Helper: Tesseract config builder ────────────────────────────
@@ -73,8 +73,8 @@ def build_tesseract_config(psm: int) -> str:
     ]
 
     # Archivos personalizados de usuario (si existen)
-    words_path = Path("data/legal_words.txt")
-    patterns_path = Path("data/legal_patterns.txt")
+    words_path = Path("tools/data/dictionaries/legal_words.txt")
+    patterns_path = Path("tools/data/dictionaries/legal_patterns.txt")
 
     if words_path.exists():
         parts.append(f"--user-words {words_path}")
