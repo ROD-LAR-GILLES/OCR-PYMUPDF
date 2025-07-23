@@ -9,30 +9,47 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  /* Variables para el tema claro (por defecto) */
+  --border-color: #e0e0e0;
+  --preview-bg: #ffffff;
+  --preview-text: #000000;
+  --dropzone-border: #cccccc;
+  --dropzone-hover: #3f51b5;
+}
+
+/* Variables para el tema oscuro */
+[data-theme='dark'] {
+  --border-color: #444444;
+  --preview-bg: #1e1e1e;
+  --preview-text: #ffffff;
+  --dropzone-border: #555555;
+  --dropzone-hover: #5c6bc0;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Estilos para el área de arrastrar y soltar archivos */
 .dropzone {
-  border: 2px dashed #cccccc;
+  border: 2px dashed var(--dropzone-border, #cccccc);
   border-radius: 8px;
   padding: 40px 20px;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .dropzone:hover, .dropzone:focus {
-  border-color: #3f51b5;
+  border-color: var(--dropzone-hover, #3f51b5);
 }
 
 .dropzone.active {
-  border-color: #3f51b5;
+  border-color: var(--dropzone-hover, #3f51b5);
   background-color: rgba(63, 81, 181, 0.05);
 }
 
@@ -40,10 +57,11 @@ body {
 .document-preview {
   max-width: 100%;
   overflow: auto;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color, #e0e0e0);
   border-radius: 8px;
   padding: 16px;
-  background-color: #ffffff;
+  background-color: var(--preview-bg, #ffffff);
+  color: var(--preview-text, #000000);
 }
 
 /* Estilos para la lista de documentos */

@@ -57,7 +57,11 @@ const SettingsPage = (): JSX.Element => {
       } catch (err) {
         console.error('Error al cargar preferencias:', err)
         setError('No se pudieron cargar las preferencias. Se usarán los valores predeterminados.')
-        // Usar valores predeterminados
+        // Usar valores predeterminados y sincronizar con el tema actual
+        setPreferences(prev => ({
+          ...prev,
+          dark_mode: mode === 'dark'
+        }))
       } finally {
         setLoading(false)
       }

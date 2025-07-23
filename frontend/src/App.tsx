@@ -52,10 +52,12 @@ function App(): JSX.Element {
           alignItems: 'center',
           height: '100vh',
           flexDirection: 'column',
-          gap: 2
+          gap: 2,
+          bgcolor: 'background.default',
+          color: 'text.primary'
         }}
       >
-        <CircularProgress />
+        <CircularProgress color="primary" />
         <Box>Conectando con el servidor...</Box>
       </Box>
     )
@@ -73,7 +75,9 @@ function App(): JSX.Element {
           flexDirection: 'column',
           gap: 2,
           p: 3,
-          textAlign: 'center'
+          textAlign: 'center',
+          bgcolor: 'background.default',
+          color: 'text.primary'
         }}
       >
         <Box sx={{ color: 'error.main', fontSize: 'h4.fontSize', fontWeight: 'bold' }}>
