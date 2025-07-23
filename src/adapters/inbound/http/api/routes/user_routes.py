@@ -24,6 +24,12 @@ class UserPreferences(BaseModel):
     default_spell_check: bool = True
     theme: str = "light"  # light, dark
     language: str = "es"  # es, en
+    dark_mode: bool = False  # Modo oscuro para compatibilidad con el frontend
+    default_language: str = "spa"  # Idioma por defecto para OCR
+    default_dpi: int = 300  # DPI por defecto para OCR
+    auto_detect_tables: bool = True  # Detectar tablas automáticamente
+    extract_images: bool = False  # Extraer imágenes del PDF
+    notifications_enabled: bool = True  # Notificaciones habilitadas
 
 class UserProfile(BaseModel):
     """Perfil de usuario."""
@@ -47,9 +53,13 @@ async def get_preferences():
     """
     # En una implementación real, obtendríamos las preferencias del usuario autenticado
     # Por ahora, devolvemos preferencias por defecto
-    return UserPreferences()
+    preferences = UserPreferences()
+    # Asegurar que dark_mode y theme estén sincronizados
+    preferences.dark_mode = preferences.theme == "dark"
+    return preferences
 
 @router.post("/preferences", response_model=UserPreferences)
+@router.put("/preferences", response_model=UserPreferences)
 async def update_preferences(preferences: UserPreferences):
     """Actualiza las preferencias del usuario actual.
     
@@ -62,6 +72,8 @@ async def update_preferences(preferences: UserPreferences):
         UserPreferences: Preferencias actualizadas
     """
     # En una implementación real, guardaríamos las preferencias del usuario autenticado
+    # Asegurar que theme y dark_mode estén sincronizados
+    preferences.theme = "dark" if preferences.dark_mode else "light"
     # Por ahora, simplemente devolvemos las preferencias enviadas
     return preferences
 

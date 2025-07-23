@@ -87,17 +87,17 @@ export const deleteDocument = async (documentId: string): Promise<ApiResponse<nu
 
 // Servicios para preferencias de usuario
 export const getUserPreferences = async (): Promise<UserPreferences> => {
-  const response: AxiosResponse<ApiResponse<UserPreferences>> = await api.get('/user/preferences')
+  const response: AxiosResponse<ApiResponse<UserPreferences>> = await api.get('/api/users/preferences')
   return response.data.data as UserPreferences
 }
 
 export const updateUserPreferences = async (preferences: Partial<UserPreferences>): Promise<ApiResponse<UserPreferences>> => {
-  const response: AxiosResponse<ApiResponse<UserPreferences>> = await api.put('/user/preferences', preferences)
+  const response: AxiosResponse<ApiResponse<UserPreferences>> = await api.put('/api/users/preferences', preferences)
   return response.data
 }
 
 export const getUserProfile = async (): Promise<ApiResponse<{ username: string; email: string }>> => {
-  const response: AxiosResponse<ApiResponse<{ username: string; email: string }>> = await api.get('/user/profile')
+  const response: AxiosResponse<ApiResponse<{ username: string; email: string }>> = await api.get('/api/users/profile')
   return response.data
 }
 

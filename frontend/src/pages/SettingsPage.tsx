@@ -25,14 +25,16 @@ import SaveIcon from '@mui/icons-material/Save'
 
 import { getUserPreferences, updateUserPreferences } from '../services/apiService'
 import { UserPreferences } from '../types'
+import { useTheme } from '../context/ThemeContext'
 
 const SettingsPage = (): JSX.Element => {
+  const { mode, toggleTheme } = useTheme();
   const [preferences, setPreferences] = useState<UserPreferences>({
     default_language: 'spa',
     default_dpi: 300,
     auto_detect_tables: true,
     extract_images: false,
-    dark_mode: false,
+    dark_mode: mode === 'dark',
     notifications_enabled: true,
   })
   const [loading, setLoading] = useState<boolean>(true)
@@ -46,7 +48,11 @@ const SettingsPage = (): JSX.Element => {
       try {
         setLoading(true)
         const data = await getUserPreferences()
-        setPreferences(data)
+        // Asegurarse de que el modo oscuro esté sincronizado con el contexto del tema
+        setPreferences({
+          ...data,
+          dark_mode: mode === 'dark'
+        })
         setError(null)
       } catch (err) {
         console.error('Error al cargar preferencias:', err)
@@ -58,14 +64,22 @@ const SettingsPage = (): JSX.Element => {
     }
 
     fetchPreferences()
-  }, [])
+  }, [mode])
 
   // Manejar cambios en los campos
   const handleChange = (event: ChangeEvent<HTMLInputElement> | SelectChangeEvent): void => {
     const { name, value, checked, type } = event.target as HTMLInputElement
+    const isCheckbox = type === 'checkbox';
+    const newValue = isCheckbox ? checked : value;
+    
+    // Si es el switch de modo oscuro, también actualizar el contexto del tema
+    if (name === 'dark_mode' && isCheckbox) {
+      toggleTheme();
+    }
+    
     setPreferences({
       ...preferences,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: newValue,
     })
   }
 
@@ -85,7 +99,12 @@ const SettingsPage = (): JSX.Element => {
   const handleSave = async (): Promise<void> => {
     try {
       setSaving(true)
-      await updateUserPreferences(preferences)
+      // Guardar las preferencias sin incluir el modo oscuro, ya que se maneja a través del contexto del tema
+      const { dark_mode, ...preferencesToSave } = preferences;
+      await updateUserPreferences({
+        ...preferencesToSave,
+        dark_mode: mode === 'dark' // Asegurarse de que el valor guardado coincida con el contexto actual
+      })
       setSuccess(true)
       setError(null)
     } catch (err) {

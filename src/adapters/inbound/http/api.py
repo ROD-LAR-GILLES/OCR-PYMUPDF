@@ -32,6 +32,9 @@ from adapters.inbound.http.models import (
     ErrorResponse
 )
 
+# Importar router de usuarios
+from adapters.inbound.http.api.routes.user_routes import router as user_router
+
 # Directorios para almacenar archivos
 UPLOAD_DIR = Path("uploads")
 RESULT_DIR = Path("resultado")
@@ -57,6 +60,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Incluir router de usuarios
+app.include_router(user_router)
 
 # Dependencias para inyección
 def get_pdf_to_markdown_use_case(use_llm: bool = False):

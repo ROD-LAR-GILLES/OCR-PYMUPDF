@@ -9,21 +9,25 @@ import {
   Menu,
   MenuItem,
   useMediaQuery,
-  useTheme,
+  useTheme as useMuiTheme,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import SettingsIcon from '@mui/icons-material/Settings'
 import HelpIcon from '@mui/icons-material/Help'
+import Brightness4Icon from '@mui/icons-material/Brightness4'
+import Brightness7Icon from '@mui/icons-material/Brightness7'
 import NavMenu from './NavMenu'
+import { useTheme } from '../../context/ThemeContext'
 
 interface HeaderProps {
   toggleDrawer: () => void;
 }
 
 const Header = ({ toggleDrawer }: HeaderProps): JSX.Element => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const muiTheme = useMuiTheme()
+  const { mode, toggleTheme } = useTheme()
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'))
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   
   const handleMenu = (event: MouseEvent<HTMLElement>): void => {
@@ -32,6 +36,10 @@ const Header = ({ toggleDrawer }: HeaderProps): JSX.Element => {
 
   const handleClose = (): void => {
     setAnchorEl(null)
+  }
+  
+  const handleToggleTheme = (): void => {
+    toggleTheme()
   }
 
   return (
@@ -69,7 +77,15 @@ const Header = ({ toggleDrawer }: HeaderProps): JSX.Element => {
           </Box>
         )}
 
-        <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton
+            color="inherit"
+            onClick={handleToggleTheme}
+            aria-label="toggle theme"
+            sx={{ mr: 1 }}
+          >
+            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
           <IconButton
             aria-label="cuenta de usuario"
             aria-controls="menu-appbar"
