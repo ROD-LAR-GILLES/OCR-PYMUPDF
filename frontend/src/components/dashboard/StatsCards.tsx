@@ -168,8 +168,8 @@ const StatsCards = (): JSX.Element => {
                   transform: 'translateY(-5px)',
                   boxShadow: 3
                 }
-            }}
-          >
+              }}
+            >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
               <Typography variant="h6" component="h2" color="text.secondary">
                 {card.title}
