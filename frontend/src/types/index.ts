@@ -28,6 +28,12 @@ export interface UserPreferences {
   extract_images: boolean;
   dark_mode: boolean;
   notifications_enabled: boolean;
+  theme?: string;
+  language?: string;
+  default_use_llm?: boolean;
+  default_process_tables?: boolean;
+  default_detect_language?: boolean;
+  default_spell_check?: boolean;
 }
 
 // Interfaces para respuestas de API

@@ -35,7 +35,8 @@ RUN apt-get update && \
         libxext6 \
         libxrender-dev \
         libgl1 \
-        fontconfig && \
+        fontconfig \
+        curl && \
     fc-cache -f -v && \
     rm -rf /var/lib/apt/lists/*
 

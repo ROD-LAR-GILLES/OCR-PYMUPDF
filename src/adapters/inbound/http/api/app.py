@@ -9,6 +9,10 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import os
 
+# Importar routers
+from adapters.inbound.http.api.routes.user_routes import router as user_router
+from adapters.inbound.http.api.routes.pdf_routes import router as pdf_router
+
 # Crear aplicación FastAPI
 app = FastAPI(
     title="OCR-PYMUPDF Web",
@@ -26,14 +30,31 @@ app.add_middleware(
 )
 
 # Ruta para verificar que la API está funcionando
-@app.get("/api/health")
+@app.get("/health")
 async def health_check():
     """Endpoint para verificar que la API está funcionando."""
     return {"status": "ok"}
 
+# Añadir la ruta /api/health directamente en la aplicación principal
+@app.get("/api/health")
+async def api_health_check():
+    """Endpoint para verificar que la API está funcionando."""
+    return {"status": "ok"}
+
+# Incluir los routers directamente en la aplicación principal
+# Los routers ya tienen sus prefijos configurados (/api/users y /api/documents)
+app.include_router(user_router)
+app.include_router(pdf_router)
+
 # Configurar archivos estáticos para el frontend
+# IMPORTANTE: Montamos los archivos estáticos después de definir todas las rutas de la API
+# para evitar que interfieran con las rutas de la API
 frontend_dir = Path(__file__).parent.parent / "frontend" / "dist"
 if frontend_dir.exists():
+    # Montar en una ruta específica para evitar conflictos con las rutas de la API
+    app.mount("/static", StaticFiles(directory=str(frontend_dir)), name="static")
+    # Montar la raíz para servir index.html al final, después de todas las rutas de la API
+    # NOTA: Este montaje debe ser el último para evitar que capture las peticiones destinadas a la API
     app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
 
 # Función para iniciar la aplicación
