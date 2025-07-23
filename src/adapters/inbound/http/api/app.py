@@ -9,9 +9,6 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import os
 
-# Importar rutas
-from interfaces.web.api.routes import pdf_routes, user_routes
-
 # Crear aplicación FastAPI
 app = FastAPI(
     title="OCR-PYMUPDF Web",
@@ -27,10 +24,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Incluir rutas
-app.include_router(pdf_routes.router)
-app.include_router(user_routes.router)
 
 # Ruta para verificar que la API está funcionando
 @app.get("/api/health")
@@ -54,7 +47,7 @@ def start_app():
     
     # Iniciar el servidor
     uvicorn.run(
-        "interfaces.web.api.app:app",
+        "adapters.inbound.http.api.app:app",
         host=host,
         port=port,
         reload=True,  # Habilitar recarga automática en desarrollo

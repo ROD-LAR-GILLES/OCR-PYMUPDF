@@ -31,21 +31,23 @@ pip install -r requirements.txt
 
 ### Usando Docker
 ```bash
-# Construir la imagen
-docker build -t ocr-pymupdf .
+# Ejecutar el sistema completo (API y Frontend)
+docker compose up -d --build
 
-# Ejecutar el contenedor
-docker run -v $(pwd)/pdfs:/app/pdfs -v $(pwd)/resultado:/app/resultado ocr-pymupdf
-
-# Usando docker-compose
-docker-compose up --build
+# Acceder a la interfaz web: http://localhost:8080
+# Acceder a la API REST: http://localhost:8000
+# Acceder a la documentación API: http://localhost:8000/docs
 ```
 
-El contenedor Docker incluye:
+Para más detalles sobre la ejecución con Docker, consulte el archivo [DOCKER_README.md](DOCKER_README.md).
+
+Los contenedores Docker incluyen:
 - Todas las dependencias preinstaladas
 - Tesseract OCR configurado
 - Soporte multilenguaje
-- Volúmenes para pdfs y resultados
+- Frontend React con interfaz de usuario moderna
+- API REST para integración con otros sistemas
+- Volúmenes persistentes para datos
 
 ## Uso
 
@@ -68,25 +70,20 @@ result = use_case.execute("documento.pdf")
 
 ### Mediante interfaz web
 
-El proyecto incluye una interfaz web para facilitar el uso sin necesidad de programación:
+El proyecto incluye una interfaz web para facilitar el uso sin necesidad de programación.
+
+Para ejecutar la interfaz web, utilice Docker Compose como se describe en la sección de instalación:
 
 ```bash
-# Configurar permisos de ejecución
-chmod +x tools/scripts/setup_web.sh
-./tools/scripts/setup_web.sh
-
-# Construir el frontend
-./tools/scripts/build_frontend.sh
-
-# Iniciar la aplicación web
-./tools/bin/run_web_local.sh
+docker compose up -d --build
 ```
 
 La interfaz web estará disponible en `http://localhost:8080` y permite:
 - Subir documentos PDF
-- Configurar opciones de procesamiento
+- Configurar opciones de procesamiento (OCR, detección de tablas, extracción de imágenes)
 - Visualizar resultados en formato Markdown
 - Gestionar documentos procesados
+- Descargar resultados
 
 ## Configuración
 El proyecto utiliza archivos `.env` para la configuración. Variables principales:

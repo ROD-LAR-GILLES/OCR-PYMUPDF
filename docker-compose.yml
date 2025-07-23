@@ -1,20 +1,32 @@
 version: '3.8'
 
 services:
-  ocr-pymupdf:
-    build: 
+  ocr-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: ocr-pymupdf-frontend
+    container_name: ocr-pymupdf-frontend
+    ports:
+      - "8080:80"  # Interfaz web en puerto 8080
+    depends_on:
+      - ocr-api
+    restart: unless-stopped
+
+  ocr-api:
+    build:
       context: .
       dockerfile: Dockerfile
-    container_name: ocr-pymupdf
-    stdin_open: true
-    tty: true
+    image: ocr-pymupdf-api
+    container_name: ocr-pymupdf-api
+    command: python tools/bin/run_api.py
     ports:
-      - "8000:8000"  # API REST
-      - "8080:8080"  # Interfaz web
+      - "8000:8000"  # API REST en puerto 8000
     volumes:
-      - .:/app
       - ./pdfs:/app/pdfs
       - ./resultado:/app/resultado
+      - ./uploads:/app/uploads
+      - ./metadata:/app/metadata
       - ./data:/app/data
     environment:
       - PYTHONPATH=/app/src
@@ -29,12 +41,17 @@ services:
       # DeepSeek
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - DEEPSEEK_MODEL_ID=${DEEPSEEK_MODEL_ID:-deepseek-chat}
+      - DEEPSEEK_MAX_RETRIES=${DEEPSEEK_MAX_RETRIES:-5}
+      - DEEPSEEK_TEMPERATURE=${DEEPSEEK_TEMPERATURE:-0.3}
       # Web Interface
       - WEB_HOST=${WEB_HOST:-0.0.0.0}
       - WEB_PORT=${WEB_PORT:-8080}
-      - DEEPSEEK_MAX_RETRIES=${DEEPSEEK_MAX_RETRIES:-5}
-      - DEEPSEEK_TEMPERATURE=${DEEPSEEK_TEMPERATURE:-0.3}
-      # Development
-      - PYTHONBREAKPOINT=ipdb.set_trace
-      - PYTEST_ADDOPTS=--color=yes
-    command: tail -f /dev/null
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
