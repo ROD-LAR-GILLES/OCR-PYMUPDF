@@ -137,7 +137,11 @@ class LegalDictionaryManager:
 
 def main():
     """Función principal."""
-    dictionary_path = Path("data/legal_words.txt")
+    # Obtener la ruta del directorio raíz del proyecto
+    script_dir = Path(__file__).resolve().parent
+    project_root = script_dir.parent.parent  # Subir dos niveles desde tools/scripts
+    dictionary_path = script_dir / "data" / "dictionaries" / "legal_words.txt"
+    
     manager = LegalDictionaryManager(dictionary_path)
     manager.process_dictionary()
     print(f"Diccionario actualizado: {dictionary_path}")
