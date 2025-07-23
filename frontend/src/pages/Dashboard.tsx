@@ -6,8 +6,6 @@ import {
   Container,
   Alert,
   Skeleton,
-  useTheme,
-  useMediaQuery,
   Button
 } from '@mui/material'
 
@@ -18,8 +16,6 @@ import QuickActions from '../components/dashboard/QuickActions'
 import { getApiStatus } from '../services/apiService'
 
 const Dashboard = (): JSX.Element => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [apiConnected, setApiConnected] = useState<boolean | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
 
