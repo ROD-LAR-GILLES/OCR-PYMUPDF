@@ -15,6 +15,17 @@ export const checkApiHealth = async (): Promise<ApiResponse<{ status: string }>>
   return response.data
 }
 
+// Verificar conexión con la API
+export const getApiStatus = async (): Promise<boolean> => {
+  try {
+    await api.get('/health')
+    return true
+  } catch (error) {
+    console.error('Error al verificar estado de la API:', error)
+    return false
+  }
+}
+
 // Servicios para documentos PDF
 export const uploadPdf = async (file: File, options: ProcessingOptions = {}): Promise<ApiResponse<Document>> => {
   const formData = new FormData()

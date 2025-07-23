@@ -29,15 +29,14 @@ import ReactMarkdown from 'react-markdown'
 
 import { getDocumentContent, getDocumentStatus, downloadDocument, deleteDocument } from '../services/apiService'
 import { Document, DocumentContent } from '../types'
+// Eliminamos la importación no utilizada de Document
 
-interface DocumentParams {
-  id: string;
-}
+// Eliminamos la interfaz DocumentParams ya que no la necesitamos
 
 const DocumentDetailPage = (): JSX.Element => {
-  const { id } = useParams<DocumentParams>()
+  const { id } = useParams<string>()
   const navigate = useNavigate()
-  const [document, setDocument] = useState<DocumentContent | null>(null)
+  const [document, setDocument] = useState<(Document & DocumentContent) | null>(null)
   const [content, setContent] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -51,10 +50,10 @@ const DocumentDetailPage = (): JSX.Element => {
       try {
         setLoading(true)
         const data = await getDocumentContent(id)
-        setDocument(data)
+        setDocument(data as Document & DocumentContent)
         
         // Si el documento está completado, cargar el contenido
-        if (data.status === 'completed' && data.content) {
+        if ((data as any).status === 'completed' && data.content) {
           setContent(data.content)
         }
         
@@ -74,16 +73,16 @@ const DocumentDetailPage = (): JSX.Element => {
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined
 
-    if (document && document.status === 'processing' && id) {
+    if (document && (document as any).status === 'processing' && id) {
       intervalId = setInterval(async () => {
         try {
           const statusData = await getDocumentStatus(id)
-          setDocument(prev => prev ? ({ ...prev, ...statusData }) : statusData)
+          setDocument(prev => prev ? ({ ...prev, ...(statusData as any) }) : (statusData as any))
           
           // Si el documento se ha completado, cargar el contenido
           if (statusData.status === 'completed') {
             const fullData = await getDocumentContent(id)
-            setDocument(fullData)
+            setDocument(fullData as Document & DocumentContent)
             setContent(fullData.content)
             clearInterval(intervalId)
           } else if (statusData.status === 'error') {
@@ -108,13 +107,13 @@ const DocumentDetailPage = (): JSX.Element => {
     try {
       const blob = await downloadDocument(id)
       const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
+      const a = window.document.createElement('a')
       a.href = url
-      a.download = document?.filename.replace('.pdf', '.md') || `document-${id}.md`
-      document.body.appendChild(a)
+      a.download = document?.filename?.replace('.pdf', '.md') || `document-${id}.md`
+      window.document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
+      window.document.body.removeChild(a)
     } catch (err) {
       console.error('Error al descargar el documento:', err)
       setError('No se pudo descargar el documento. Por favor, intenta nuevamente.')
@@ -150,9 +149,9 @@ const DocumentDetailPage = (): JSX.Element => {
     try {
       setLoading(true)
       const data = await getDocumentContent(id)
-      setDocument(data)
+      setDocument(data as Document & DocumentContent)
       
-      if (data.status === 'completed' && data.content) {
+      if ((data as any).status === 'completed' && data.content) {
         setContent(data.content)
       }
       
@@ -227,7 +226,7 @@ const DocumentDetailPage = (): JSX.Element => {
                       Nombre del archivo
                     </Typography>
                     <Typography variant="body1">
-                      {document.filename}
+                      {(document as any).filename}
                     </Typography>
                   </Box>
                   
@@ -236,7 +235,7 @@ const DocumentDetailPage = (): JSX.Element => {
                       Estado
                     </Typography>
                     <Box sx={{ mt: 0.5 }}>
-                      {getStatusChip(document.status)}
+                      {getStatusChip((document as any).status)}
                     </Box>
                   </Box>
                   
@@ -245,11 +244,11 @@ const DocumentDetailPage = (): JSX.Element => {
                       Fecha de creación
                     </Typography>
                     <Typography variant="body1">
-                      {formatDate(document.created_at)}
+                      {formatDate((document as any).created_at)}
                     </Typography>
                   </Box>
                   
-                  {document.status === 'processing' && (
+                  {(document as any).status === 'processing' && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" color="text.secondary">
                         Progreso
@@ -257,34 +256,34 @@ const DocumentDetailPage = (): JSX.Element => {
                       <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
                         <LinearProgress
                           variant="determinate"
-                          value={document.progress || 0}
+                          value={(document as any).progress || 0}
                           sx={{ flexGrow: 1, mr: 1 }}
                         />
                         <Typography variant="body2">
-                          {document.progress || 0}%
+                          {(document as any).progress || 0}%
                         </Typography>
                       </Box>
                     </Box>
                   )}
                   
-                  {document.options && (
+                  {(document as any).options && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" color="text.secondary">
                         Opciones de procesamiento
                       </Typography>
                       <Box sx={{ mt: 0.5 }}>
-                        {document.options.perform_ocr && (
+                        {(document as any).options.perform_ocr && (
                           <Chip label="OCR" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
                         )}
-                        {document.options.detect_tables && (
+                        {(document as any).options.detect_tables && (
                           <Chip label="Tablas" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
                         )}
-                        {document.options.extract_images && (
+                        {(document as any).options.extract_images && (
                           <Chip label="Imágenes" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
                         )}
-                        {document.options.language && (
+                        {(document as any).options.language && (
                           <Chip
-                            label={`Idioma: ${document.options.language}`}
+                            label={`Idioma: ${(document as any).options.language}`}
                             size="small"
                             sx={{ mr: 0.5, mb: 0.5 }}
                           />
@@ -293,19 +292,19 @@ const DocumentDetailPage = (): JSX.Element => {
                     </Box>
                   )}
                   
-                  {document.error_message && (
+                  {(document as any).error_message && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" color="error">
                         Error
                       </Typography>
                       <Alert severity="error" sx={{ mt: 0.5 }}>
-                        {document.error_message}
+                        {(document as any).error_message}
                       </Alert>
                     </Box>
                   )}
                   
                   <Box sx={{ display: 'flex', gap: 1, mt: 3 }}>
-                    {document.status === 'completed' && (
+                    {(document as any).status === 'completed' && (
                       <Button
                         variant="contained"
                         startIcon={<DownloadIcon />}
@@ -334,7 +333,7 @@ const DocumentDetailPage = (): JSX.Element => {
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 
-                {document.status === 'completed' ? (
+                {(document as any).status === 'completed' ? (
                   content ? (
                     <Box className="document-preview">
                       <ReactMarkdown>{content}</ReactMarkdown>
@@ -344,7 +343,7 @@ const DocumentDetailPage = (): JSX.Element => {
                       No hay contenido disponible para mostrar.
                     </Typography>
                   )
-                ) : document.status === 'processing' ? (
+                ) : (document as any).status === 'processing' ? (
                   <Box sx={{ textAlign: 'center', py: 4 }}>
                     <CircularProgress sx={{ mb: 2 }} />
                     <Typography>
@@ -368,7 +367,7 @@ const DocumentDetailPage = (): JSX.Element => {
             <DialogTitle>Confirmar eliminación</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                ¿Estás seguro de que deseas eliminar el documento "{document.filename}"?
+                ¿Estás seguro de que deseas eliminar el documento "{(document as any).filename}"?
                 Esta acción no se puede deshacer.
               </DialogContentText>
             </DialogContent>

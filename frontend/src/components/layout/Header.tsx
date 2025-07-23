@@ -5,7 +5,6 @@ import {
   Box,
   Toolbar,
   Typography,
-  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -16,6 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import SettingsIcon from '@mui/icons-material/Settings'
 import HelpIcon from '@mui/icons-material/Help'
+import NavMenu from './NavMenu'
 
 interface HeaderProps {
   toggleDrawer: () => void;
@@ -64,21 +64,8 @@ const Header = ({ toggleDrawer }: HeaderProps): JSX.Element => {
         </Typography>
 
         {!isMobile && (
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button
-              color="inherit"
-              component={RouterLink}
-              to="/upload"
-            >
-              Subir PDF
-            </Button>
-            <Button
-              color="inherit"
-              component={RouterLink}
-              to="/documents"
-            >
-              Mis Documentos
-            </Button>
+          <Box sx={{ display: 'flex', gap: 1, ml: 2 }}>
+            <NavMenu variant="header" />
           </Box>
         )}
 

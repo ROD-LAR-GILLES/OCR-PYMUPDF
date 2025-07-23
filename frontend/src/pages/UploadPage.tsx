@@ -17,17 +17,20 @@ import {
   Card,
   CardContent,
 } from '@mui/material'
-import { useDropzone, FileRejection } from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import SettingsIcon from '@mui/icons-material/Settings'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 import { uploadPdf } from '../services/apiService'
-import { ProcessingOptions } from '../types'
+import { ProcessingOptions, Document } from '../types'
 
 interface UploadOptions extends ProcessingOptions {
   language: string;
   dpi: number;
+  perform_ocr?: boolean;
+  detect_tables?: boolean;
+  extract_images?: boolean;
 }
 
 const UploadPage = (): JSX.Element => {
@@ -88,7 +91,7 @@ const UploadPage = (): JSX.Element => {
       setError(null)
       
       const response = await uploadPdf(file, options)
-      setUploadedDocId(response.id)
+      setUploadedDocId((response.data as Document).id)
       setActiveStep(2) // Avanzar al paso final
     } catch (err) {
       console.error('Error al subir el documento:', err)
@@ -188,7 +191,7 @@ const UploadPage = (): JSX.Element => {
             Archivo seleccionado: <strong>{file?.name}</strong>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Tamaño: {(file?.size / 1024 / 1024).toFixed(2)} MB
+            Tamaño: {(file && file.size ? (file.size / 1024 / 1024).toFixed(2) : '0')} MB
           </Typography>
 
           <Divider sx={{ my: 3 }} />
