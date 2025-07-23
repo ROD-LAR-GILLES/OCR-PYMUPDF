@@ -27,7 +27,7 @@ services:
       - ./resultado:/app/resultado
       - ./uploads:/app/uploads
       - ./metadata:/app/metadata
-      - ./data:/app/data
+      - ./tools/data:/app/tools/data
     environment:
       - PYTHONPATH=/app/src
       # OpenAI
