@@ -8,7 +8,6 @@ import {
   Button
 } from '@mui/material'
 import { getDocuments } from '../../services/apiService'
-import { Document } from '../../types'
 
 interface ChartData {
   completed: number;
@@ -39,12 +38,12 @@ const StatusChart = (): JSX.Element => {
         // Calcular datos para el gráfico
         const completed = documents.filter(doc => doc.status === 'completed').length
         const processing = documents.filter(doc => doc.status === 'processing').length
-        const error = documents.filter(doc => doc.status === 'error').length
+        const errorCount = documents.filter(doc => doc.status === 'error').length
         
         setChartData({
           completed,
           processing,
-          error,
+          error: errorCount,
           loading: false
         })
       } catch (error) {
@@ -121,12 +120,12 @@ const StatusChart = (): JSX.Element => {
                 .then(documents => {
                   const completed = documents.filter(doc => doc.status === 'completed').length
                   const processing = documents.filter(doc => doc.status === 'processing').length
-                  const error = documents.filter(doc => doc.status === 'error').length
+                  const errorCount = documents.filter(doc => doc.status === 'error').length
                   
                   setChartData({
                     completed,
                     processing,
-                    error,
+                    error: errorCount,
                     loading: false
                   })
                 })

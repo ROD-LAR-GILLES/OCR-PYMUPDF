@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
-import { 
-  Grid, 
-  Paper, 
-  Typography, 
-  Box, 
-  CircularProgress,
+import {
+  Grid,
+  Paper,
+  Typography,
+  Box,
   Skeleton,
-  Tooltip,
   Button
 } from '@mui/material'
 import DescriptionIcon from '@mui/icons-material/Description'
@@ -14,14 +12,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
 import ErrorIcon from '@mui/icons-material/Error'
 import { getDocuments } from '../../services/apiService'
-import { Document } from '../../types'
 
 interface StatsData {
-  total: number;
-  completed: number;
-  processing: number;
-  error: number;
-  loading: boolean;
+  total: number
+  completed: number
+  processing: number
+  error: number
+  loading: boolean
 }
 
 const StatsCards = (): JSX.Element => {
@@ -35,65 +32,59 @@ const StatsCards = (): JSX.Element => {
 
   const [error, setError] = useState<string | null>(null)
 
+  const loadStats = async () => {
+    setStats(prev => ({ ...prev, loading: true }))
+    setError(null)
+    try {
+      const documents = await getDocuments()
+      const completed = documents.filter(doc => doc.status === 'completed').length
+      const processing = documents.filter(doc => doc.status === 'processing').length
+      const errorCount = documents.filter(doc => doc.status === 'error').length
+
+      setStats({
+        total: documents.length,
+        completed,
+        processing,
+        error: errorCount,
+        loading: false
+      })
+    } catch (err) {
+      console.error('Error al obtener estadísticas:', err)
+      setStats(prev => ({ ...prev, loading: false }))
+      setError('No se pudieron cargar las estadísticas. Intente nuevamente más tarde.')
+    }
+  }
+
   useEffect(() => {
-    const fetchStats = async () => {
-      setStats(prev => ({ ...prev, loading: true }))
-      setError(null)
-      
-      try {
-        const documents = await getDocuments()
-        
-        // Calcular estadísticas
-        const completed = documents.filter(doc => doc.status === 'completed').length
-        const processing = documents.filter(doc => doc.status === 'processing').length
-        const error = documents.filter(doc => doc.status === 'error').length
-        
-        setStats({
-          total: documents.length,
-          completed,
-          processing,
-          error,
-          loading: false
-        })
-      } catch (error) {
-        console.error('Error al obtener estadísticas:', error)
-        setStats(prev => ({ ...prev, loading: false }))
-        setError('No se pudieron cargar las estadísticas. Intente nuevamente más tarde.')
-      }
-    }
-    
-    fetchStats()
-    
-    // Configurar un intervalo para actualizar las estadísticas cada 60 segundos
-    const intervalId = window.setInterval(() => {
-      fetchStats()
-    }, 60000)
-    
-    return () => {
-      window.clearInterval(intervalId)
-    }
+    loadStats()
+    const intervalId = window.setInterval(loadStats, 60000)
+    return () => window.clearInterval(intervalId)
   }, [])
 
   const statCards = [
     {
+      key: 'total',
       title: 'Total de Documentos',
       value: stats.total,
       icon: <DescriptionIcon fontSize="large" color="primary" />,
       color: '#3f51b5'
     },
     {
+      key: 'completed',
       title: 'Completados',
       value: stats.completed,
       icon: <CheckCircleIcon fontSize="large" color="success" />,
       color: '#4caf50'
     },
     {
+      key: 'processing',
       title: 'En Procesamiento',
       value: stats.processing,
       icon: <HourglassEmptyIcon fontSize="large" color="warning" />,
       color: '#ff9800'
     },
     {
+      key: 'error',
       title: 'Con Errores',
       value: stats.error,
       icon: <ErrorIcon fontSize="large" color="error" />,
@@ -118,33 +109,11 @@ const StatsCards = (): JSX.Element => {
             <Typography color="error" variant="subtitle1">
               {error}
             </Typography>
-            <Button 
-              variant="outlined" 
-              color="primary" 
+            <Button
+              variant="outlined"
+              color="primary"
               size="small"
-              onClick={() => {
-                setStats(prev => ({ ...prev, loading: true }))
-                setError(null)
-                getDocuments()
-                  .then(documents => {
-                    const completed = documents.filter(doc => doc.status === 'completed').length
-                    const processing = documents.filter(doc => doc.status === 'processing').length
-                    const error = documents.filter(doc => doc.status === 'error').length
-                    
-                    setStats({
-                      total: documents.length,
-                      completed,
-                      processing,
-                      error,
-                      loading: false
-                    })
-                  })
-                  .catch(err => {
-                    console.error('Error al reintentar:', err)
-                    setStats(prev => ({ ...prev, loading: false }))
-                    setError('No se pudieron cargar las estadísticas. Intente nuevamente más tarde.')
-                  })
-              }}
+              onClick={loadStats}
               sx={{ mt: 2, alignSelf: 'flex-start' }}
             >
               Reintentar
@@ -152,8 +121,8 @@ const StatsCards = (): JSX.Element => {
           </Paper>
         </Grid>
       ) : (
-        statCards.map((card, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+        statCards.map(card => (
+          <Grid item xs={12} sm={6} md={3} key={card.key}>
             <Paper
               elevation={2}
               sx={{
@@ -170,23 +139,24 @@ const StatsCards = (): JSX.Element => {
                 }
               }}
             >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-              <Typography variant="h6" component="h2" color="text.secondary">
-                {card.title}
-              </Typography>
-              {card.icon}
-            </Box>
-            
-            {stats.loading ? (
-              <Skeleton variant="rectangular" width="60%" height={40} />
-            ) : (
-              <Typography variant="h3" component="div" sx={{ fontWeight: 'bold' }}>
-                {card.value}
-              </Typography>
-            )}
-          </Paper>
-        </Grid>
-      ))}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                <Typography variant="h6" component="h2" color="text.secondary">
+                  {card.title}
+                </Typography>
+                {card.icon}
+              </Box>
+
+              {stats.loading ? (
+                <Skeleton variant="rectangular" width="60%" height={40} />
+              ) : (
+                <Typography variant="h3" component="div" sx={{ fontWeight: 'bold' }}>
+                  {card.value}
+                </Typography>
+              )}
+            </Paper>
+          </Grid>
+        ))
+      )}
     </Grid>
   )
 }

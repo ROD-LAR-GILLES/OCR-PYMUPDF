@@ -1,12 +1,10 @@
-import { Drawer, Box } from '@mui/material'
+import { Drawer } from '@mui/material'
 import NavMenu from './NavMenu'
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
 }
-
-
 
 const Sidebar = ({ open, onClose }: SidebarProps): JSX.Element => {
 
