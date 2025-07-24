@@ -5,33 +5,33 @@ import {
   Typography,
   Paper,
   Button,
-  Chip,
-  LinearProgress,
-  CircularProgress,
-  Alert,
-  Divider,
   Grid,
   Card,
   CardContent,
+  Divider,
+  Chip,
   IconButton,
-  Tooltip,
+  CircularProgress,
+  LinearProgress,
+  Alert,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Tooltip,
 } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import DownloadIcon from '@mui/icons-material/Download'
-import DeleteIcon from '@mui/icons-material/Delete'
-import RefreshIcon from '@mui/icons-material/Refresh'
+import {
+  ArrowBack as ArrowBackIcon,
+  Refresh as RefreshIcon,
+  Download as DownloadIcon,
+  Delete as DeleteIcon,
+} from '@mui/icons-material'
 import ReactMarkdown from 'react-markdown'
+import axios from 'axios'
 
 import { getDocumentContent, getDocumentStatus, downloadDocument, deleteDocument } from '../services/apiService'
 import { Document, DocumentContent } from '../types'
-// Eliminamos la importación no utilizada de Document
-
-// Eliminamos la interfaz DocumentParams ya que no la necesitamos
 
 const DocumentDetailPage = (): JSX.Element => {
   const { id } = useParams<string>()
@@ -42,7 +42,6 @@ const DocumentDetailPage = (): JSX.Element => {
   const [error, setError] = useState<string | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false)
 
-  // Cargar documento
   useEffect(() => {
     const fetchDocument = async (): Promise<void> => {
       if (!id) return
@@ -52,7 +51,6 @@ const DocumentDetailPage = (): JSX.Element => {
         const data = await getDocumentContent(id)
         setDocument(data as Document & DocumentContent)
         
-        // Si el documento está completado, cargar el contenido
         if ((data as any).status === 'completed' && data.content) {
           setContent(data.content)
         }
@@ -60,7 +58,13 @@ const DocumentDetailPage = (): JSX.Element => {
         setError(null)
       } catch (err) {
         console.error('Error al cargar el documento:', err)
-        setError('No se pudo cargar el documento. Por favor, intenta nuevamente.')
+        let errorMessage = 'No se pudo cargar el documento. Por favor, intenta nuevamente.'
+        
+        if (axios.isAxiosError(err) && err.response?.data?.message) {
+          errorMessage = err.response?.data?.message || 'Error desconocido'
+        }
+        
+        setError(errorMessage)
       } finally {
         setLoading(false)
       }
@@ -77,26 +81,32 @@ const DocumentDetailPage = (): JSX.Element => {
       intervalId = setInterval(async () => {
         try {
           const statusData = await getDocumentStatus(id)
-          setDocument(prev => prev ? ({ ...prev, ...(statusData as any) }) : (statusData as any))
           
-          // Si el documento se ha completado, cargar el contenido
-          if (statusData.status === 'completed') {
-            const fullData = await getDocumentContent(id)
-            setDocument(fullData as Document & DocumentContent)
-            setContent(fullData.content)
+          if (statusData.status !== 'processing') {
+            // Si el procesamiento ha terminado, obtener el documento completo
+            const data = await getDocumentContent(id)
+            setDocument(data as Document & DocumentContent)
+            
+            if (data.status === 'completed' && data.content) {
+              setContent(data.content)
+            }
+            
             clearInterval(intervalId)
-          } else if (statusData.status === 'error') {
-            clearInterval(intervalId)
+          } else {
+            // Actualizar solo el estado y progreso
+            setDocument(prev => prev ? { ...prev, ...statusData } : null)
           }
         } catch (err) {
-          console.error('Error al actualizar el estado:', err)
+          console.error('Error al actualizar estado del documento:', err)
           clearInterval(intervalId)
         }
-      }, 3000) // Actualizar cada 3 segundos
+      }, 5000) // Consultar cada 5 segundos
     }
 
     return () => {
-      if (intervalId) clearInterval(intervalId)
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
     }
   }, [document, id])
 
@@ -116,7 +126,13 @@ const DocumentDetailPage = (): JSX.Element => {
       window.document.body.removeChild(a)
     } catch (err) {
       console.error('Error al descargar el documento:', err)
-      setError('No se pudo descargar el documento. Por favor, intenta nuevamente.')
+      let errorMessage = 'No se pudo descargar el documento. Por favor, intenta nuevamente.'
+      
+      if (axios.isAxiosError(err) && err.userMessage) {
+        errorMessage = err.userMessage
+      }
+      
+      setError(errorMessage)
     }
   }
 
@@ -134,7 +150,13 @@ const DocumentDetailPage = (): JSX.Element => {
       navigate('/documents')
     } catch (err) {
       console.error('Error al eliminar el documento:', err)
-      setError('No se pudo eliminar el documento. Por favor, intenta nuevamente.')
+      let errorMessage = 'No se pudo eliminar el documento. Por favor, intenta nuevamente.'
+      
+      if (axios.isAxiosError(err) && err.userMessage) {
+        errorMessage = err.userMessage
+      }
+      
+      setError(errorMessage)
     }
   }
 
@@ -142,39 +164,48 @@ const DocumentDetailPage = (): JSX.Element => {
     setDeleteDialogOpen(false)
   }
 
-  // Refrescar datos del documento
-  const handleRefresh = async (): Promise<void> => {
+  // Refrescar documento
+  const handleRefresh = (): void => {
     if (!id) return
-    
-    try {
-      setLoading(true)
-      const data = await getDocumentContent(id)
-      setDocument(data as Document & DocumentContent)
-      
-      if ((data as any).status === 'completed' && data.content) {
-        setContent(data.content)
+    const fetchDocument = async (): Promise<void> => {
+      try {
+        setLoading(true)
+        const data = await getDocumentContent(id)
+        setDocument(data as Document & DocumentContent)
+        
+        if ((data as any).status === 'completed' && data.content) {
+          setContent(data.content)
+        }
+        
+        setError(null)
+      } catch (err) {
+        console.error('Error al cargar el documento:', err)
+        let errorMessage = 'No se pudo cargar el documento. Por favor, intenta nuevamente.'
+        
+        if (axios.isAxiosError(err) && err.response?.data?.message) {
+          errorMessage = err.response?.data?.message || 'Error desconocido'
+        }
+        
+        setError(errorMessage)
+      } finally {
+        setLoading(false)
       }
-      
-      setError(null)
-    } catch (err) {
-      console.error('Error al refrescar el documento:', err)
-      setError('No se pudo refrescar el documento. Por favor, intenta nuevamente.')
-    } finally {
-      setLoading(false)
     }
+
+    fetchDocument()
   }
 
   // Obtener chip de estado
   const getStatusChip = (status: string): JSX.Element => {
     switch (status) {
       case 'completed':
-        return <Chip label="Completado" color="success" />
+        return <Chip label="Completado" color="success" size="small" />
       case 'processing':
-        return <Chip label="Procesando" color="warning" />
+        return <Chip label="Procesando" color="warning" size="small" />
       case 'error':
-        return <Chip label="Error" color="error" />
+        return <Chip label="Error" color="error" size="small" />
       default:
-        return <Chip label="Desconocido" />
+        return <Chip label="Desconocido" color="default" size="small" />
     }
   }
 
@@ -202,7 +233,15 @@ const DocumentDetailPage = (): JSX.Element => {
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
+          <Typography variant="body2" fontWeight="bold" gutterBottom>
+            Error:
+          </Typography>
+          <Typography variant="body2" data-testid="error-message">
+            {error}
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            Si el problema persiste, verifica tu conexión a internet o intenta más tarde.
+          </Typography>
         </Alert>
       )}
 
@@ -295,10 +334,24 @@ const DocumentDetailPage = (): JSX.Element => {
                   {(document as any).error_message && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" color="error">
-                        Error
+                        Error en el procesamiento
                       </Typography>
                       <Alert severity="error" sx={{ mt: 0.5 }}>
+                        <Typography variant="body2" fontWeight="bold" gutterBottom>
+                        Mensaje de error:
+                      </Typography>
+                      <Typography variant="body2" data-testid="document-error-message">
                         {(document as any).error_message}
+                      </Typography>
+                      <Typography variant="body2" sx={{ mt: 1 }}>
+                        Posibles soluciones:
+                      </Typography>
+                      <ul>
+                        <li>Intenta procesar el documento con diferentes opciones de OCR</li>
+                        <li>Verifica que el archivo PDF no esté dañado o protegido</li>
+                        <li>Si el documento tiene muchas imágenes, prueba con un valor de DPI más bajo</li>
+                        <li>Si el problema persiste, contacta al soporte técnico</li>
+                      </ul>
                       </Alert>
                     </Box>
                   )}

@@ -18,6 +18,11 @@ export interface ProcessingOptions {
   enhance_image?: boolean;
   use_llm_refiner?: boolean;
   llm_provider?: string;
+  llm_model?: string;
+  detect_tables?: boolean;
+  extract_images?: boolean;
+  dpi?: number;
+  perform_ocr?: boolean;
 }
 
 // Interfaces para preferencias de usuario

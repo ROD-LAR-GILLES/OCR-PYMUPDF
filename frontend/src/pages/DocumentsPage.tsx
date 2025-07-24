@@ -27,7 +27,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DownloadIcon from '@mui/icons-material/Download'
-import AddIcon from '@mui/icons-material/Add'
+import AddIcon from '@mui/icons-material/AddCircleOutline'
 
 import { getDocuments, deleteDocument, downloadDocument } from '../services/apiService'
 import { Document } from '../types'

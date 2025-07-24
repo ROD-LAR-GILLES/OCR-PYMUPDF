@@ -9,6 +9,67 @@ const api: AxiosInstance = axios.create({
   },
 })
 
+// Interceptor para manejar errores de forma global
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Registrar información detallada del error
+    let errorMessage = 'Error inesperado en la comunicación con el servidor.';
+    
+    if (axios.isAxiosError(error)) {
+      if (error.code === 'ECONNABORTED') {
+        errorMessage = 'La conexión con el servidor ha expirado. El procesamiento del documento puede estar tomando más tiempo del esperado. Verifica tu conexión a internet e intenta nuevamente.';
+        console.error('Error: Timeout al conectar con la API. La solicitud ha excedido el tiempo máximo de espera.');
+      } else if (!error.response) {
+        errorMessage = 'No se pudo establecer conexión con el servidor. Verifica tu conexión a internet o si el servidor está en funcionamiento e intenta nuevamente.';
+        console.error('Error: No se pudo establecer conexión con el servidor API. Verifica tu conexión a internet o si el servidor está en funcionamiento.');
+      } else {
+        console.error(`Error de API: ${error.response.status} - ${error.response.statusText}`);
+        console.error('Detalles:', error.response.data);
+        
+        // Registrar información adicional según el código de estado
+        switch (error.response.status) {
+          case 400:
+            errorMessage = 'Solicitud incorrecta. Verifica las opciones de procesamiento seleccionadas.';
+            console.error('Error de solicitud: Los datos enviados son incorrectos o incompletos.');
+            break;
+          case 401:
+            errorMessage = 'No tienes permiso para acceder a este recurso. Por favor, inicia sesión nuevamente.';
+            console.error('Error de autenticación: No tienes permiso para acceder a este recurso.');
+            break;
+          case 404:
+            errorMessage = 'El recurso solicitado no existe. Verifica la URL o el identificador del documento.';
+            console.error('Recurso no encontrado: El endpoint solicitado no existe.');
+            break;
+          case 413:
+            errorMessage = 'El archivo es demasiado grande. Por favor, intenta con un archivo más pequeño (máximo 50MB) o comprime el PDF antes de subirlo.';
+            console.error('Archivo demasiado grande: El servidor rechazó el archivo por exceder el tamaño máximo permitido.');
+            break;
+          case 500:
+            errorMessage = 'Error interno del servidor. El servidor encontró un problema al procesar tu solicitud. Por favor, intenta más tarde.';
+            console.error('Error interno del servidor: Ocurrió un problema en el servidor. Por favor, intenta más tarde.');
+            break;
+          default:
+            if (error.response.data && error.response.data.error) {
+              errorMessage = `Error: ${error.response.data.error}`;
+            } else {
+              errorMessage = `Error del servidor (${error.response.status}): ${error.response.statusText}`;
+            }
+        }
+      }
+    } else {
+      console.error('Error inesperado:', error);
+    }
+    
+    // Añadir el mensaje de error al objeto de error para que esté disponible en los componentes
+    if (error.isAxiosError) {
+      error.userMessage = errorMessage;
+    }
+    
+    return Promise.reject(error);
+  }
+)
+
 // Verificar estado de la API
 export const checkApiHealth = async (): Promise<ApiResponse<{ status: string }>> => {
   const response: AxiosResponse<ApiResponse<{ status: string }>> = await api.get('/health')
@@ -26,16 +87,7 @@ export const getApiStatus = async (): Promise<boolean> => {
     return false
   } catch (error) {
     console.error('Error al verificar estado de la API:', error)
-    // Registrar información más detallada sobre el error
-    if (axios.isAxiosError(error)) {
-      if (error.code === 'ECONNABORTED') {
-        console.error('Timeout al conectar con la API')
-      } else if (!error.response) {
-        console.error('No se pudo establecer conexión con el servidor API')
-      } else {
-        console.error(`Error de API: ${error.response.status} - ${error.response.statusText}`)
-      }
-    }
+    // El interceptor global ya maneja el registro detallado de errores
     return false
   }
 }
@@ -54,6 +106,17 @@ export const uploadPdf = async (file: File, options: ProcessingOptions = {}): Pr
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+  })
+  return response.data
+}
+
+// Función para subir documentos con seguimiento de progreso
+export const uploadDocument = async (formData: FormData, onProgress?: (progressEvent: any) => void): Promise<ApiResponse<Document>> => {
+  const response: AxiosResponse<ApiResponse<Document>> = await api.post('/documents/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress: onProgress
   })
   return response.data
 }
@@ -100,15 +163,5 @@ export const getUserProfile = async (): Promise<ApiResponse<{ username: string; 
   const response: AxiosResponse<ApiResponse<{ username: string; email: string }>> = await api.get('/api/users/profile')
   return response.data
 }
-
-// Interceptor para manejar errores
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Personalizar manejo de errores aquí
-    console.error('API Error:', error.response?.data || error.message)
-    return Promise.reject(error)
-  }
-)
 
 export default api
