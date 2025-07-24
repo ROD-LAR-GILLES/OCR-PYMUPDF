@@ -7,10 +7,12 @@ import {
   Skeleton,
   Button
 } from '@mui/material'
-import DescriptionIcon from '@mui/icons-material/Description'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty'
-import ErrorIcon from '@mui/icons-material/Error'
+import {
+  Description,
+  CheckCircle,
+  HourglassEmpty,
+  Error
+} from '@mui/icons-material'
 import { getDocuments } from '../../services/apiService'
 
 interface StatsData {
@@ -66,28 +68,28 @@ const StatsCards = (): JSX.Element => {
       key: 'total',
       title: 'Total de Documentos',
       value: stats.total,
-      icon: <DescriptionIcon fontSize="large" color="primary" />,
+      icon: <Description fontSize="large" color="primary" />,
       color: '#3f51b5'
     },
     {
       key: 'completed',
       title: 'Completados',
       value: stats.completed,
-      icon: <CheckCircleIcon fontSize="large" color="success" />,
+      icon: <CheckCircle fontSize="large" color="success" />,
       color: '#4caf50'
     },
     {
       key: 'processing',
       title: 'En Procesamiento',
       value: stats.processing,
-      icon: <HourglassEmptyIcon fontSize="large" color="warning" />,
+      icon: <HourglassEmpty fontSize="large" color="warning" />,
       color: '#ff9800'
     },
     {
       key: 'error',
       title: 'Con Errores',
       value: stats.error,
-      icon: <ErrorIcon fontSize="large" color="error" />,
+      icon: <Error fontSize="large" color="error" />,
       color: '#f44336'
     }
   ]

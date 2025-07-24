@@ -13,7 +13,6 @@ import {
   MenuItem,
   Grid,
   Alert,
-  CircularProgress,
   Divider,
   Tooltip,
   IconButton,
@@ -24,22 +23,21 @@ import {
   Step,
   StepLabel,
   StepContent,
+  LinearProgress,
 } from '@mui/material'
 import {
   CloudUpload as CloudUploadIcon,
   Delete as DeleteIcon,
   Info as InfoIcon,
-  Settings as SettingsIcon,
-  Check as CheckIcon,
   ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material'
 import { useDropzone } from 'react-dropzone'
 import axios from 'axios'
 
-import { uploadPdf, uploadDocument } from '../services/apiService'
-import { ProcessingOptions } from '../types'
+import { uploadDocument } from '../services/apiService'
+import { ProcessingOptions, CustomAxiosError, ApiResponse, Document } from '../types'
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024 
 const ACCEPTED_FILE_TYPES = {
   'application/pdf': ['.pdf'],
   'image/jpeg': ['.jpg', '.jpeg'],
@@ -85,6 +83,25 @@ const LLM_MODEL_OPTIONS = {
   ],
 }
 
+interface LinearProgressWithLabelProps {
+  value: number
+}
+
+function LinearProgressWithLabel(props: LinearProgressWithLabelProps) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <LinearProgress variant="determinate" value={props.value} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          props.value,
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  )
+}
+
 const UploadPage = (): JSX.Element => {
   const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState<number>(0)
@@ -103,7 +120,6 @@ const UploadPage = (): JSX.Element => {
   const [uploading, setUploading] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
   const [uploadError, setUploadError] = useState<string | null>(null)
-  const [uploadSuccess, setUploadSuccess] = useState<boolean>(false)
   const [documentId, setDocumentId] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -195,12 +211,11 @@ const UploadPage = (): JSX.Element => {
     })
 
     try {
-      const response = await uploadDocument(formData, (progressEvent) => {
+      const response: ApiResponse<Document> = await uploadDocument(formData, (progressEvent: ProgressEvent) => {
         const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
         setUploadProgress(progress)
       })
 
-      setUploadSuccess(true)
       setDocumentId(response.data.id)
       setActiveStep(2) // Avanzar al paso de éxito
     } catch (err) {
@@ -209,13 +224,14 @@ const UploadPage = (): JSX.Element => {
       let errorMessage = 'Error al subir el documento. Por favor, intenta nuevamente.'
       
       if (axios.isAxiosError(err)) {
-        if (err.response?.status === 413) {
+        const axiosError = err as CustomAxiosError
+        if (axiosError.response?.status === 413) {
           errorMessage = 'El archivo es demasiado grande para ser procesado por el servidor.'
-        } else if (err.response?.status === 415) {
+        } else if (axiosError.response?.status === 415) {
           errorMessage = 'Tipo de archivo no soportado. Por favor, sube un archivo PDF, JPG, PNG o TIFF.'
-        } else if (err.response?.data?.detail) {
-          errorMessage = `Error: ${err.response.data.detail}`
-        } else if (!err.response) {
+        } else if (axiosError.response?.data?.detail || axiosError.response?.data?.message) {
+          errorMessage = `Error: ${axiosError.response.data.detail || axiosError.response.data.message}`
+        } else if (!axiosError.response) {
           errorMessage = 'No se pudo establecer conexión con el servidor. Verifica tu conexión a internet.'
         }
       }
@@ -242,7 +258,6 @@ const UploadPage = (): JSX.Element => {
   const handleUploadAnother = () => {
     setFile(null)
     setFileError(null)
-    setUploadSuccess(false)
     setDocumentId(null)
     setUploadProgress(0)
     setActiveStep(0)
@@ -577,58 +592,42 @@ const UploadPage = (): JSX.Element => {
         <Step>
           <StepLabel>Documento subido</StepLabel>
           <StepContent>
-            <Alert severity="success" sx={{ mb: 3 }}>
-              <Typography variant="body1">
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="body1" gutterBottom>
                 ¡El documento se ha subido correctamente!
               </Typography>
-              <Typography variant="body2">
-                El procesamiento puede tardar unos minutos dependiendo del tamaño y complejidad del documento.
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                El procesamiento del documento comenzará en breve.
               </Typography>
-            </Alert>
+            </Box>
 
             <Box sx={{ mb: 2 }}>
               <Button
                 variant="contained"
                 onClick={handleViewDocument}
                 sx={{ mt: 1, mr: 1 }}
-                startIcon={<SettingsIcon />}
+                endIcon={<ArrowForwardIcon />}
               >
-                Ver detalles del documento
+                Ver documento
               </Button>
               <Button
                 variant="outlined"
-                onClick={handleViewAllDocuments}
-                sx={{ mt: 1, mr: 1 }}
-              >
-                Ver todos los documentos
-              </Button>
-              <Button
                 onClick={handleUploadAnother}
                 sx={{ mt: 1, mr: 1 }}
                 startIcon={<CloudUploadIcon />}
               >
                 Subir otro documento
               </Button>
+              <Button
+                onClick={handleViewAllDocuments}
+                sx={{ mt: 1 }}
+              >
+                Ver todos los documentos
+              </Button>
             </Box>
           </StepContent>
         </Step>
       </Stepper>
-    </Box>
-  )
-}
-
-// Componente para mostrar una barra de progreso con etiqueta
-function LinearProgressWithLabel(props: { value: number }) {
-  return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <Box sx={{ width: '100%', mr: 1 }}>
-        <CircularProgress variant="determinate" value={props.value} />
-      </Box>
-      <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" color="text.secondary">{`${Math.round(
-          props.value,
-        )}%`}</Typography>
-      </Box>
     </Box>
   )
 }

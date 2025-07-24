@@ -23,14 +23,16 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import DeleteIcon from '@mui/icons-material/Delete'
-import DownloadIcon from '@mui/icons-material/Download'
-import AddIcon from '@mui/icons-material/AddCircleOutline'
+import {
+  Search,
+  Visibility,
+  Delete,
+  Download,
+  AddCircleOutline,
+} from '@mui/icons-material'
 
 import { getDocuments, deleteDocument, downloadDocument } from '../services/apiService'
-import { Document } from '../types'
+import { Document, ProcessingStatus } from '../types'
 
 const DocumentsPage = (): JSX.Element => {
   const navigate = useNavigate()
@@ -123,7 +125,7 @@ const DocumentsPage = (): JSX.Element => {
   }
 
   // Obtener chip de estado
-  const getStatusChip = (status: string): JSX.Element => {
+  const getStatusChip = (status: ProcessingStatus): JSX.Element => {
     switch (status) {
       case 'completed':
         return <Chip label="Completado" color="success" size="small" />
@@ -131,6 +133,10 @@ const DocumentsPage = (): JSX.Element => {
         return <Chip label="Procesando" color="warning" size="small" />
       case 'error':
         return <Chip label="Error" color="error" size="small" />
+      case 'failed':
+        return <Chip label="Fallido" color="error" size="small" />
+      case 'pending':
+        return <Chip label="Pendiente" color="default" size="small" />
       default:
         return <Chip label="Desconocido" size="small" />
     }
@@ -149,7 +155,7 @@ const DocumentsPage = (): JSX.Element => {
         </Typography>
         <Button
           variant="contained"
-          startIcon={<AddIcon />}
+          startIcon={<AddCircleOutline />}
           onClick={() => navigate('/upload')}
         >
           Nuevo documento
@@ -171,7 +177,7 @@ const DocumentsPage = (): JSX.Element => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon />
+                <Search />
               </InputAdornment>
             ),
           }}
@@ -205,7 +211,7 @@ const DocumentsPage = (): JSX.Element => {
                       onClick={() => navigate(`/documents/${doc.id}`)}
                       title="Ver detalles"
                     >
-                      <VisibilityIcon />
+                      <Visibility />
                     </IconButton>
                     {doc.status === 'completed' && (
                       <IconButton
@@ -213,7 +219,7 @@ const DocumentsPage = (): JSX.Element => {
                         onClick={() => handleDownload(doc.id, doc.filename)}
                         title="Descargar"
                       >
-                        <DownloadIcon />
+                        <Download />
                       </IconButton>
                     )}
                     <IconButton
@@ -221,7 +227,7 @@ const DocumentsPage = (): JSX.Element => {
                       onClick={() => handleDeleteClick(doc)}
                       title="Eliminar"
                     >
-                      <DeleteIcon />
+                      <Delete />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -238,9 +244,8 @@ const DocumentsPage = (): JSX.Element => {
             {!searchTerm && (
               <Button
                 variant="contained"
-                startIcon={<AddIcon />}
+                startIcon={<AddCircleOutline />}
                 onClick={() => navigate('/upload')}
-                sx={{ mt: 2 }}
               >
                 Subir documento
               </Button>

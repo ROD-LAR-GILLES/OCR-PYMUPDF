@@ -14,8 +14,10 @@ import {
   Chip,
   Button
 } from '@mui/material'
-import DescriptionIcon from '@mui/icons-material/Description'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import {
+  Description as DescriptionIcon,
+  ArrowForward as ArrowForwardIcon,
+} from '@mui/icons-material'
 import { getDocuments } from '../../services/apiService'
 import { Document } from '../../types'
 

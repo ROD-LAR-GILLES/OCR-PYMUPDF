@@ -1,7 +1,9 @@
 import { Link as RouterLink } from 'react-router-dom'
 import { Box, Typography, Button, Paper } from '@mui/material'
-import ErrorIcon from '@mui/icons-material/Error'
-import HomeIcon from '@mui/icons-material/Home'
+import {
+  Error as ErrorIcon,
+  Home as HomeIcon,
+} from '@mui/icons-material'
 
 const NotFoundPage = (): JSX.Element => {
   return (

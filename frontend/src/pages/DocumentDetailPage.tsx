@@ -31,12 +31,12 @@ import ReactMarkdown from 'react-markdown'
 import axios from 'axios'
 
 import { getDocumentContent, getDocumentStatus, downloadDocument, deleteDocument } from '../services/apiService'
-import { Document, DocumentContent } from '../types'
+import type { Document, DocumentContent, CustomAxiosError, ProcessingStatus } from '../types'
 
 const DocumentDetailPage = (): JSX.Element => {
   const { id } = useParams<string>()
   const navigate = useNavigate()
-  const [document, setDocument] = useState<(Document & DocumentContent) | null>(null)
+  const [document, setDocument] = useState<Document | null>(null)
   const [content, setContent] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -49,10 +49,11 @@ const DocumentDetailPage = (): JSX.Element => {
       try {
         setLoading(true)
         const data = await getDocumentContent(id)
-        setDocument(data as Document & DocumentContent)
+        const documentData = data as DocumentContent
+        setDocument(documentData)
         
-        if ((data as any).status === 'completed' && data.content) {
-          setContent(data.content)
+        if (documentData.status === 'completed' && documentData.content) {
+          setContent(documentData.content)
         }
         
         setError(null)
@@ -60,8 +61,9 @@ const DocumentDetailPage = (): JSX.Element => {
         console.error('Error al cargar el documento:', err)
         let errorMessage = 'No se pudo cargar el documento. Por favor, intenta nuevamente.'
         
-        if (axios.isAxiosError(err) && err.response?.data?.message) {
-          errorMessage = err.response?.data?.message || 'Error desconocido'
+        if (axios.isAxiosError(err)) {
+          const axiosError = err as CustomAxiosError
+          errorMessage = axiosError.response?.data?.detail || axiosError.response?.data?.message || axiosError.userMessage || 'Error desconocido'
         }
         
         setError(errorMessage)
@@ -77,7 +79,7 @@ const DocumentDetailPage = (): JSX.Element => {
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined
 
-    if (document && (document as any).status === 'processing' && id) {
+    if (document?.status === 'processing' && id) {
       intervalId = setInterval(async () => {
         try {
           const statusData = await getDocumentStatus(id)
@@ -85,10 +87,11 @@ const DocumentDetailPage = (): JSX.Element => {
           if (statusData.status !== 'processing') {
             // Si el procesamiento ha terminado, obtener el documento completo
             const data = await getDocumentContent(id)
-            setDocument(data as Document & DocumentContent)
+            const documentData = data as DocumentContent
+            setDocument(documentData)
             
-            if (data.status === 'completed' && data.content) {
-              setContent(data.content)
+            if (documentData.status === 'completed' && documentData.content) {
+              setContent(documentData.content)
             }
             
             clearInterval(intervalId)
@@ -98,6 +101,10 @@ const DocumentDetailPage = (): JSX.Element => {
           }
         } catch (err) {
           console.error('Error al actualizar estado del documento:', err)
+          if (axios.isAxiosError(err)) {
+            const axiosError = err as CustomAxiosError
+            setError(axiosError.userMessage || 'Error al actualizar el estado del documento')
+          }
           clearInterval(intervalId)
         }
       }, 5000) // Consultar cada 5 segundos
@@ -128,8 +135,9 @@ const DocumentDetailPage = (): JSX.Element => {
       console.error('Error al descargar el documento:', err)
       let errorMessage = 'No se pudo descargar el documento. Por favor, intenta nuevamente.'
       
-      if (axios.isAxiosError(err) && err.userMessage) {
-        errorMessage = err.userMessage
+      if (axios.isAxiosError(err)) {
+        const axiosError = err as CustomAxiosError
+        errorMessage = axiosError.userMessage || axiosError.response?.data?.message || 'Error desconocido'
       }
       
       setError(errorMessage)
@@ -152,8 +160,9 @@ const DocumentDetailPage = (): JSX.Element => {
       console.error('Error al eliminar el documento:', err)
       let errorMessage = 'No se pudo eliminar el documento. Por favor, intenta nuevamente.'
       
-      if (axios.isAxiosError(err) && err.userMessage) {
-        errorMessage = err.userMessage
+      if (axios.isAxiosError(err)) {
+        const axiosError = err as CustomAxiosError
+        errorMessage = axiosError.userMessage || axiosError.response?.data?.message || 'Error desconocido'
       }
       
       setError(errorMessage)
@@ -171,10 +180,11 @@ const DocumentDetailPage = (): JSX.Element => {
       try {
         setLoading(true)
         const data = await getDocumentContent(id)
-        setDocument(data as Document & DocumentContent)
+        const documentData = data as DocumentContent
+        setDocument(documentData)
         
-        if ((data as any).status === 'completed' && data.content) {
-          setContent(data.content)
+        if (documentData.status === 'completed' && documentData.content) {
+          setContent(documentData.content)
         }
         
         setError(null)
@@ -182,8 +192,9 @@ const DocumentDetailPage = (): JSX.Element => {
         console.error('Error al cargar el documento:', err)
         let errorMessage = 'No se pudo cargar el documento. Por favor, intenta nuevamente.'
         
-        if (axios.isAxiosError(err) && err.response?.data?.message) {
-          errorMessage = err.response?.data?.message || 'Error desconocido'
+        if (axios.isAxiosError(err)) {
+          const axiosError = err as CustomAxiosError
+          errorMessage = axiosError.response?.data?.message || axiosError.userMessage || 'Error desconocido'
         }
         
         setError(errorMessage)
@@ -196,7 +207,7 @@ const DocumentDetailPage = (): JSX.Element => {
   }
 
   // Obtener chip de estado
-  const getStatusChip = (status: string): JSX.Element => {
+  const getStatusChip = (status: ProcessingStatus): JSX.Element => {
     switch (status) {
       case 'completed':
         return <Chip label="Completado" color="success" size="small" />
@@ -265,7 +276,7 @@ const DocumentDetailPage = (): JSX.Element => {
                       Nombre del archivo
                     </Typography>
                     <Typography variant="body1">
-                      {(document as any).filename}
+                      {document.filename}
                     </Typography>
                   </Box>
                   
@@ -274,7 +285,7 @@ const DocumentDetailPage = (): JSX.Element => {
                       Estado
                     </Typography>
                     <Box sx={{ mt: 0.5 }}>
-                      {getStatusChip((document as any).status)}
+                      {getStatusChip(document.status)}
                     </Box>
                   </Box>
                   
@@ -283,11 +294,11 @@ const DocumentDetailPage = (): JSX.Element => {
                       Fecha de creación
                     </Typography>
                     <Typography variant="body1">
-                      {formatDate((document as any).created_at)}
+                      {formatDate(document.created_at)}
                     </Typography>
                   </Box>
                   
-                  {(document as any).status === 'processing' && (
+                  {document.status === 'processing' && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" color="text.secondary">
                         Progreso
@@ -295,34 +306,34 @@ const DocumentDetailPage = (): JSX.Element => {
                       <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
                         <LinearProgress
                           variant="determinate"
-                          value={(document as any).progress || 0}
+                          value={document.progress || 0}
                           sx={{ flexGrow: 1, mr: 1 }}
                         />
                         <Typography variant="body2">
-                          {(document as any).progress || 0}%
+                          {document.progress || 0}%
                         </Typography>
                       </Box>
                     </Box>
                   )}
                   
-                  {(document as any).options && (
+                  {document?.options && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" color="text.secondary">
                         Opciones de procesamiento
                       </Typography>
                       <Box sx={{ mt: 0.5 }}>
-                        {(document as any).options.perform_ocr && (
+                        {document.options.perform_ocr && (
                           <Chip label="OCR" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
                         )}
-                        {(document as any).options.detect_tables && (
+                        {document.options.detect_tables && (
                           <Chip label="Tablas" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
                         )}
-                        {(document as any).options.extract_images && (
+                        {document.options.extract_images && (
                           <Chip label="Imágenes" size="small" sx={{ mr: 0.5, mb: 0.5 }} />
                         )}
-                        {(document as any).options.language && (
+                        {document.options.language && (
                           <Chip
-                            label={`Idioma: ${(document as any).options.language}`}
+                            label={`Idioma: ${document.options.language}`}
                             size="small"
                             sx={{ mr: 0.5, mb: 0.5 }}
                           />
@@ -331,7 +342,7 @@ const DocumentDetailPage = (): JSX.Element => {
                     </Box>
                   )}
                   
-                  {(document as any).error_message && (
+                  {document.error_message && (
                     <Box sx={{ mb: 2 }}>
                       <Typography variant="body2" color="error">
                         Error en el procesamiento
@@ -341,7 +352,7 @@ const DocumentDetailPage = (): JSX.Element => {
                         Mensaje de error:
                       </Typography>
                       <Typography variant="body2" data-testid="document-error-message">
-                        {(document as any).error_message}
+                        {document.error_message}
                       </Typography>
                       <Typography variant="body2" sx={{ mt: 1 }}>
                         Posibles soluciones:
@@ -357,7 +368,7 @@ const DocumentDetailPage = (): JSX.Element => {
                   )}
                   
                   <Box sx={{ display: 'flex', gap: 1, mt: 3 }}>
-                    {(document as any).status === 'completed' && (
+                    {document.status === 'completed' && (
                       <Button
                         variant="contained"
                         startIcon={<DownloadIcon />}
@@ -386,7 +397,7 @@ const DocumentDetailPage = (): JSX.Element => {
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 
-                {(document as any).status === 'completed' ? (
+                {document.status === 'completed' ? (
                   content ? (
                     <Box className="document-preview">
                       <ReactMarkdown>{content}</ReactMarkdown>
@@ -396,7 +407,7 @@ const DocumentDetailPage = (): JSX.Element => {
                       No hay contenido disponible para mostrar.
                     </Typography>
                   )
-                ) : (document as any).status === 'processing' ? (
+                ) : document.status === 'processing' ? (
                   <Box sx={{ textAlign: 'center', py: 4 }}>
                     <CircularProgress sx={{ mb: 2 }} />
                     <Typography>
@@ -420,7 +431,7 @@ const DocumentDetailPage = (): JSX.Element => {
             <DialogTitle>Confirmar eliminación</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                ¿Estás seguro de que deseas eliminar el documento "{(document as any).filename}"?
+                ¿Estás seguro de que deseas eliminar el documento "{document.filename}"?
                 Esta acción no se puede deshacer.
               </DialogContentText>
             </DialogContent>

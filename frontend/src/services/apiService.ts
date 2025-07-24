@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
-import { Document, ProcessingOptions, UserPreferences, DocumentStatus, DocumentContent, ApiResponse } from '../types'
+import { Document, ProcessingOptions, UserPreferences, DocumentContent, ApiResponse } from '../types'
 
 // Crear instancia de axios con configuración base
 const api: AxiosInstance = axios.create({
@@ -50,8 +50,8 @@ api.interceptors.response.use(
             console.error('Error interno del servidor: Ocurrió un problema en el servidor. Por favor, intenta más tarde.');
             break;
           default:
-            if (error.response.data && error.response.data.error) {
-              errorMessage = `Error: ${error.response.data.error}`;
+            if (error.response.data && (error.response.data.detail || error.response.data.message || error.response.data.error)) {
+              errorMessage = `Error: ${error.response.data.detail || error.response.data.message || error.response.data.error}`;
             } else {
               errorMessage = `Error del servidor (${error.response.status}): ${error.response.statusText}`;
             }
@@ -126,9 +126,9 @@ export const getDocuments = async (): Promise<Document[]> => {
   return response.data.data || []
 }
 
-export const getDocumentStatus = async (documentId: string): Promise<DocumentStatus> => {
-  const response: AxiosResponse<ApiResponse<DocumentStatus>> = await api.get(`/documents/${documentId}/status`)
-  return response.data.data as DocumentStatus
+export const getDocumentStatus = async (documentId: string): Promise<Document> => {
+  const response: AxiosResponse<ApiResponse<Document>> = await api.get(`/documents/${documentId}/status`)
+  return response.data.data as Document
 }
 
 export const getDocumentContent = async (documentId: string): Promise<DocumentContent> => {
