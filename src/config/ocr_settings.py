@@ -20,8 +20,8 @@ class OCRSettings:
     
     # Rutas
     CORRECTIONS_PATH = Path("tools/data/corrections/corrections.csv")
-WORDS_PATH = Path("tools/data/dictionaries/legal_words.txt")
-PATTERNS_PATH = Path("tools/data/dictionaries/legal_patterns.txt")
+    WORDS_PATH = Path("tools/data/dictionaries/legal_words.txt")
+    PATTERNS_PATH = Path("tools/data/dictionaries/legal_patterns.txt")
     
     # Parámetros de procesamiento de imagen
     CLAHE_CLIP_LIMIT = 3.0
