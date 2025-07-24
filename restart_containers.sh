@@ -19,3 +19,6 @@ docker ps -a | grep ocr-pymupdf
 
 echo "Logs del contenedor API:"
 docker logs ocr-pymupdf-api
+
+echo "Logs del contenedor Frontend:"
+docker logs ocr-pymupdf-frontend
