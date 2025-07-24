@@ -8,10 +8,12 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material'
-import UploadFileIcon from '@mui/icons-material/UploadFile'
-import DescriptionIcon from '@mui/icons-material/Description'
-import SettingsIcon from '@mui/icons-material/Settings'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import {
+  UploadFile,
+  Description,
+  Settings,
+  HelpOutline
+} from '@mui/icons-material'
 
 interface ActionButton {
   title: string;
@@ -30,28 +32,28 @@ const QuickActions = (): JSX.Element => {
     {
       title: 'Subir PDF',
       description: 'Sube un nuevo documento PDF para procesarlo',
-      icon: <UploadFileIcon fontSize="large" />,
+      icon: <UploadFile fontSize="large" />,
       action: () => navigate('/upload'),
       color: theme.palette.primary.main
     },
     {
       title: 'Mis Documentos',
       description: 'Ver todos tus documentos procesados',
-      icon: <DescriptionIcon fontSize="large" />,
+      icon: <Description fontSize="large" />,
       action: () => navigate('/documents'),
       color: theme.palette.secondary.main
     },
     {
       title: 'Configuración',
       description: 'Ajusta las opciones de procesamiento',
-      icon: <SettingsIcon fontSize="large" />,
+      icon: <Settings fontSize="large" />,
       action: () => navigate('/settings'),
       color: theme.palette.info.main
     },
     {
       title: 'Ayuda',
       description: 'Consulta la documentación del proyecto',
-      icon: <HelpOutlineIcon fontSize="large" />,
+      icon: <HelpOutline fontSize="large" />,
       action: () => window.open('https://github.com/robaguilera/OCR-PYMUPDF', '_blank'),
       color: theme.palette.warning.main
     }
