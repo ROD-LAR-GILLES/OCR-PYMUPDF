@@ -320,6 +320,16 @@ const UploadPage = (): JSX.Element => {
                     ? 'Suelta el archivo aquí...'
                     : 'Arrastra y suelta un archivo aquí, o haz clic para seleccionar'}
                 </Typography>
+                <Button 
+                  variant="outlined" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
+                  sx={{ mt: 2 }}
+                >
+                  Explorar archivos
+                </Button>
               </Box>
             </Paper>
 

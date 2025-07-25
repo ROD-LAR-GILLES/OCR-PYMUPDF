@@ -102,7 +102,7 @@ export const uploadPdf = async (file: File, options: ProcessingOptions = {}): Pr
     formData.append('options', JSON.stringify(options))
   }
   
-  const response: AxiosResponse<ApiResponse<Document>> = await api.post('/documents/upload', formData, {
+  const response: AxiosResponse<ApiResponse<Document>> = await api.post('/documents', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -112,7 +112,7 @@ export const uploadPdf = async (file: File, options: ProcessingOptions = {}): Pr
 
 // Función para subir documentos con seguimiento de progreso
 export const uploadDocument = async (formData: FormData, onProgress?: (progressEvent: any) => void): Promise<ApiResponse<Document>> => {
-  const response: AxiosResponse<ApiResponse<Document>> = await api.post('/documents/upload', formData, {
+  const response: AxiosResponse<ApiResponse<Document>> = await api.post('/documents', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
