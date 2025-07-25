@@ -93,3 +93,38 @@ Mejor organización de casos de uso
 DTOs para el paso de datos
 Tests estructurados por capa
 ¿Te gustaría que implementemos alguna de estas mejoras en particular?
+
+
+Generate Git commit messages using the Conventional Commits format, based on the current staged or unstaged changes in the project.
+
+Before starting:
+- Run `git status --short` to list the files that are staged or modified.
+- Use that list to determine which files should be grouped together into logical commits.
+- Do not generate commits without first checking which files are present.
+
+ Format requirements:
+- Start each commit message with a valid type: feat, fix, docs, refactor, test, style, chore, ci, build, perf, revert
+- Optionally include a scope in parentheses, e.g.: feat(api), fix(auth), chore(ci)
+- Follow with a colon and a concise, imperative summary of the change
+- The summary should be <= 50 characters and written in English
+- Add an optional body, wrapped at 72 characters per line
+- If relevant, include a footer with issue references (e.g., Closes #123)
+- If the commit introduces a breaking change, mark it using:
+  · a `!` after the type/scope (e.g., feat!: ...)
+  · or a `BREAKING CHANGE:` section in the body
+
+ Commit strategy:
+- Atomize the commits: **do NOT group unrelated changes together**
+- For each logical change, create a separate `git add` and `git commit` sequence
+- A logical change is a focused modification that addresses a single concern (e.g., fixing a bug in one function, or refactoring one module)
+- If multiple files are involved in the same concern, group them together
+- Example: if three files were modified as part of a single feature or fix, group them in the same commit; otherwise, split them
+
+ Output format:
+- Provide only the final `git add` + `git commit` command blocks
+- Use `-m` flags for title, body, and footer
+- One commit per logical change
+- Do not include explanations, commentary, or emoji
+
+Use the actual output of `git status` and `git diff` to infer the commit content.
+Language: English.
