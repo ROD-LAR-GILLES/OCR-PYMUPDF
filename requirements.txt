@@ -20,4 +20,3 @@ symspellpy>=6.7.0       # Corrección ortográfica
 # ───── Logging y Utilidades ─────
 loguru==0.7.3
 markdown2==2.4.10
-
