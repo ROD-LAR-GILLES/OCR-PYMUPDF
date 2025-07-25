@@ -1,8 +1,5 @@
 #!/bin/bash
-# MASTEecho "║                         echo -e "${YELLOW} MODOS PREDEFINIDOS:${NC}"ASTER TESTING SUITE - OCR-PYMUPDF                    ║"
-echo "║                                                                              ║"
-echo "║   Tests Unitarios  │   Análisis de Código  │   Seguridad             ║"
-echo "║   Rendimiento      │   Calidad             │   Reportes              ║"STING SCRIPT - Ejecuta todas las herramientas de testing y calidad
+# MASTER TESTING SCRIPT - Ejecuta todas las herramientas de testing y calidad
 # Este script es tu punto de entrada único para verificar todo el proyecto
 
 set -e
@@ -20,20 +17,18 @@ NC='\033[0m' # No Color
 # Banner principal
 echo -e "${BOLD}${BLUE}"
 echo "╔══════════════════════════════════════════════════════════════════════════════╗"
-echo "║                      MASTER TESTING SUITE - OCR-PYMUPDF                    ║"
+echo "║                      MASTER TESTING SUITE - OCR-PYMUPDF                      ║"
 echo "║                                                                              ║"
-echo "║    Tests Unitarios  │    Análisis de Código  │    Seguridad             ║"
-echo "║    Rendimiento      │    Calidad             │    Reportes              ║"
+echo "║    Tests Unitarios  │    Análisis de Código  │    Seguridad                  ║"
+echo "║    Rendimiento      │    Calidad             │    Reportes                   ║"
 echo "╚══════════════════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 
 # Variables globales
-PROJECT_ROOT=$(pwd)
-TESTING_DIR="testing"
-TOOLS_DIR="$TESTING_DIR/tools"
-REPORTS_DIR="$TESTING_DIR/reports"
-SESSION_ID=$(date +%Y%m%d_%H%M%S)
-MASTER_REPORT="$REPORTS_DIR/master_report_$SESSION_ID.txt"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR"
+TOOLS_DIR="$PROJECT_ROOT/tools"
+REPORTS_DIR="$PROJECT_ROOT/tools/reports"
 
 # Crear directorios si no existen
 mkdir -p "$REPORTS_DIR"
@@ -49,7 +44,7 @@ show_help() {
     echo "  --quick           Verificación rápida (5-10 min)"
     echo "  --standard        Análisis estándar (15-20 min)"
     echo "  --full            Análisis completo (30+ min)"
-    echo "  --ci            🤖 Modo CI/CD (solo errores críticos)"
+    echo "  --ci              Modo CI/CD (solo errores críticos)"
     echo ""
     echo -e "${YELLOW}  OPCIONES ESPECÍFICAS:${NC}"
     echo "  --tests           Solo ejecutar tests unitarios"
@@ -57,6 +52,7 @@ show_help() {
     echo "  --security        Solo verificación de seguridad"
     echo "  --performance     Solo análisis de rendimiento"
     echo "  --format          Solo formateo de código"
+    echo "  --clean-emojis    Solo limpieza de emoticones"
     echo ""
     echo -e "${YELLOW}  MODIFICADORES:${NC}"
     echo "  --coverage        Incluir análisis de cobertura"
@@ -97,12 +93,12 @@ check_prerequisites() {
     
     # Verificar que las herramientas existen
     REQUIRED_TOOLS=(
-        "$TOOLS_DIR/lint_code.sh"
-        "$TOOLS_DIR/format_code.sh"
-        "$TOOLS_DIR/quality_report.sh"
-        "$TOOLS_DIR/run_tests.sh"
-        "$TOOLS_DIR/security_check.sh"
-        "$TOOLS_DIR/performance_check.sh"
+        "$TOOLS_DIR/quality/lint_code.sh"
+        "$TOOLS_DIR/maintenance/format_code.sh"
+        "$TOOLS_DIR/quality/quality_report.sh"
+        "$TOOLS_DIR/tests/run_tests.sh"
+        "$TOOLS_DIR/security/security_check.sh"
+        "$TOOLS_DIR/performance/performance_check.sh"
     )
     
     for tool in "${REQUIRED_TOOLS[@]}"; do
@@ -120,7 +116,7 @@ check_prerequisites() {
 init_master_report() {
     cat > "$MASTER_REPORT" << EOF
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                      REPORTE MAESTRO - OCR-PYMUPDF                         ║
+║                      REPORTE MAESTRO - OCR-PYMUPDF                           ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 
    Fecha: $(date)
@@ -173,15 +169,22 @@ run_tool() {
 # Función para ejecutar formateo de código
 run_code_formatting() {
     if [ "$RUN_FORMAT" = true ]; then
-        run_tool "FORMAT" "$TOOLS_DIR/format_code.sh" "--apply" "  Formateando código automáticamente"
+        run_tool "FORMAT" "$TOOLS_DIR/maintenance/format_code.sh" "--apply" "  Formateando código automáticamente"
+    fi
+}
+
+# Función para ejecutar limpieza de emoticones
+run_emoji_cleanup() {
+    if [ "$RUN_CLEAN_EMOJIS" = true ]; then
+        run_tool "EMOJIS" "python3 $TOOLS_DIR/maintenance/clean_emojis.py" "" "  Limpiando emoticones del proyecto"
     fi
 }
 
 # Función para ejecutar análisis de calidad
 run_quality_analysis() {
     if [ "$RUN_QUALITY" = true ]; then
-        run_tool "LINT" "$TOOLS_DIR/lint_code.sh" "$LINT_ARGS" "  Analizando calidad de código"
-        run_tool "QUALITY" "$TOOLS_DIR/quality_report.sh" "" "  Generando reporte de calidad"
+        run_tool "LINT" "$TOOLS_DIR/quality/lint_code.sh" "$LINT_ARGS" "  Analizando calidad de código"
+        run_tool "QUALITY" "$TOOLS_DIR/quality/quality_report.sh" "" "  Generando reporte de calidad"
     fi
 }
 
@@ -192,7 +195,7 @@ run_testing() {
         [ "$RUN_COVERAGE" = true ] && test_args="$test_args --coverage"
         [ "$QUICK_MODE" = true ] && test_args="$test_args --quick"
         
-        run_tool "TESTS" "$TOOLS_DIR/run_tests.sh" "$test_args" "  Ejecutando tests unitarios"
+        run_tool "TESTS" "$TOOLS_DIR/tests/run_tests.sh" "$test_args" "  Ejecutando tests unitarios"
     fi
 }
 
@@ -202,7 +205,7 @@ run_security_analysis() {
         local security_args=""
         [ "$DETAILED_SECURITY" = true ] && security_args="--detailed"
         
-        run_tool "SECURITY" "$TOOLS_DIR/security_check.sh" "$security_args" "  Verificando seguridad"
+        run_tool "SECURITY" "$TOOLS_DIR/security/security_check.sh" "$security_args" "  Verificando seguridad"
     fi
 }
 
@@ -212,7 +215,7 @@ run_performance_analysis() {
         local perf_args=""
         [ "$FULL_PERFORMANCE" = true ] && perf_args="--full"
         
-        run_tool "PERFORMANCE" "$TOOLS_DIR/performance_check.sh" "$perf_args" "  Analizando rendimiento"
+        run_tool "PERFORMANCE" "$TOOLS_DIR/performance/performance_check.sh" "$perf_args" "  Analizando rendimiento"
     fi
 }
 
@@ -232,7 +235,7 @@ $(ls -la "$REPORTS_DIR/" 2>/dev/null | grep "$(date +%Y%m%d)" || echo "No hay re
   PRÓXIMOS PASOS RECOMENDADOS
 ═══════════════════════════════════════════════════════════════════════════════
 
-1.   Revisar reportes detallados en testing/reports/
+1.   Revisar reportes detallados en tools/reports/
 2.   Corregir problemas encontrados en análisis de calidad
 3.   Agregar tests para código sin cobertura
 4.   Resolver vulnerabilidades de seguridad si las hay
@@ -243,9 +246,11 @@ $(ls -la "$REPORTS_DIR/" 2>/dev/null | grep "$(date +%Y%m%d)" || echo "No hay re
 ═══════════════════════════════════════════════════════════════════════════════
 
 Para más información sobre las herramientas:
-• ./testing/tools/lint_code.sh --help
-• ./testing/tools/format_code.sh --help
-• ./testing/tools/run_tests.sh --help
+• ./tools/quality/lint_code.sh --help
+• ./tools/maintenance/format_code.sh --help
+• ./tools/tests/run_tests.sh --help
+• ./tools/maintenance/code_maintenance.sh --help
+• ./tools/maintenance/clean_emojis.py --help
 
 Documentación del proyecto: README.md
 EOF
@@ -294,6 +299,7 @@ main() {
     RUN_SECURITY=false
     RUN_PERFORMANCE=false
     RUN_FORMAT=false
+    RUN_CLEAN_EMOJIS=false
     
     RUN_COVERAGE=false
     VERBOSE=false
@@ -305,6 +311,8 @@ main() {
     LINT_ARGS=""
     
     START_TIME=$(date +%s)
+    SESSION_ID=$(date +%Y%m%d_%H%M%S)
+    MASTER_REPORT="$REPORTS_DIR/master_report_${SESSION_ID}.txt"
     
     # Procesar argumentos
     while [[ $# -gt 0 ]]; do
@@ -363,6 +371,10 @@ main() {
                 RUN_FORMAT=true
                 shift
                 ;;
+            --clean-emojis)
+                RUN_CLEAN_EMOJIS=true
+                shift
+                ;;
             --coverage)
                 RUN_COVERAGE=true
                 shift
@@ -391,7 +403,7 @@ main() {
     done
     
     # Si no se especifica nada, usar modo estándar
-    if [ "$RUN_TESTS" = false ] && [ "$RUN_QUALITY" = false ] && [ "$RUN_SECURITY" = false ] && [ "$RUN_PERFORMANCE" = false ] && [ "$RUN_FORMAT" = false ]; then
+    if [ "$RUN_TESTS" = false ] && [ "$RUN_QUALITY" = false ] && [ "$RUN_SECURITY" = false ] && [ "$RUN_PERFORMANCE" = false ] && [ "$RUN_FORMAT" = false ] && [ "$RUN_CLEAN_EMOJIS" = false ]; then
         echo -e "${YELLOW}  No se especificaron opciones, usando modo estándar${NC}"
         STANDARD_MODE=true
         RUN_TESTS=true
@@ -402,6 +414,9 @@ main() {
     # Verificar prerrequisitos
     check_prerequisites
     
+    # Crear directorio de reportes si no existe
+    mkdir -p "$REPORTS_DIR"
+    
     # Inicializar reporte maestro
     if [ "$GENERATE_REPORTS" = true ]; then
         init_master_report
@@ -409,6 +424,7 @@ main() {
     
     # Ejecutar herramientas en orden
     run_code_formatting
+    run_emoji_cleanup
     run_testing
     run_quality_analysis
     run_security_analysis
