@@ -74,3 +74,21 @@ def get_available_llm_provider():
             return provider_name
     
     return None
+
+def get_available_llm_providers():
+    """
+    Obtiene todos los proveedores LLM disponibles.
+    
+    Returns:
+        list: Lista de nombres de proveedores LLM disponibles.
+    """
+    available_providers = []
+    all_provider_keys = REQUIRED_LLM_KEYS + OPTIONAL_LLM_KEYS
+    
+    for provider_key in all_provider_keys:
+        if os.getenv(provider_key):
+            # Extraer nombre del proveedor (ej: OPENAI_API_KEY -> openai)
+            provider_name = provider_key.split('_')[0].lower()
+            available_providers.append(provider_name)
+    
+    return available_providers
