@@ -57,7 +57,11 @@ RUN mkdir -p /app/data/models/fasttext \
 COPY --from=builder /install /usr/local
 
 # Copiar archivos de configuración y código
-COPY . .
+COPY tools /app/tools
+COPY src /app/src
+
+# Crear y configurar estructura del directorio data
+RUN mkdir -p /app/data/corrections /app/data/legal_patterns /app/data/models/fasttext
 
 # Configurar pre-commit hooks
 RUN git init && \

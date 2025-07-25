@@ -8,7 +8,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 import fitz  # PyMuPDF
 
-from adapters.ocr_adapter import perform_ocr_on_page
+from .ocr_adapter import perform_ocr_on_page
 
 
 def _ocr_single(args: tuple[str, int]) -> str:

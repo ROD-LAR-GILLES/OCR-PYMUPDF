@@ -4,7 +4,7 @@ Este módulo configura la aplicación FastAPI para la interfaz web,
 incluye las rutas y middleware necesarios.
 """
 # Configurar filtros de advertencias antes de importar otras dependencias
-from infrastructure.warnings_setup import configure_warnings
+from config.warnings_setup import configure_warnings
 configure_warnings()
 
 from fastapi import FastAPI
@@ -18,7 +18,7 @@ from adapters.inbound.http.api.routes.user_routes import router as user_router
 from adapters.inbound.http.api.routes.pdf_routes import router as pdf_router
 
 # Importar validación de claves LLM
-from infrastructure.llm_keys_check import check_llm_keys, get_available_llm_providers
+from config.llm_keys_check import check_llm_keys, get_available_llm_providers
 
 # Crear aplicación FastAPI
 app = FastAPI(

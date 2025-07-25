@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile.api
     image: ocr-pymupdf-api
     container_name: ocr-pymupdf-api
-    command: python tools/bin/run_api.py
+    command: python3 -m tools.bin.run_api
     ports:
       - "8000:8000"  # API REST en puerto 8000
     volumes:
@@ -27,7 +27,7 @@ services:
       - ./metadata:/app/metadata
       - ./backend/tools/data:/app/tools/data
     environment:
-      - PYTHONPATH=/app/src
+      - PYTHONPATH=/app/src:/app
       # OpenAI
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_MODEL_ID=${OPENAI_MODEL_ID:-gpt-3.5-turbo}
@@ -41,10 +41,6 @@ services:
       - DEEPSEEK_MODEL_ID=${DEEPSEEK_MODEL_ID:-deepseek-chat}
       - DEEPSEEK_MAX_RETRIES=${DEEPSEEK_MAX_RETRIES:-5}
       - DEEPSEEK_TEMPERATURE=${DEEPSEEK_TEMPERATURE:-0.3}
-      # Anthropic
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - ANTHROPIC_MODEL_ID=${ANTHROPIC_MODEL_ID:-claude-3-sonnet-20240229}
-      - ANTHROPIC_MAX_RETRIES=${ANTHROPIC_MAX_RETRIES:-5}
       # Web Interface
       - WEB_HOST=${WEB_HOST:-0.0.0.0}
       - WEB_PORT=${WEB_PORT:-8080}
@@ -57,3 +53,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+
+
+    

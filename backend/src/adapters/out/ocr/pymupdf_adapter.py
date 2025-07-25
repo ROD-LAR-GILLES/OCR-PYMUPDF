@@ -21,7 +21,7 @@ from typing import List, Tuple
 from datetime import datetime
 from domain.ports.document_port import DocumentPort
 from domain.dtos.document_dtos import DocumentMetadataDTO
-import adapters.parallel_ocr as parallel_ocr
+from adapters.out.ocr import parallel_ocr
 import os
 import config.state as state
 
