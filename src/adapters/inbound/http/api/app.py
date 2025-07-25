@@ -3,6 +3,10 @@
 Este módulo configura la aplicación FastAPI para la interfaz web,
 incluye las rutas y middleware necesarios.
 """
+# Configurar filtros de advertencias antes de importar otras dependencias
+from infrastructure.warnings_setup import configure_warnings
+configure_warnings()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -12,6 +16,9 @@ import os
 # Importar routers
 from adapters.inbound.http.api.routes.user_routes import router as user_router
 from adapters.inbound.http.api.routes.pdf_routes import router as pdf_router
+
+# Importar validación de claves LLM
+from infrastructure.llm_keys_check import check_llm_keys, get_available_llm_providers
 
 # Crear aplicación FastAPI
 app = FastAPI(
@@ -56,6 +63,18 @@ if frontend_dir.exists():
     # Montar la raíz para servir index.html al final, después de todas las rutas de la API
     # NOTA: Este montaje debe ser el último para evitar que capture las peticiones destinadas a la API
     app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+
+# Eventos de inicio y cierre de la aplicación
+@app.on_event("startup")
+async def startup_event():
+    """Evento que se ejecuta al iniciar la aplicación."""
+    # Verificar claves de API para LLM
+    available_providers = get_available_llm_providers()
+    if available_providers:
+        print(f"Proveedores LLM disponibles: {', '.join(available_providers)}")
+    else:
+        print("ADVERTENCIA: No se encontraron claves de API para los proveedores LLM")
+        print("El sistema funcionará en modo OCR básico sin refinamiento LLM")
 
 # Función para iniciar la aplicación
 def start_app():

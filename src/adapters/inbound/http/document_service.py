@@ -50,7 +50,7 @@ class DocumentService:
         return doc_id
     
     @staticmethod
-    def update_document_status(doc_id: str, status: str, progress: float = None, error_message: str = None):
+    def update_document_status(doc_id: str, status: str, progress: float = None, error_message: str = None, metadata: Dict[str, Any] = None):
         """Actualiza el estado de un documento.
         
         Args:
@@ -58,6 +58,7 @@ class DocumentService:
             status: Nuevo estado (pending, processing, completed, error)
             progress: Progreso del procesamiento (0-100)
             error_message: Mensaje de error si ocurrió alguno
+            metadata: Metadatos adicionales para agregar al documento
         """
         metadata_path = METADATA_DIR / f"{doc_id}.json"
         
@@ -66,21 +67,26 @@ class DocumentService:
         
         # Cargar metadatos actuales
         with open(metadata_path, "r") as f:
-            metadata = json.load(f)
+            document_metadata = json.load(f)
         
         # Actualizar metadatos
-        metadata["status"] = status
-        metadata["updated_at"] = datetime.now().isoformat()
+        document_metadata["status"] = status
+        document_metadata["updated_at"] = datetime.now().isoformat()
         
         if progress is not None:
-            metadata["progress"] = progress
+            document_metadata["progress"] = progress
         
         if error_message is not None:
-            metadata["error_message"] = error_message
+            document_metadata["error_message"] = error_message
+        
+        # Agregar metadatos adicionales si se proporcionan
+        if metadata is not None:
+            for key, value in metadata.items():
+                document_metadata[key] = value
         
         # Guardar metadatos actualizados
         with open(metadata_path, "w") as f:
-            json.dump(metadata, f, indent=2)
+            json.dump(document_metadata, f, indent=2, ensure_ascii=False)
     
     @staticmethod
     def get_document(doc_id: str) -> Dict[str, Any]:

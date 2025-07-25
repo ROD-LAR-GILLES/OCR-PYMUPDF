@@ -46,8 +46,39 @@ def get_pdf_to_markdown_use_case(use_llm: bool = False):
     """Proporciona una instancia configurada del caso de uso PDFToMarkdownUseCase."""
     document_port = PyMuPDFAdapter()
     storage_port = FileStorage()
-    llm_port = LLMRefiner() if use_llm else None
+    llm_port = _resolve_llm_port() if use_llm else None
     return PDFToMarkdownUseCase(document_port, storage_port, llm_port)
+
+def _resolve_llm_port():
+    """
+    Resuelve dinámicamente el puerto LLM a utilizar según las claves de API disponibles.
+    
+    Returns:
+        LLMPort or None: Una instancia del puerto LLM si hay claves disponibles, None en caso contrario
+    """
+    import os
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    # Verificar claves de API disponibles
+    openai_key = os.getenv("OPENAI_API_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    
+    # Elegir el proveedor según disponibilidad (orden de prioridad)
+    if openai_key:
+        logger.info("Usando OpenAI como proveedor LLM")
+        return LLMRefiner(provider="openai")
+    elif gemini_key:
+        logger.info("Usando Gemini como proveedor LLM")
+        return LLMRefiner(provider="gemini")
+    elif anthropic_key:
+        logger.info("Usando Anthropic como proveedor LLM")
+        return LLMRefiner(provider="anthropic")
+    else:
+        logger.warning("No se encontraron claves de API para proveedores LLM. Desactivando refinamiento LLM.")
+        return None
 
 # Función para procesar documentos en segundo plano
 async def process_document(input_dto: DocumentInputDTO, doc_id: str, use_case: PDFToMarkdownUseCase):
@@ -58,15 +89,57 @@ async def process_document(input_dto: DocumentInputDTO, doc_id: str, use_case: P
         doc_id: ID único del documento
         use_case: Caso de uso para procesar el documento
     """
+    from infrastructure.logging_setup import logger, log_error_details, log_document_processing
+    
     try:
+        # Registrar inicio del procesamiento
+        logger.info(f"Iniciando procesamiento del documento {doc_id}: {input_dto.file_path}")
+        
         # Actualizar estado a "processing"
         DocumentService.update_document_status(doc_id, "processing", 0.0)
+        
+        # Registrar en el log de documentos
+        log_document_processing(
+            doc_id=doc_id,
+            filename=os.path.basename(input_dto.file_path),
+            status="processing",
+            progress=0.0,
+            metadata={
+                "process_tables": input_dto.process_tables,
+                "detect_language": input_dto.detect_language,
+                "spell_check": input_dto.spell_check,
+                "refine_with_llm": input_dto.refine_with_llm
+            }
+        )
         
         # Registrar tiempo de inicio
         start_time = time.time()
         
         # Procesar documento
-        result = use_case.execute(input_dto)
+        try:
+            # Verificar existencia del archivo
+            file_path = Path(input_dto.file_path)
+            if not file_path.exists():
+                raise FileNotFoundError(f"El archivo no existe: {file_path}")
+                
+            # Verificar tamaño
+            file_size_mb = file_path.stat().st_size / (1024 * 1024)
+            logger.info(f"Tamaño del archivo: {file_size_mb:.2f} MB")
+            
+            # Ejecutar caso de uso
+            logger.info(f"Ejecutando caso de uso para documento {doc_id}")
+            result = use_case.execute(input_dto)
+            logger.info(f"Procesamiento completado para documento {doc_id}")
+            
+        except Exception as process_error:
+            # Registrar error detallado
+            error_id = log_error_details(
+                process_error, 
+                f"Error al procesar documento {doc_id}: {input_dto.file_path}"
+            )
+            
+            # Propagar el error con ID para referencia
+            raise Exception(f"Error al procesar el documento (Error ID: {error_id}): {str(process_error)}")
         
         # Calcular tiempo de procesamiento
         processing_time = time.time() - start_time
@@ -77,19 +150,49 @@ async def process_document(input_dto: DocumentInputDTO, doc_id: str, use_case: P
             "completed", 
             100.0, 
             metadata={
-                "total_pages": result.total_pages,
+                "total_pages": result.total_pages if hasattr(result, 'total_pages') else 0,
                 "processing_time": processing_time,
-                "language": result.language
+                "language": result.language if hasattr(result, 'language') else "desconocido"
             }
         )
+        
+        # Registrar éxito en el log de documentos
+        log_document_processing(
+            doc_id=doc_id,
+            filename=os.path.basename(input_dto.file_path),
+            status="completed",
+            progress=100.0,
+            metadata={
+                "total_pages": result.total_pages if hasattr(result, 'total_pages') else 0,
+                "processing_time": processing_time,
+                "language": result.language if hasattr(result, 'language') else "desconocido"
+            }
+        )
+        
+        logger.info(f"Documento {doc_id} procesado correctamente en {processing_time:.2f} segundos")
+        
     except Exception as e:
+        # Registrar error detallado
+        error_id = log_error_details(e, f"Error en procesamiento de documento {doc_id}")
+        
         # Actualizar estado a "error"
+        error_message = f"Error ID: {error_id} - {str(e)}"
         DocumentService.update_document_status(
             doc_id, 
             "error", 
             0.0, 
-            error_message=str(e)
+            error_message=error_message
         )
+        
+        # Registrar error en el log de documentos
+        log_document_processing(
+            doc_id=doc_id,
+            filename=os.path.basename(input_dto.file_path) if hasattr(input_dto, 'file_path') else "desconocido",
+            status="error",
+            error=error_message
+        )
+        
+        logger.error(f"Error al procesar documento {doc_id}: {str(e)}")
         raise
 
 @router.get("/", response_model=List[DocumentStatus])
@@ -130,86 +233,90 @@ async def list_documents(
     
     return result
 
-@router.post("/", response_model=DocumentResponse, responses={400: {"model": ErrorResponse}})
-async def upload_pdf(
+# Rutas para crear y gestionar documentos
+@router.post("", response_model=DocumentResponse, responses={400: {"model": ErrorResponse}}, status_code=201)
+async def create_document(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
-    options: DocumentCreate = Depends()
-):
-    """Sube un archivo PDF para procesamiento.
+    use_llm: bool = Query(False, description="Usar LLM para refinar el resultado"),
+    use_case: PDFToMarkdownUseCase = Depends(get_pdf_to_markdown_use_case)
+) -> DocumentResponse:
+    """Sube un documento PDF y lo procesa en segundo plano.
     
     Args:
+        background_tasks: Tareas en segundo plano
         file: Archivo PDF a procesar
-        options: Opciones de procesamiento
+        use_llm: Si se debe usar LLM para refinar el resultado
+        use_case: Caso de uso para procesar el documento
         
     Returns:
-        DocumentResponse: Información sobre el documento procesado
+        DocumentResponse: Información del documento creado
     """
-    # Validar que sea un PDF
-    if not file.filename.lower().endswith(".pdf"):
-        return JSONResponse(
-            status_code=400,
-            content={"detail": "El archivo debe ser un PDF"}
-        )
+    from infrastructure.logging_setup import logger
+    import uuid
+    from datetime import datetime
     
     try:
-        # Crear documento en el servicio
-        doc_id = DocumentService.create_document(
-            filename=file.filename,
-            options=options.dict()
-        )
+        # Validar el tipo de archivo
+        if not file.filename.lower().endswith('.pdf'):
+            raise HTTPException(
+                status_code=400,
+                detail="Solo se permiten archivos PDF"
+            )
         
-        # Definir ruta del archivo
-        file_path = UPLOAD_DIR / f"{doc_id}_{file.filename}"
+        # Crear metadatos del documento
+        now = datetime.now().isoformat()
         
-        # Guardar el archivo subido
+        # Preparar opciones de procesamiento
+        options = {
+            "use_llm": use_llm,
+            "process_tables": True,  # Por defecto activado
+            "detect_language": True,  # Por defecto activado
+            "spell_check": False,  # Por defecto desactivado
+        }
+        
+        # Guardar metadatos usando el método correcto
+        doc_id = DocumentService.create_document(file.filename, options)
+        
+        # Crear ruta de archivo
+        file_path = UPLOAD_DIR / f"{doc_id}.pdf"
+        
+        # Guardar archivo en disco
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        # Actualizar estado a "processing"
-        DocumentService.update_document_status(doc_id, "processing", 0.0)
-        
-        # Crear DTO de entrada
+        # Crear DTO para el caso de uso
         input_dto = DocumentInputDTO(
             file_path=str(file_path),
-            process_tables=options.process_tables,
-            detect_language=options.detect_language,
-            spell_check=options.spell_check,
-            refine_with_llm=options.use_llm
+            process_tables=True,  # Por defecto activado
+            detect_language=True,  # Por defecto activado
+            spell_check=False,  # Por defecto desactivado
+            refine_with_llm=use_llm
         )
         
-        # Obtener caso de uso apropiado
-        use_case = get_pdf_to_markdown_use_case(options.use_llm)
+        # Iniciar procesamiento en segundo plano
+        background_tasks.add_task(process_document, input_dto, doc_id, use_case)
         
-        # Procesar el documento en segundo plano
-        background_tasks.add_task(
-            process_document,
-            input_dto=input_dto,
-            doc_id=doc_id,
-            use_case=use_case
-        )
+        # Obtener los metadatos del documento recién creado para la respuesta
+        document_metadata = DocumentService.get_document(doc_id)
         
-        # Construir URL para descargar el resultado
-        base_url = f"/api/documents/{doc_id}/download"
-        
-        # Devolver respuesta inmediata
+        # Devolver respuesta
         return DocumentResponse(
             id=doc_id,
             filename=file.filename,
+            status="pending",
             total_pages=0,  # Se actualizará después del procesamiento
-            processed_successfully=True,
-            processing_time=None,
-            markdown_url=base_url,
-            created_at=DocumentService.get_document(doc_id)["created_at"]
+            processed_successfully=False,  # Se actualizará después del procesamiento
+            created_at=datetime.fromisoformat(document_metadata["created_at"]),
+            markdown_url=None,  # Se generará después del procesamiento
+            error_message=None
         )
-    except Exception as e:
-        # Eliminar el archivo en caso de error
-        if 'file_path' in locals() and Path(file_path).exists():
-            os.remove(file_path)
         
-        return JSONResponse(
+    except Exception as e:
+        logger.exception(f"Error al procesar documento: {e}")
+        raise HTTPException(
             status_code=500,
-            content={"detail": f"Error al procesar el documento: {str(e)}"}
+            detail=f"Error al procesar el documento: {str(e)}"
         )
 
 @router.get("/{doc_id}/status", response_model=DocumentStatus, responses={404: {"model": ErrorResponse}})
