@@ -10,30 +10,30 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🔍 Analizando código - problemas como VS Code${NC}"
+echo -e "${BLUE}  Analizando código - problemas como VS Code${NC}"
 echo "=================================================="
 
 # Función para verificar si el contenedor está corriendo
 check_container() {
     API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
     if [ -z "$API_CONTAINER" ]; then
-        echo -e "${RED}❌ Error: El contenedor de la API no está en ejecución${NC}"
+        echo -e "${RED}  Error: El contenedor de la API no está en ejecución${NC}"
         echo "Iniciando contenedor..."
         docker-compose up -d
         sleep 10
         API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
         if [ -z "$API_CONTAINER" ]; then
-            echo -e "${RED}❌ No se pudo iniciar el contenedor${NC}"
+            echo -e "${RED}  No se pudo iniciar el contenedor${NC}"
             exit 1
         fi
     fi
-    echo -e "${GREEN}✅ Contenedor encontrado: $API_CONTAINER${NC}"
+    echo -e "${GREEN}  Contenedor encontrado: $API_CONTAINER${NC}"
 }
 
 # Función para ejecutar flake8 (linting como VS Code)
 run_flake8() {
     echo ""
-    echo -e "${YELLOW}📋 Ejecutando Flake8 (Linting y estilo)...${NC}"
+    echo -e "${YELLOW}  Ejecutando Flake8 (Linting y estilo)...${NC}"
     echo "============================================"
     
     docker exec $API_CONTAINER flake8 /app/src \
@@ -57,13 +57,13 @@ run_mypy() {
         --show-column-numbers 
         --no-error-summary || true
         
-    echo -e "${GREEN}✅ MyPy completado${NC}"
+    echo -e "${GREEN}  MyPy completado${NC}"
 }
 
 # Función para mostrar errores de importación
 check_imports() {
     echo ""
-    echo -e "${YELLOW}📦 Verificando importaciones...${NC}"
+    echo -e "${YELLOW}  Verificando importaciones...${NC}"
     echo "=================================="
     
     # Verificar que no hay errores de importación básicos
@@ -84,33 +84,33 @@ errors = []
 for module in modules_to_check:
     try:
         __import__(module)
-        print(f'✅ {module}')
+        print(f'  {module}')
     except Exception as e:
-        print(f'❌ {module}: {e}')
+        print(f'  {module}: {e}')
         errors.append((module, str(e)))
 
 if errors:
-    print(f'\n❌ Se encontraron {len(errors)} errores de importación')
+    print(f'\n  Se encontraron {len(errors)} errores de importación')
     for module, error in errors:
         print(f'   {module}: {error}')
 else:
-    print(f'\n✅ Todas las importaciones están correctas')
+    print(f'\n  Todas las importaciones están correctas')
 " || true
 }
 
 # Función para verificar sintaxis Python
 check_syntax() {
     echo ""
-    echo -e "${YELLOW}🐍 Verificando sintaxis Python...${NC}"
+    echo -e "${YELLOW}  Verificando sintaxis Python...${NC}"
     echo "=================================="
     
-    docker exec $API_CONTAINER find /app/src -name "*.py" -exec python -m py_compile {} \; 2>&1 | grep -v "^$" || echo -e "${GREEN}✅ No hay errores de sintaxis${NC}"
+    docker exec $API_CONTAINER find /app/src -name "*.py" -exec python -m py_compile {} \; 2>&1 | grep -v "^$" || echo -e "${GREEN}  No hay errores de sintaxis${NC}"
 }
 
 # Función para mostrar estadísticas del código
 show_stats() {
     echo ""
-    echo -e "${BLUE}📊 Estadísticas del código:${NC}"
+    echo -e "${BLUE}  Estadísticas del código:${NC}"
     echo "=========================="
     
     docker exec $API_CONTAINER bash -c "
@@ -157,14 +157,14 @@ main() {
     check_container
     
     if [ ! -z "$SPECIFIC_FILE" ]; then
-        echo -e "${BLUE}🎯 Analizando archivo específico: $SPECIFIC_FILE${NC}"
+        echo -e "${BLUE}  Analizando archivo específico: $SPECIFIC_FILE${NC}"
         docker exec $API_CONTAINER flake8 "/app/$SPECIFIC_FILE" --show-source || true
         docker exec $API_CONTAINER mypy "/app/$SPECIFIC_FILE" --ignore-missing-imports || true
         return
     fi
     
     if [ "$QUICK_MODE" = true ]; then
-        echo -e "${BLUE}⚡ Modo rápido activado${NC}"
+        echo -e "${BLUE}  Modo rápido activado${NC}"
         check_syntax
         check_imports
     else
@@ -176,8 +176,8 @@ main() {
     fi
     
     echo ""
-    echo -e "${GREEN}✅ Análisis completado${NC}"
-    echo "💡 Tip: Usa --quick para análisis rápido o --file <archivo> para un archivo específico"
+    echo -e "${GREEN}  Análisis completado${NC}"
+    echo "  Tip: Usa --quick para análisis rápido o --file <archivo> para un archivo específico"
 }
 
 # Ejecutar función principal con todos los argumentos

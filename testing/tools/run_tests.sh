@@ -11,41 +11,41 @@ BLUE='\033[0;34m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🧪 Ejecutando Tests - OCR-PYMUPDF${NC}"
+echo -e "${BLUE} Ejecutando Tests - OCR-PYMUPDF${NC}"
 echo "======================================="
 
 # Función para verificar si el contenedor está corriendo
 check_container() {
     API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
     if [ -z "$API_CONTAINER" ]; then
-        echo -e "${RED}❌ Error: El contenedor de la API no está en ejecución${NC}"
+        echo -e "${RED} Error: El contenedor de la API no está en ejecución${NC}"
         echo "Iniciando contenedor..."
         docker-compose up -d
         sleep 10
         API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
         if [ -z "$API_CONTAINER" ]; then
-            echo -e "${RED}❌ No se pudo iniciar el contenedor${NC}"
+            echo -e "${RED} No se pudo iniciar el contenedor${NC}"
             exit 1
         fi
     fi
-    echo -e "${GREEN}✅ Contenedor encontrado: $API_CONTAINER${NC}"
+    echo -e "${GREEN} Contenedor encontrado: $API_CONTAINER${NC}"
 }
 
 # Función para instalar pytest si no está disponible
 install_pytest() {
-    echo -e "${YELLOW}📦 Verificando pytest...${NC}"
+    echo -e "${YELLOW} Verificando pytest...${NC}"
     if ! docker exec $API_CONTAINER python -c "import pytest" 2>/dev/null; then
-        echo -e "${YELLOW}📦 Instalando pytest...${NC}"
+        echo -e "${YELLOW} Instalando pytest...${NC}"
         docker exec $API_CONTAINER pip install pytest pytest-cov pytest-asyncio pytest-mock
     else
-        echo -e "${GREEN}✅ pytest ya está instalado${NC}"
+        echo -e "${GREEN} pytest ya está instalado${NC}"
     fi
 }
 
 # Función para ejecutar tests unitarios
 run_unit_tests() {
     echo ""
-    echo -e "${YELLOW}🔬 Ejecutando tests unitarios...${NC}"
+    echo -e "${YELLOW} Ejecutando tests unitarios...${NC}"
     echo "================================="
     
     docker exec $API_CONTAINER python -m pytest /app/tests/ \
@@ -58,7 +58,7 @@ run_unit_tests() {
 # Función para ejecutar tests con cobertura
 run_coverage_tests() {
     echo ""
-    echo -e "${YELLOW}📊 Ejecutando tests con cobertura...${NC}"
+    echo -e "${YELLOW} Ejecutando tests con cobertura...${NC}"
     echo "====================================="
     
     docker exec $API_CONTAINER python -m pytest /app/tests/ \
@@ -72,18 +72,18 @@ run_coverage_tests() {
 # Función para ejecutar tests específicos de OCR
 run_ocr_tests() {
     echo ""
-    echo -e "${YELLOW}👁️ Ejecutando tests específicos de OCR...${NC}"
+    echo -e "${YELLOW} Ejecutando tests específicos de OCR...${NC}"
     echo "==========================================="
     
     # Test con PDF digital
     if [ -f "tests/fixtures/digital.pdf" ]; then
-        echo -e "${BLUE}📄 Probando PDF digital...${NC}"
+        echo -e "${BLUE} Probando PDF digital...${NC}"
         docker exec $API_CONTAINER python -m pytest /app/tests/test_digital_pdfs.py -v || true
     fi
     
     # Test con PDF escaneado
     if [ -f "tests/fixtures/scanned.pdf" ]; then
-        echo -e "${BLUE}📄 Probando PDF escaneado...${NC}"
+        echo -e "${BLUE} Probando PDF escaneado...${NC}"
         docker exec $API_CONTAINER python -m pytest /app/tests/test_scanned_pdfs.py -v || true
     fi
 }
@@ -91,30 +91,30 @@ run_ocr_tests() {
 # Función para ejecutar tests de API
 run_api_tests() {
     echo ""
-    echo -e "${YELLOW}🌐 Ejecutando tests de API...${NC}"
+    echo -e "${YELLOW} Ejecutando tests de API...${NC}"
     echo "=============================="
     
     # Verificar que la API esté funcionando
-    echo -e "${BLUE}🔍 Verificando salud de la API...${NC}"
+    echo -e "${BLUE} Verificando salud de la API...${NC}"
     if curl -f http://localhost:8000/health >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ API está respondiendo${NC}"
+        echo -e "${GREEN} API está respondiendo${NC}"
         
         # Ejecutar tests de endpoints si existen
         docker exec $API_CONTAINER python -m pytest /app/tests/ -k "api" -v || true
     else
-        echo -e "${YELLOW}⚠️ API no está disponible en localhost:8000${NC}"
+        echo -e "${YELLOW} API no está disponible en localhost:8000${NC}"
     fi
 }
 
 # Función para ejecutar tests de rendimiento básicos
 run_performance_tests() {
     echo ""
-    echo -e "${YELLOW}⚡ Ejecutando tests de rendimiento básicos...${NC}"
+    echo -e "${YELLOW} Ejecutando tests de rendimiento básicos...${NC}"
     echo "=============================================="
     
     # Test de memoria y tiempo con un PDF pequeño
     if [ -f "tests/fixtures/digital.pdf" ]; then
-        echo -e "${BLUE}📊 Midiendo rendimiento con PDF de prueba...${NC}"
+        echo -e "${BLUE} Midiendo rendimiento con PDF de prueba...${NC}"
         docker exec $API_CONTAINER python -c "
 import time
 import sys
@@ -144,15 +144,15 @@ try:
         current, peak = tracemalloc.get_traced_memory()
         tracemalloc.stop()
         
-        print(f'✅ Tiempo de procesamiento: {processing_time:.2f} segundos')
-        print(f'📊 Memoria actual: {current / 1024 / 1024:.1f} MB')
-        print(f'📈 Pico de memoria: {peak / 1024 / 1024:.1f} MB')
-        print(f'📄 Páginas procesadas: {len(result[1]) if len(result) > 1 else 0}')
+        print(f'Tiempo de procesamiento: {processing_time:.2f} segundos')
+        print(f'Memoria actual: {current / 1024 / 1024:.1f} MB')
+        print(f'Pico de memoria: {peak / 1024 / 1024:.1f} MB')
+        print(f'Páginas procesadas: {len(result[1]) if len(result) > 1 else 0}')
     else:
-        print('⚠️ Archivo de prueba no encontrado')
+        print('Archivo de prueba no encontrado')
         
 except Exception as e:
-    print(f'❌ Error en test de rendimiento: {e}')
+    print(f'Error en test de rendimiento: {e}')
 " || true
     fi
 }
@@ -160,7 +160,7 @@ except Exception as e:
 # Función para generar reporte de tests
 generate_test_report() {
     echo ""
-    echo -e "${MAGENTA}📋 Generando reporte de tests...${NC}"
+    echo -e "${MAGENTA} Generando reporte de tests...${NC}"
     echo "=================================="
     
     REPORT_FILE="testing/reports/test_report_$(date +%Y%m%d_%H%M%S).txt"
@@ -181,7 +181,7 @@ generate_test_report() {
         docker exec $API_CONTAINER pip list | grep -E "(pytest|coverage|black|flake8|mypy)"
     } > "$REPORT_FILE"
     
-    echo -e "${GREEN}✅ Reporte guardado en: $REPORT_FILE${NC}"
+    echo -e "${GREEN} Reporte guardado en: $REPORT_FILE${NC}"
 }
 
 # Función principal
@@ -225,7 +225,7 @@ main() {
     install_pytest
     
     if [ "$QUICK_MODE" = true ]; then
-        echo -e "${BLUE}⚡ Modo rápido: Solo tests esenciales${NC}"
+        echo -e "${BLUE} Modo rápido: Solo tests esenciales${NC}"
         run_unit_tests
     else
         run_unit_tests
@@ -244,8 +244,8 @@ main() {
     generate_test_report
     
     echo ""
-    echo -e "${GREEN}✅ Tests completados${NC}"
-    echo "💡 Tip: Usa --coverage para análisis de cobertura o --performance para tests de rendimiento"
+    echo -e "${GREEN} Tests completados${NC}"
+    echo "Tip: Usa --coverage para análisis de cobertura o --performance para tests de rendimiento"
 }
 
 # Ejecutar función principal con todos los argumentos

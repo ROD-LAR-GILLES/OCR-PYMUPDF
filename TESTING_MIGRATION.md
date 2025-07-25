@@ -1,8 +1,8 @@
-# 📝 Migración de Herramientas de Testing
+#   Migración de Herramientas de Testing
 
-## ✅ Cambios Realizados
+##   Cambios Realizados
 
-### 🏗️ Estructura Reorganizada
+###   Estructura Reorganizada
 
 **ANTES:**
 ```
@@ -30,14 +30,14 @@ testing/
 run_all_tests.sh             # NUEVO - Script maestro
 ```
 
-### 🚀 Nuevas Herramientas
+###   Nuevas Herramientas
 
 1. **`run_all_tests.sh`** - Script maestro que ejecuta todo
 2. **`testing/tools/run_tests.sh`** - Tests unitarios con pytest
 3. **`testing/tools/security_check.sh`** - Análisis de seguridad
 4. **`testing/tools/performance_check.sh`** - Análisis de rendimiento
 
-## 🔄 Comandos de Migración
+##   Comandos de Migración
 
 ### Antes (comandos antiguos)
 ```bash
@@ -57,7 +57,7 @@ run_all_tests.sh             # NUEVO - Script maestro
 ./testing/tools/quality_report.sh
 ```
 
-## 🎯 Casos de Uso Principales
+##   Casos de Uso Principales
 
 ### Desarrollo Diario
 ```bash
@@ -79,23 +79,23 @@ run_all_tests.sh             # NUEVO - Script maestro
 ./run_all_tests.sh --format
 ```
 
-## 📊 Beneficios de la Migración
+##   Beneficios de la Migración
 
-1. **🎯 Punto de entrada único**: Un solo comando para todo
-2. **📁 Organización clara**: Todo el testing en un directorio
-3. **🔧 Más herramientas**: Seguridad, rendimiento, tests unitarios
-4. **📋 Reportes centralizados**: Todos los reportes en un lugar
-5. **🚀 Modos predefinidos**: Quick, standard, full, CI
-6. **📖 Documentación completa**: README con ejemplos
+1. **  Punto de entrada único**: Un solo comando para todo
+2. **  Organización clara**: Todo el testing en un directorio
+3. **  Más herramientas**: Seguridad, rendimiento, tests unitarios
+4. **  Reportes centralizados**: Todos los reportes en un lugar
+5. **  Modos predefinidos**: Quick, standard, full, CI
+6. **  Documentación completa**: README con ejemplos
 
-## 🛠️ Compatibilidad
+##   Compatibilidad
 
-- ✅ Todas las herramientas existentes funcionan igual
-- ✅ Mismas opciones y argumentos
-- ✅ Misma salida y reportes
-- ✅ Scripts ejecutables preservados
+-   Todas las herramientas existentes funcionan igual
+-   Mismas opciones y argumentos
+-   Misma salida y reportes
+-   Scripts ejecutables preservados
 
-## 🔗 Referencias
+##   Referencias
 
 - **Documentación completa**: `testing/README.md`
 - **Ayuda del script maestro**: `./run_all_tests.sh --help`
@@ -103,4 +103,4 @@ run_all_tests.sh             # NUEVO - Script maestro
 
 ---
 
-**¡La migración está completa y lista para usar! 🎉**
+**¡La migración está completa y lista para usar!  **

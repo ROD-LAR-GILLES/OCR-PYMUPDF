@@ -102,32 +102,32 @@ def main():
         print("\n=== EVALUACIÓN ===")
         
         # Verificar si hay problemas con el archivo
-        if not result["file_info"]["exists"]:
-            print(" ERROR: El archivo no existe")
-        elif not result["file_info"]["readable"]:
-            print(" ERROR: El archivo no es legible (problema de permisos)")
-        elif result["file_info"].get("size_bytes", 0) == 0:
-            print(" ERROR: El archivo está vacío")
+        if not result['file_access']['exists']:
+            print(" El archivo no existe")
+        elif not result['file_access']['readable']:
+            print(" El archivo no es legible (problema de permisos)")
+        elif result['file_access']['size'] == 0:
+            print(" El archivo está vacío")
         else:
-            print(" OK: El archivo existe y es accesible")
+            print(" El archivo existe y es accesible")
         
         # Verificar si el PDF es válido
-        if not result["pdf_validity"].get("is_valid", False):
-            print(f" ERROR: El archivo no es un PDF válido: {result['pdf_validity'].get('error', 'Razón desconocida')}")
+        if not result['pdf_validity']['valid']:
+            print(f" El archivo no es un PDF válido: {result['pdf_validity'].get('error', 'Razón desconocida')}")
         else:
-            print(" OK: El archivo es un PDF válido")
-            if result["pdf_validity"].get("is_encrypted", False):
-                print(" WARNING: El PDF está encriptado, lo que puede causar problemas")
-            if not result["pdf_validity"].get("has_text", True):
+            print(" El archivo es un PDF válido")
+            if result['pdf_validity'].get('encrypted', False):
+                print(" El PDF está encriptado, lo que puede causar problemas")
+            elif not result['pdf_validity'].get('has_text', True):
                 print(" El PDF no contiene texto seleccionable, se usará OCR")
         
         # Verificar capacidad de OCR
-        if result["ocr_capability"].get("error"):
-            print(f" WARNING: OCR disponible pero con errores: {result['ocr_capability']['error']}")
+        if not result['ocr_capability']['available']:
+            print(f" OCR disponible pero con errores: {result['ocr_capability']['error']}")
         else:
-            print(" OK: OCR está disponible")
-            if result["ocr_capability"].get("accuracy", 0) < 50:
-                print(f" WARNING: La precisión del OCR es baja: {result['ocr_capability'].get('accuracy', 0):.1f}%")
+            print(" OCR está disponible")
+            if result['ocr_capability'].get('accuracy', 100) < 80:
+                print(f" La precisión del OCR es baja: {result['ocr_capability'].get('accuracy', 0):.1f}%")
         
         # Devolver código de éxito
         return 0

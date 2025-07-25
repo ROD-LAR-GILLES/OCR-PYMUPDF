@@ -12,49 +12,49 @@ MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}⚡ Análisis de Rendimiento - OCR-PYMUPDF${NC}"
+echo -e "${BLUE}  Análisis de Rendimiento - OCR-PYMUPDF${NC}"
 echo "============================================"
 
 # Función para verificar si el contenedor está corriendo
 check_container() {
     API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
     if [ -z "$API_CONTAINER" ]; then
-        echo -e "${RED}❌ Error: El contenedor de la API no está en ejecución${NC}"
+        echo -e "${RED}  Error: El contenedor de la API no está en ejecución${NC}"
         echo "Iniciando contenedor..."
         docker-compose up -d
         sleep 10
         API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
         if [ -z "$API_CONTAINER" ]; then
-            echo -e "${RED}❌ No se pudo iniciar el contenedor${NC}"
+            echo -e "${RED}  No se pudo iniciar el contenedor${NC}"
             exit 1
         fi
     fi
-    echo -e "${GREEN}✅ Contenedor encontrado: $API_CONTAINER${NC}"
+    echo -e "${GREEN}  Contenedor encontrado: $API_CONTAINER${NC}"
 }
 
 # Función para verificar recursos del sistema
 check_system_resources() {
     echo ""
-    echo -e "${CYAN}🖥️ Recursos del Sistema${NC}"
+    echo -e "${CYAN}  Recursos del Sistema${NC}"
     echo "======================="
     
-    echo -e "${YELLOW}📊 Uso de CPU y Memoria del contenedor:${NC}"
+    echo -e "${YELLOW}  Uso de CPU y Memoria del contenedor:${NC}"
     docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}" ocr-pymupdf-api || true
     
-    echo -e "${YELLOW}💾 Espacio en disco:${NC}"
+    echo -e "${YELLOW}  Espacio en disco:${NC}"
     df -h . | tail -1 | awk '{print "Disponible: " $4 " de " $2 " (" $5 " usado)"}'
     
-    echo -e "${YELLOW}🐳 Imágenes Docker:${NC}"
+    echo -e "${YELLOW}  Imágenes Docker:${NC}"
     docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep -E "(ocr-pymupdf|python|nginx)" || true
 }
 
 # Función para medir tiempo de inicio
 measure_startup_time() {
     echo ""
-    echo -e "${CYAN}🚀 Tiempo de Inicio${NC}"
+    echo -e "${CYAN}  Tiempo de Inicio${NC}"
     echo "==================="
     
-    echo -e "${YELLOW}📈 Midiendo tiempo de inicio del contenedor...${NC}"
+    echo -e "${YELLOW}  Midiendo tiempo de inicio del contenedor...${NC}"
     
     # Parar contenedor si está corriendo
     docker-compose down >/dev/null 2>&1 || true
@@ -72,7 +72,7 @@ measure_startup_time() {
         if curl -f http://localhost:8000/health >/dev/null 2>&1; then
             END_TIME=$(date +%s)
             STARTUP_TIME=$((END_TIME - START_TIME))
-            echo -e "${GREEN}✅ API lista en $STARTUP_TIME segundos${NC}"
+            echo -e "${GREEN}  API lista en $STARTUP_TIME segundos${NC}"
             break
         fi
         sleep 2
@@ -80,17 +80,17 @@ measure_startup_time() {
     done
     
     if [ $ELAPSED -ge $TIMEOUT ]; then
-        echo -e "${RED}❌ Timeout: API no respondió en $TIMEOUT segundos${NC}"
+        echo -e "${RED}  Timeout: API no respondió en $TIMEOUT segundos${NC}"
     fi
 }
 
 # Función para medir rendimiento de OCR
 measure_ocr_performance() {
     echo ""
-    echo -e "${CYAN}👁️ Rendimiento de OCR${NC}"
+    echo -e "${CYAN}  Rendimiento de OCR${NC}"
     echo "====================="
     
-    echo -e "${YELLOW}📄 Procesando PDFs de prueba...${NC}"
+    echo -e "${YELLOW}  Procesando PDFs de prueba...${NC}"
     
     # Crear script de benchmark dentro del contenedor
     docker exec $API_CONTAINER python -c "
@@ -100,10 +100,10 @@ from pathlib import Path
 import sys
 
 def benchmark_pdf(pdf_path, description):
-    print(f'📊 Analizando {description}...')
+    print(f'  Analizando {description}...')
     
     if not pdf_path.exists():
-        print(f'⚠️ {pdf_path} no encontrado')
+        print(f'  {pdf_path} no encontrado')
         return None
     
     # Iniciar medición
@@ -126,9 +126,9 @@ def benchmark_pdf(pdf_path, description):
         pages = len(result[1]) if len(result) > 1 else 0
         
         print(f'  ⏱️ Tiempo: {processing_time:.2f}s')
-        print(f'  📄 Páginas: {pages}')
-        print(f'  💾 Memoria pico: {peak / 1024 / 1024:.1f} MB')
-        print(f'  📊 Velocidad: {pages/processing_time:.1f} páginas/segundo')
+        print(f'    Páginas: {pages}')
+        print(f'    Memoria pico: {peak / 1024 / 1024:.1f} MB')
+        print(f'    Velocidad: {pages/processing_time:.1f} páginas/segundo')
         print()
         
         return {
@@ -139,7 +139,7 @@ def benchmark_pdf(pdf_path, description):
         }
         
     except Exception as e:
-        print(f'  ❌ Error: {e}')
+        print(f'    Error: {e}')
         return None
 
 # Ejecutar benchmarks
@@ -157,7 +157,7 @@ for pdf_path, description in test_files:
 
 # Mostrar resumen
 if results:
-    print('📈 RESUMEN DE RENDIMIENTO:')
+    print('  RESUMEN DE RENDIMIENTO:')
     print('========================')
     for desc, result in results:
         print(f'{desc}:')
@@ -165,33 +165,33 @@ if results:
         print(f'  - Velocidad: {result[\"speed\"]:.1f} pág/s')
         print(f'  - Memoria: {result[\"memory_peak\"] / 1024 / 1024:.1f} MB')
 else:
-    print('⚠️ No se pudieron procesar archivos de prueba')
-" || echo -e "${YELLOW}⚠️ Error en benchmark de OCR${NC}"
+    print('  No se pudieron procesar archivos de prueba')
+" || echo -e "${YELLOW}  Error en benchmark de OCR${NC}"
 }
 
 # Función para medir rendimiento de API
 measure_api_performance() {
     echo ""
-    echo -e "${CYAN}🌐 Rendimiento de API${NC}"
+    echo -e "${CYAN}  Rendimiento de API${NC}"
     echo "====================="
     
     if ! curl -f http://localhost:8000/health >/dev/null 2>&1; then
-        echo -e "${YELLOW}⚠️ API no está disponible, saltando tests de API${NC}"
+        echo -e "${YELLOW}  API no está disponible, saltando tests de API${NC}"
         return
     fi
     
-    echo -e "${YELLOW}📡 Midiendo latencia de endpoints...${NC}"
+    echo -e "${YELLOW}  Midiendo latencia de endpoints...${NC}"
     
     # Test de endpoint de salud
-    echo -e "${BLUE}🔍 GET /health${NC}"
+    echo -e "${BLUE}  GET /health${NC}"
     time curl -s http://localhost:8000/health >/dev/null || echo "Error"
     
-    echo -e "${BLUE}🔍 GET /api/health${NC}"
+    echo -e "${BLUE}  GET /api/health${NC}"
     time curl -s http://localhost:8000/api/health >/dev/null || echo "Error"
     
     # Test de carga básico si hay curl disponible
     if command -v ab >/dev/null 2>&1; then
-        echo -e "${YELLOW}🔥 Test de carga básico (Apache Bench)...${NC}"
+        echo -e "${YELLOW}  Test de carga básico (Apache Bench)...${NC}"
         ab -n 50 -c 5 http://localhost:8000/health 2>/dev/null | grep -E "(Requests per second|Time per request)" || echo "Apache Bench no disponible"
     fi
 }
@@ -199,10 +199,10 @@ measure_api_performance() {
 # Función para verificar uso de memoria en el tiempo
 monitor_memory_usage() {
     echo ""
-    echo -e "${CYAN}📊 Monitoreo de Memoria${NC}"
+    echo -e "${CYAN}  Monitoreo de Memoria${NC}"
     echo "======================="
     
-    echo -e "${YELLOW}📈 Monitoreando uso de memoria por 30 segundos...${NC}"
+    echo -e "${YELLOW}  Monitoreando uso de memoria por 30 segundos...${NC}"
     
     for i in {1..10}; do
         MEMORY_USAGE=$(docker stats --no-stream --format "{{.MemUsage}}" ocr-pymupdf-api 2>/dev/null || echo "N/A")
@@ -215,7 +215,7 @@ monitor_memory_usage() {
 # Función para generar reporte de rendimiento
 generate_performance_report() {
     echo ""
-    echo -e "${MAGENTA}📋 Generando reporte de rendimiento...${NC}"
+    echo -e "${MAGENTA}  Generando reporte de rendimiento...${NC}"
     echo "======================================"
     
     REPORT_FILE="testing/reports/performance_report_$(date +%Y%m%d_%H%M%S).txt"
@@ -240,7 +240,7 @@ generate_performance_report() {
         
     } > "$REPORT_FILE"
     
-    echo -e "${GREEN}✅ Reporte de rendimiento guardado en: $REPORT_FILE${NC}"
+    echo -e "${GREEN}  Reporte de rendimiento guardado en: $REPORT_FILE${NC}"
 }
 
 # Función principal
@@ -299,8 +299,8 @@ main() {
     generate_performance_report
     
     echo ""
-    echo -e "${GREEN}⚡ Análisis de rendimiento completado${NC}"
-    echo "💡 Tip: Usa --full para benchmark completo o --monitor para monitoreo en tiempo real"
+    echo -e "${GREEN}  Análisis de rendimiento completado${NC}"
+    echo "  Tip: Usa --full para benchmark completo o --monitor para monitoreo en tiempo real"
 }
 
 # Ejecutar función principal con todos los argumentos

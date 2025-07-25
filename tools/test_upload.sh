@@ -35,7 +35,7 @@ echo "$BODY" | python3 -m json.tool 2>/dev/null || echo "$BODY"
 
 # Verificar resultado
 if [ "$HTTP_STATUS" -eq "201" ]; then
-    echo "  ¡Éxito! El documento se cargó correctamente."
+    echo " ¡Éxito! El documento se cargó correctamente."
     
     # Extraer el ID del documento para verificar su estado
     DOC_ID=$(echo "$BODY" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('id', ''))" 2>/dev/null)
@@ -51,7 +51,7 @@ if [ "$HTTP_STATUS" -eq "201" ]; then
         echo "$STATUS_RESPONSE" | python3 -m json.tool 2>/dev/null || echo "$STATUS_RESPONSE"
     fi
 else
-    echo "  Error al cargar el documento (código $HTTP_STATUS)"
+    echo " Error al cargar el documento (código $HTTP_STATUS)"
 fi
 
 # Limpiar archivo temporal si se creó

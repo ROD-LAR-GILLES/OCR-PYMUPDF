@@ -10,30 +10,30 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🛠️  Formateando código automáticamente${NC}"
+echo -e "${BLUE}   Formateando código automáticamente${NC}"
 echo "=============================================="
 
 # Función para verificar si el contenedor está corriendo
 check_container() {
     API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
     if [ -z "$API_CONTAINER" ]; then
-        echo -e "${RED}❌ Error: El contenedor de la API no está en ejecución${NC}"
+        echo -e "${RED}  Error: El contenedor de la API no está en ejecución${NC}"
         echo "Iniciando contenedor..."
         docker-compose up -d
         sleep 10
         API_CONTAINER=$(docker ps -q -f name=ocr-pymupdf-api)
         if [ -z "$API_CONTAINER" ]; then
-            echo -e "${RED}❌ No se pudo iniciar el contenedor${NC}"
+            echo -e "${RED}  No se pudo iniciar el contenedor${NC}"
             exit 1
         fi
     fi
-    echo -e "${GREEN}✅ Contenedor encontrado: $API_CONTAINER${NC}"
+    echo -e "${GREEN}  Contenedor encontrado: $API_CONTAINER${NC}"
 }
 
 # Función para formatear con black
 format_with_black() {
     echo ""
-    echo -e "${YELLOW}🖤 Formateando con Black...${NC}"
+    echo -e "${YELLOW}  Formateando con Black...${NC}"
     echo "=============================="
     
     docker exec $API_CONTAINER black /app/src \
@@ -44,13 +44,13 @@ format_with_black() {
         --diff \
         --color || true
         
-    echo -e "${GREEN}✅ Formateo con Black completado${NC}"
+    echo -e "${GREEN}  Formateo con Black completado${NC}"
 }
 
 # Función para aplicar cambios con black
 apply_black_formatting() {
     echo ""
-    echo -e "${YELLOW}🖤 Aplicando formateo con Black...${NC}"
+    echo -e "${YELLOW}  Aplicando formateo con Black...${NC}"
     echo "==================================="
     
     docker exec $API_CONTAINER black /app/src \
@@ -60,13 +60,13 @@ apply_black_formatting() {
         --extend-exclude='__pycache__|\.git|\.pytest_cache|\.mypy_cache' \
         --quiet
         
-    echo -e "${GREEN}✅ Formateo aplicado${NC}"
+    echo -e "${GREEN}  Formateo aplicado${NC}"
 }
 
 # Función para ordenar imports con isort
 sort_imports() {
     echo ""
-    echo -e "${YELLOW}📦 Ordenando imports con isort...${NC}"
+    echo -e "${YELLOW}  Ordenando imports con isort...${NC}"
     echo "=================================="
     
     # Instalar isort si no está disponible
@@ -82,13 +82,13 @@ sort_imports() {
         --diff \
         --color || true
         
-    echo -e "${GREEN}✅ Imports ordenados${NC}"
+    echo -e "${GREEN}  Imports ordenados${NC}"
 }
 
 # Función para aplicar cambios de isort
 apply_import_sorting() {
     echo ""
-    echo -e "${YELLOW}📦 Aplicando ordenamiento de imports...${NC}"
+    echo -e "${YELLOW}  Aplicando ordenamiento de imports...${NC}"
     echo "========================================"
     
     docker exec $API_CONTAINER isort /app/src \
@@ -100,16 +100,16 @@ apply_import_sorting() {
         --combine-as \
         --quiet
         
-    echo -e "${GREEN}✅ Ordenamiento de imports aplicado${NC}"
+    echo -e "${GREEN}  Ordenamiento de imports aplicado${NC}"
 }
 
 # Función para arreglar problemas básicos de flake8
 fix_basic_issues() {
     echo ""
-    echo -e "${YELLOW}🔧 Instalando autopep8...${NC}"
+    echo -e "${YELLOW}  Instalando autopep8...${NC}"
     docker exec $API_CONTAINER pip install autopep8 || true
     
-    echo -e "${YELLOW}🔧 Arreglando problemas básicos con autopep8...${NC}"
+    echo -e "${YELLOW}  Arreglando problemas básicos con autopep8...${NC}"
     echo "==============================================="
     
     docker exec $API_CONTAINER autopep8 /app/src \
@@ -121,13 +121,13 @@ fix_basic_issues() {
         --ignore=E501 \
         --select=E1,E2,E3,W1,W2,W3
         
-    echo -e "${GREEN}✅ Problemas básicos arreglados${NC}"
+    echo -e "${GREEN}  Problemas básicos arreglados${NC}"
 }
 
 # Función para mostrar estadísticas después del formateo
 show_stats() {
     echo ""
-    echo -e "${BLUE}📊 Estadísticas después del formateo:${NC}"
+    echo -e "${BLUE}  Estadísticas después del formateo:${NC}"
     echo "====================================="
     
     # Ejecutar flake8 solo para contar errores
@@ -175,17 +175,17 @@ main() {
     check_container
     
     if [ "$DRY_RUN" = true ]; then
-        echo -e "${BLUE}🔍 Modo dry-run: Solo mostrando cambios${NC}"
+        echo -e "${BLUE}  Modo dry-run: Solo mostrando cambios${NC}"
         format_with_black
         sort_imports
     elif [ "$APPLY_CHANGES" = true ]; then
-        echo -e "${BLUE}✨ Aplicando cambios automáticamente${NC}"
+        echo -e "${BLUE}  Aplicando cambios automáticamente${NC}"
         fix_basic_issues
         apply_import_sorting
         apply_black_formatting
         show_stats
     else
-        echo -e "${YELLOW}❓ ¿Qué deseas hacer?${NC}"
+        echo -e "${YELLOW}  ¿Qué deseas hacer?${NC}"
         echo "1) Ver cambios sin aplicar (dry-run)"
         echo "2) Aplicar formateo automático"
         echo "3) Solo arreglar problemas básicos"
@@ -195,36 +195,36 @@ main() {
         
         case $choice in
             1)
-                echo -e "${BLUE}🔍 Mostrando cambios...${NC}"
+                echo -e "${BLUE}  Mostrando cambios...${NC}"
                 format_with_black
                 sort_imports
                 ;;
             2)
-                echo -e "${BLUE}✨ Aplicando formateo completo...${NC}"
+                echo -e "${BLUE}  Aplicando formateo completo...${NC}"
                 fix_basic_issues
                 apply_import_sorting
                 apply_black_formatting
                 show_stats
                 ;;
             3)
-                echo -e "${BLUE}🔧 Arreglando solo problemas básicos...${NC}"
+                echo -e "${BLUE}  Arreglando solo problemas básicos...${NC}"
                 fix_basic_issues
                 show_stats
                 ;;
             4)
-                echo -e "${GREEN}👋 ¡Hasta luego!${NC}"
+                echo -e "${GREEN}  ¡Hasta luego!${NC}"
                 exit 0
                 ;;
             *)
-                echo -e "${RED}❌ Opción inválida${NC}"
+                echo -e "${RED}  Opción inválida${NC}"
                 exit 1
                 ;;
         esac
     fi
     
     echo ""
-    echo -e "${GREEN}✅ Formateo completado${NC}"
-    echo "💡 Tip: Ejecuta './tools/lint_code.sh --quick' para verificar los cambios"
+    echo -e "${GREEN}  Formateo completado${NC}"
+    echo "  Tip: Ejecuta './tools/lint_code.sh --quick' para verificar los cambios"
 }
 
 # Ejecutar función principal con todos los argumentos

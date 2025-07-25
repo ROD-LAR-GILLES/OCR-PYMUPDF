@@ -291,30 +291,30 @@ def main():
         print("\n=== EVALUACIÓN ===")
         
         # Verificar si hay problemas con el archivo
-        if not result["file_info"]["exists"]:
-            print(" ERROR: El archivo no existe")
-        elif not result["file_info"]["readable"]:
-            print(" ERROR: El archivo no es legible (problema de permisos)")
-        elif result["file_info"].get("size_bytes", 0) == 0:
-            print(" ERROR: El archivo está vacío")
+        if not result['file_access']['exists']:
+            print(" El archivo no existe")
+        elif not result['file_access']['readable']:
+            print(" El archivo no es legible (problema de permisos)")
+        elif result['file_access']['size'] == 0:
+            print(" El archivo está vacío")
         else:
-            print(" OK: El archivo existe y es accesible")
+            print(" El archivo existe y es accesible")
         
         # Verificar si el PDF es válido
         if not result["pdf_validity"].get("is_valid", False):
-            print(f" ERROR: El archivo no es un PDF válido: {result['pdf_validity'].get('error', 'Razón desconocida')}")
+            print(f" El archivo no es un PDF válido: {result['pdf_validity'].get('error', 'Razón desconocida')}")
         else:
-            print(" OK: El archivo es un PDF válido")
+            print(" El archivo es un PDF válido")
             if result["pdf_validity"].get("is_encrypted", False):
-                print(" WARNING: El PDF está encriptado, lo que puede causar problemas")
+                print(" El PDF está encriptado, lo que puede causar problemas")
             if not result["pdf_validity"].get("has_text", True):
                 print("ℹ️ El PDF no contiene texto seleccionable, se usará OCR")
         
         # Verificar capacidad de OCR
         if not result["ocr_capability"].get("ocr_available", False):
-            print(f" ERROR: OCR no disponible: {result['ocr_capability'].get('error', 'Error desconocido')}")
+            print(f" OCR no disponible: {result['ocr_capability'].get('error', 'Error desconocido')}")
         else:
-            print(" OK: OCR está disponible")
+            print(" OCR está disponible")
             print(f"  Versión de Tesseract: {result['ocr_capability'].get('tesseract_version', 'Desconocida')}")
             print(f"  Idiomas disponibles: {', '.join(result['ocr_capability'].get('languages', ['Ninguno']))}")
         
@@ -323,9 +323,9 @@ def main():
         missing_libs = [lib for lib in required_libs if result["libraries_info"].get(lib, "No instalado") == "No instalado"]
         
         if missing_libs:
-            print(f" ERROR: Faltan bibliotecas requeridas: {', '.join(missing_libs)}")
+            print(f" Faltan bibliotecas requeridas: {', '.join(missing_libs)}")
         else:
-            print(" OK: Todas las bibliotecas requeridas están instaladas")
+            print(" Todas las bibliotecas requeridas están instaladas")
         
         # Guardar resultados en un archivo JSON
         try:

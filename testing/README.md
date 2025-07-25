@@ -1,8 +1,8 @@
-# 🧪 Testing Suite - OCR-PYMUPDF
+#   Testing Suite - OCR-PYMUPDF
 
 Este directorio contiene todas las herramientas de testing, análisis de calidad, seguridad y rendimiento para el proyecto OCR-PYMUPDF.
 
-## 🚀 Inicio Rápido
+##   Inicio Rápido
 
 Para ejecutar todas las verificaciones de una vez:
 
@@ -11,7 +11,7 @@ Para ejecutar todas las verificaciones de una vez:
 ./run_all_tests.sh --standard
 ```
 
-## 📁 Estructura del Directorio
+##   Estructura del Directorio
 
 ```
 testing/
@@ -20,12 +20,12 @@ testing/
 └── README.md       # Esta documentación
 ```
 
-## 🛠️ Herramientas Disponibles
+##   Herramientas Disponibles
 
-### 🎯 Script Maestro
+###   Script Maestro
 - **`../run_all_tests.sh`** - Ejecuta todas las herramientas de testing
 
-### 🔧 Herramientas Individuales
+###   Herramientas Individuales
 - **`tools/lint_code.sh`** - Análisis de calidad de código (como VS Code)
 - **`tools/format_code.sh`** - Formateo automático de código
 - **`tools/quality_report.sh`** - Reporte completo de calidad
@@ -33,9 +33,9 @@ testing/
 - **`tools/security_check.sh`** - Análisis de seguridad
 - **`tools/performance_check.sh`** - Análisis de rendimiento
 
-## 🎮 Modos de Uso
+##   Modos de Uso
 
-### 🚀 Modo Rápido (5-10 minutos)
+###   Modo Rápido (5-10 minutos)
 ```bash
 ./run_all_tests.sh --quick
 ```
@@ -43,7 +43,7 @@ testing/
 - Análisis rápido de código
 - Verificación de sintaxis
 
-### 📋 Modo Estándar (15-20 minutos)
+###   Modo Estándar (15-20 minutos)
 ```bash
 ./run_all_tests.sh --standard
 ```
@@ -51,7 +51,7 @@ testing/
 - Análisis de calidad
 - Verificación de seguridad
 
-### 🔬 Modo Completo (30+ minutos)
+###   Modo Completo (30+ minutos)
 ```bash
 ./run_all_tests.sh --full
 ```
@@ -68,9 +68,9 @@ testing/
 - Sin output verbose
 - Optimizado para pipelines
 
-## 🔧 Herramientas Específicas
+##   Herramientas Específicas
 
-### 🔍 Análisis de Código
+###   Análisis de Código
 ```bash
 # Análisis rápido (como VS Code Problems)
 ./testing/tools/lint_code.sh --quick
@@ -79,7 +79,7 @@ testing/
 ./testing/tools/lint_code.sh
 ```
 
-### 🎨 Formateo de Código
+###   Formateo de Código
 ```bash
 # Ver cambios sin aplicar
 ./testing/tools/format_code.sh --dry-run
@@ -88,7 +88,7 @@ testing/
 ./testing/tools/format_code.sh --apply
 ```
 
-### 🧪 Tests Unitarios
+###   Tests Unitarios
 ```bash
 # Tests básicos
 ./testing/tools/run_tests.sh
@@ -100,7 +100,7 @@ testing/
 ./testing/tools/run_tests.sh --performance
 ```
 
-### 🔒 Seguridad
+###   Seguridad
 ```bash
 # Análisis básico
 ./testing/tools/security_check.sh
@@ -109,7 +109,7 @@ testing/
 ./testing/tools/security_check.sh --detailed
 ```
 
-### ⚡ Rendimiento
+###   Rendimiento
 ```bash
 # Verificación básica
 ./testing/tools/performance_check.sh
@@ -121,7 +121,7 @@ testing/
 ./testing/tools/performance_check.sh --monitor
 ```
 
-## 📊 Reportes
+##   Reportes
 
 Todos los reportes se generan en `testing/reports/` con timestamp único:
 
@@ -132,7 +132,7 @@ Todos los reportes se generan en `testing/reports/` con timestamp único:
 - `performance_report_YYYYMMDD_HHMMSS.txt` - Análisis de rendimiento
 - `coverage_html/` - Reporte de cobertura HTML
 
-## 🎯 Casos de Uso Comunes
+##   Casos de Uso Comunes
 
 ### Desarrollo Diario
 ```bash
@@ -164,7 +164,7 @@ Todos los reportes se generan en `testing/reports/` con timestamp único:
 ./run_all_tests.sh --security --verbose
 ```
 
-## 🚦 Estados y Códigos de Salida
+##   Estados y Códigos de Salida
 
 - **0** - Todas las verificaciones pasaron
 - **1** - Error en prerrequisitos o configuración
@@ -172,13 +172,13 @@ Todos los reportes se generan en `testing/reports/` con timestamp único:
 - **3** - Problemas de calidad críticos
 - **4** - Vulnerabilidades de seguridad encontradas
 
-## 📋 Prerrequisitos
+##   Prerrequisitos
 
 - Docker y docker-compose instalados
 - Contenedor `ocr-pymupdf-api` disponible
 - Ejecutar desde la raíz del proyecto OCR-PYMUPDF
 
-## 🔧 Personalización
+##   Personalización
 
 Puedes modificar los scripts en `tools/` para:
 - Ajustar umbrales de calidad
@@ -186,7 +186,7 @@ Puedes modificar los scripts en `tools/` para:
 - Cambiar formatos de reporte
 - Integrar nuevas herramientas
 
-## 💡 Tips y Trucos
+##   Tips y Trucos
 
 1. **Desarrollo iterativo**: Usa `--quick` durante desarrollo
 2. **Formateo automático**: Ejecuta `--format` antes de commits
@@ -211,7 +211,7 @@ chmod +x testing/tools/*.sh run_all_tests.sh
 find testing/reports/ -name "*.txt" -mtime +7 -delete
 ```
 
-## 📚 Referencias
+##   Referencias
 
 - **Flake8**: Análisis de código Python
 - **MyPy**: Verificación de tipos
@@ -222,6 +222,6 @@ find testing/reports/ -name "*.txt" -mtime +7 -delete
 
 ---
 
-**¡Happy Testing! 🎉**
+**¡Happy Testing!  **
 
 Para soporte adicional, consulta la documentación individual de cada herramienta usando `--help`.
