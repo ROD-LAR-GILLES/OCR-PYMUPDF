@@ -34,7 +34,7 @@ from loguru import logger
 from tabulate import tabulate
 
 # ──────── Internal adapters ────────
-import adapters.ocr_adapter as ocr_adapter
+from adapters.out.ocr.ocr_adapter import needs_ocr, perform_ocr_on_page
 
 # ──────── Configuración ────────
 _RENDER_DPI = 300
@@ -58,29 +58,57 @@ class PyMuPDFAdapter(DocumentPort):
         results: List[str] = []
         
         try:
+            logger.info(f"Iniciando extracción de texto del PDF: {pdf_path}")
+            # Verificar que el archivo existe
+            if not pdf_path.exists():
+                logger.error(f"El archivo no existe: {pdf_path}")
+                raise FileNotFoundError(f"El archivo no existe: {pdf_path}")
+                
+            # Verificar que es un archivo PDF válido
+            if not str(pdf_path).lower().endswith('.pdf'):
+                logger.error(f"El archivo no es un PDF: {pdf_path}")
+                raise ValueError(f"El archivo no es un PDF válido: {pdf_path}")
+                
             with fitz.open(pdf_path) as doc:
+                logger.info(f"PDF abierto correctamente. Número de páginas: {doc.page_count}")
+                
                 for page_num, page in enumerate(doc, start=1):
                     logger.info(f"Procesando página {page_num}/{doc.page_count}")
                     
-                    # Intentar extraer texto directamente
-                    text = page.get_text()
-                    
-                    # Si la página necesita OCR
-                    if ocr_adapter.needs_ocr(page):
-                        logger.info(f"Página {page_num} requiere OCR")
-                        text = ocr_adapter.perform_ocr_on_page(page)
-                    else:
-                        logger.info(f"Página {page_num} procesada sin OCR")
-                    
-                    results.append(text)
+                    try:
+                        # Intentar extraer texto directamente
+                        text = page.get_text()
+                        
+                        # Si la página necesita OCR
+                        if needs_ocr(page):
+                            logger.info(f"Página {page_num} requiere OCR")
+                            text = perform_ocr_on_page(page)
+                        else:
+                            logger.info(f"Página {page_num} procesada sin OCR")
+                        
+                        results.append(text)
+                    except Exception as e:
+                        logger.error(f"Error al procesar página {page_num}: {e}")
+                        from infrastructure.logging_setup import log_error_details
+                        log_error_details(e, f"Procesando página {page_num} de {pdf_path}")
+                        # Añadir texto de error a la página
+                        results.append(f"[ERROR EN PÁGINA {page_num}]: No se pudo extraer el texto correctamente.")
                     
             return results
                     
         except Exception as e:
             logger.error(f"Error al extraer páginas del PDF: {e}")
+            from infrastructure.logging_setup import log_error_details
+            log_error_details(e, f"Extracción de páginas de {pdf_path}")
+            
             # Si falla el proceso normal, intentar con OCR paralelo como respaldo
             logger.info("Intentando extracción con OCR paralelo como respaldo")
-            return parallel_ocr.run_parallel(pdf_path)
+            try:
+                return parallel_ocr.run_parallel(pdf_path)
+            except Exception as ocr_error:
+                logger.critical(f"Falló también el OCR paralelo: {ocr_error}")
+                log_error_details(ocr_error, f"OCR paralelo en {pdf_path}")
+                return ["Error fatal: No se pudo procesar el documento. Consulte los logs para más detalles."]
 
     def extract_tables(self, pdf_path: Path) -> List[Tuple[int, str]]:
         """
@@ -269,23 +297,24 @@ class PyMuPDFAdapter(DocumentPort):
                     logger.info(f"[Page {page_num}] Se detectó estructura de tabla")
                     tables_found += 1
 
-                    if ocr_adapter.needs_ocr(page):
-                        logger.info(f"[Page {page_num}] Página escaneada - aplicando OCR a tablas")
-                        try:
-                            from adapters.ocr_adapter import detect_table_regions, ocr_table_to_markdown
-                            table_regions = detect_table_regions(img)
-                            if table_regions:
-                                logger.info(f"[Page {page_num}] Se detectaron {len(table_regions)} regiones de tabla")
-                                md_parts.append(f"## Tables (OCR fallback · page {page_num})\n")
-                                for idx, region in enumerate(table_regions, start=1):
-                                    logger.info(f"[Page {page_num}] Procesando tabla {idx}/{len(table_regions)}")
-                                    table_img = img.crop(region)
-                                    md = ocr_table_to_markdown(table_img)
-                                    if md.strip():
-                                        md_parts.append(f"### Table {idx}\n\n{md}\n")
-                                        logger.success(f"[Page {page_num}] Tabla {idx} extraída exitosamente")
-                        except Exception as exc:
-                            logger.warning(f"[Page {page_num}] OCR fallback error → {exc}")
+                    if needs_ocr(page):
+                        logger.info(f"[Page {page_num}] Página escaneada - OCR de tablas deshabilitado temporalmente")
+                        # TODO: Implementar extracción OCR de tablas
+                        # try:
+                        #     from adapters.ocr_adapter import detect_table_regions, ocr_table_to_markdown
+                        #     table_regions = detect_table_regions(img)
+                        #     if table_regions:
+                        #         logger.info(f"[Page {page_num}] Se detectaron {len(table_regions)} regiones de tabla")
+                        #         md_parts.append(f"## Tables (OCR fallback · page {page_num})\n")
+                        #         for idx, region in enumerate(table_regions, start=1):
+                        #             logger.info(f"[Page {page_num}] Procesando tabla {idx}/{len(table_regions)}")
+                        #             table_img = img.crop(region)
+                        #             md = ocr_table_to_markdown(table_img)
+                        #             if md.strip():
+                        #                 md_parts.append(f"### Table {idx}\n\n{md}\n")
+                        #                 logger.success(f"[Page {page_num}] Tabla {idx} extraída exitosamente")
+                        # except Exception as exc:
+                        #     logger.warning(f"[Page {page_num}] OCR fallback error → {exc}")
                         continue
 
                     logger.info(f"[Page {page_num}] Página digital — usando Camelot")
