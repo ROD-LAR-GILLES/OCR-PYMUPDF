@@ -13,23 +13,6 @@ load_dotenv()
 # Crear directorios necesarios
 Path("uploads").mkdir(exist_ok=True)
 Path("resultado").mkdir(exist_ok=True)
-Path("metadata").mkdir(exist_ok=True)
-
-def start_server(host="0.0.0.0", port=8000):
-    """Inicia el servidor API con la configuración especificada.
-    
-    Args:
-        host: Host donde se ejecutará el servidor
-        port: Puerto donde se ejecutará el servidor
-    """
-    # Iniciar el servidor
-    uvicorn.run(
-        "adapters.inbound.http.api:app",  # Ruta al módulo api.py
-        host=host,
-        port=port,
-        reload=True, 
-        log_level="info"
-    )
 
 def main():
     """Función principal para iniciar el servidor API."""
@@ -38,7 +21,13 @@ def main():
     port = int(os.getenv("API_PORT", "8000"))
     
     # Iniciar el servidor
-    start_server(host=host, port=port)
+    uvicorn.run(
+        "adapters.inbound.http.api:app",
+        host=host,
+        port=port,
+        reload=True,  # Habilitar recarga automática en desarrollo
+        log_level="info"
+    )
 
 if __name__ == "__main__":
     main()
