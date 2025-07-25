@@ -7,8 +7,6 @@ services:
       - ./resultado:/app/resultado
       - ./src:/app/src
       - ./data:/app/data
-      - ./tests:/app/tests
-      - ./tests/fixtures:/app/tests/fixtures
     stdin_open: true
     tty: true
     environment:
