@@ -1,59 +1,30 @@
 """
-Detector de idiomas híbrido que combina FastText y langdetect.
+Detector de idiomas simplificado - por defecto español.
 """
-import os
-from pathlib import Path
 from loguru import logger
-import fasttext
-import langdetect
 
 class LanguageDetector:
     def __init__(self):
-        self.fasttext_model = None
-        self.model_path = Path("/app/data/models/fasttext/lid.176.ftz")
-        try:
-            if not self.model_path.parent.exists():
-                self.model_path.parent.mkdir(parents=True, exist_ok=True)
-                
-            if not self.model_path.exists():
-                logger.info("Descargando modelo de FastText...")
-                import urllib.request
-                urllib.request.urlretrieve(
-                    "https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz",
-                    self.model_path
-                )
-            self.fasttext_model = fasttext.load_model(str(self.model_path))
-        except Exception as e:
-            logger.warning(f"No se pudo cargar FastText, usando langdetect como respaldo: {e}")
-    
+        """Inicializa el detector con configuración para español por defecto."""
+        self.default_language = "es"
+        
     def detect(self, text: str) -> str:
         """
-        Detecta el idioma del texto usando FastText o langdetect como respaldo.
+        Detecta el idioma del texto. Por defecto retorna español.
         
         Args:
             text: Texto a analizar
             
         Returns:
-            str: Código ISO del idioma (ej: 'es', 'en')
+            str: Código ISO del idioma (siempre 'es' para simplificar)
         """
-        if not text.strip():
-            return "es"
-            
-        try:
-            # Intentar primero con FastText si está disponible
-            if self.fasttext_model:
-                predictions = self.fasttext_model.predict(text, k=1)
-                lang_code = predictions[0][0].replace("__label__", "")
-                # Convertir códigos de 3 letras a 2 letras si es necesario
-                if lang_code == "spa":
-                    return "es"
-                return lang_code
-                
-            # Fallback a langdetect
-            return langdetect.detect(text)
-        except Exception as e:
-            logger.error(f"Error en detección de idioma: {e}")
-            return "es"  # Valor por defecto
+        if not text or not text.strip():
+            return self.default_language
+        
+        # Para simplificar, siempre retornamos español
+        # Esto facilita el procesamiento y configuración de OCR
+        logger.debug(f"Detectando idioma para texto de {len(text)} caracteres -> {self.default_language}")
+        return self.default_language
 
 # Instancia global
 detector = LanguageDetector()
