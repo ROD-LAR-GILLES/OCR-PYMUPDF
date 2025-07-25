@@ -47,17 +47,53 @@ class PDFToMarkdownUseCase:
             StorageError: Si hay problemas al guardar el resultado
             LLMError: Si hay problemas con el refinamiento del texto
         """
-        # Extraer contenido del PDF
-        markdown_content = self.document_port.extract_markdown(pdf_path)
+        from infrastructure.logging_setup import logger, log_error_details
         
-        # Refinar el contenido con LLM solo si está disponible
-        if self.llm_port is not None:
+        logger.info(f"Iniciando conversión de PDF a Markdown: {pdf_path}")
+        
+        try:
+            # Verificar que el archivo existe
+            if not pdf_path.exists():
+                error_msg = f"El archivo PDF no existe: {pdf_path}"
+                logger.error(error_msg)
+                raise FileNotFoundError(error_msg)
+                
+            # Registrar información del archivo
+            file_size_mb = pdf_path.stat().st_size / (1024 * 1024)
+            logger.info(f"Archivo PDF: {pdf_path.name}, Tamaño: {file_size_mb:.2f} MB")
+            
+            # Extraer contenido del PDF
+            logger.info("Extrayendo contenido del PDF")
             try:
-                markdown_content = self.llm_port.format_markdown(markdown_content)
-            except Exception as e:
-                from infrastructure.logging_setup import logger
-                logger.warning(f"LLM refinement failed, using raw text: {e}")
-        
-        # Guardar el resultado
-        md_path = self.storage_port.save_markdown(pdf_path.stem, markdown_content)
-        return md_path
+                markdown_content = self.document_port.extract_markdown(pdf_path)
+                logger.info(f"Extracción completada: {len(markdown_content)} caracteres")
+            except Exception as doc_error:
+                logger.error(f"Error al extraer contenido del PDF: {doc_error}")
+                log_error_details(doc_error, f"Extracción de contenido de {pdf_path}")
+                raise
+            
+            # Refinar el contenido con LLM solo si está disponible
+            if self.llm_port is not None:
+                try:
+                    logger.info("Iniciando refinamiento con LLM")
+                    markdown_content = self.llm_port.format_markdown(markdown_content)
+                    logger.info("Refinamiento con LLM completado")
+                except Exception as llm_error:
+                    logger.warning(f"LLM refinement failed, using raw text: {llm_error}")
+                    log_error_details(llm_error, "Refinamiento LLM")
+            
+            # Guardar el resultado
+            try:
+                logger.info(f"Guardando resultado para {pdf_path.stem}")
+                md_path = self.storage_port.save_markdown(pdf_path.stem, markdown_content)
+                logger.info(f"Archivo Markdown guardado en: {md_path}")
+                return md_path
+            except Exception as storage_error:
+                logger.error(f"Error al guardar el archivo Markdown: {storage_error}")
+                log_error_details(storage_error, f"Guardando resultado para {pdf_path.stem}")
+                raise
+                
+        except Exception as e:
+            logger.error(f"Error en la conversión de PDF a Markdown: {e}")
+            log_error_details(e, f"Conversión de {pdf_path} a Markdown")
+            raise
