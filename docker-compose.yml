@@ -13,8 +13,8 @@ services:
 
   ocr-api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile.api
     image: ocr-pymupdf-api
     container_name: ocr-pymupdf-api
     command: python tools/bin/run_api.py
@@ -25,7 +25,7 @@ services:
       - ./resultado:/app/resultado
       - ./uploads:/app/uploads
       - ./metadata:/app/metadata
-      - ./tools/data:/app/tools/data
+      - ./backend/tools/data:/app/tools/data
     environment:
       - PYTHONPATH=/app/src
       # OpenAI
