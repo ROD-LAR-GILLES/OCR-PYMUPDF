@@ -40,8 +40,7 @@ ENV PYTHONPATH=/app/src
 WORKDIR /app
 
 # Crear estructura de directorios necesaria y configurar volúmenes
-RUN mkdir -p /app/data/models/fasttext \
-            /app/data/corrections \
+RUN mkdir -p /app/data/corrections \
             /app/pdfs \
             /app/resultado
 
@@ -55,7 +54,5 @@ COPY resultado/ resultado/
 # Asegurar permisos de escritura y ownership
 RUN chown -R 1000:1000 /app/data && \
     chmod -R 777 /app/data
-
-VOLUME ["/app/data/models/fasttext"]
 
 CMD ["python", "-m", "src.main"]

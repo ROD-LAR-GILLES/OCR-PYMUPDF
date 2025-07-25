@@ -9,7 +9,6 @@ services:
       - ./data:/app/data
       - ./tests:/app/tests
       - ./tests/fixtures:/app/tests/fixtures
-      - fasttext_models:/app/data/models/fasttext
     stdin_open: true
     tty: true
     environment:
@@ -19,6 +18,3 @@ services:
       - OPENAI_PROMPT_MODEL
       - OPENAI_FT_MODEL
       - OCR_DPI=300
-
-volumes:
-  fasttext_models: {}
